@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+
+namespace Max\Foundation;
+
+use Max\Console\{Input, Output};
+
+require './vendor/autoload.php';
+
+(new App('.'))->start(function(App $app) {
+    $console = $app->console;
+    $console->run(
+        $app->make(Input::class),
+        $app->make(Output::class)
+    );
+});
