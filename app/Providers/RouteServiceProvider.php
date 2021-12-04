@@ -19,6 +19,5 @@ class RouteServiceProvider extends RouteProvider
              ->group(env('route_path') . 'api.php');
         Route::middleware('web')
              ->group(env('route_path') . 'web.php');
-        Route::prefix('admin')->group(env('route_path') . 'admin.php');
     }
 }

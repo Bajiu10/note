@@ -4,7 +4,7 @@ namespace App\Http;
 
 use Max\ValidateTrait;
 
-class Request extends \Max\Http\Request
+class Request extends \Max\Foundation\Http\Request
 {
     use ValidateTrait;
 }

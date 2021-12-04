@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controller;
 use App\Models\Notes;
-use Max\Cache\Cache;
-use Max\Http\Request\UploadedFile;
+use Max\Http\UploadedFile;
 
 class Note extends Controller
 {
@@ -13,8 +12,8 @@ class Note extends Controller
     {
         $page = $this->request->get('p', 1);
         return $notes->list($page, 8)->map(function($value) {
-            if(empty($value['thumb'])) {
-                $value['thumb'] = '/static/bg/bg'. rand(1, 18). '.jpg';
+            if (empty($value['thumb'])) {
+                $value['thumb'] = '/static/bg/bg' . rand(1, 18) . '.jpg';
             }
             return $value;
         })->toArray();
@@ -28,10 +27,14 @@ class Note extends Controller
      */
     public function uploadImage(): array
     {
+        /* @var UploadedFile $thumb */
         $thumb = $this->request->file('thumb');
-        $name  = md5(microtime(true));
-        if ($thumb instanceof UploadedFile && $thumb->move(env('public_path') . 'upload/thumb/' . date('Ymd'), $name)) {
-            return ['status' => true, 'path' => '/upload/thumb/' . date('Ymd/') . $name . '.' . $thumb->getExtention()];
+        $type  = pathinfo($thumb->getClientFilename(), PATHINFO_EXTENSION);
+        $name  = md5(microtime(true)) . '.' . $type;
+        $path  = '/upload/thumb/' . date('Ymd/') . $name;
+        if ($thumb instanceof UploadedFile) {
+            $thumb->moveTo(public_path(ltrim($path, '/')));
+            return ['status' => true, 'path' => $path];
         }
         return ['status' => false, 'path' => ''];
     }
@@ -45,12 +48,15 @@ class Note extends Controller
     public function uploadImages(): array
     {
         $image = $this->request->file('editormd-image-file');
-        $name  = md5(microtime(true));
-        if ($image instanceof UploadedFile && $image->move(env('public_path') . 'upload/images/' . date('Ymd'), $name)) {
+        $type  = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
+        $name  = md5(microtime(true)) . '.' . $type;
+        $path  = '/upload/images/' . date('Ymd/') . $name;
+        if ($image instanceof UploadedFile) {
+            $image->moveTo(public_path(ltrim($path, '/')));
             return [
                 'success' => 1,
                 'message' => '图片上传成功！',
-                'url'     => '/upload/images/' . date('Ymd') . '/' . $name . '.' . $image->getExtention()
+                'url'     => $path
             ];
         }
         return [
