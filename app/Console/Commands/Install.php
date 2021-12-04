@@ -11,7 +11,7 @@ class Install extends Command
     protected $userinfo = [
         'username' => '',
         'password' => '',
-        'email'    => '',
+        'email' => '',
     ];
 
     public function handle()

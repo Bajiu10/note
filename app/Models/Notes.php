@@ -56,7 +56,7 @@ class Notes extends Model
                  ->whereNull('delete_time')
                  ->where('n.cid', '=', $cid)
                  ->where('n.id', '!=', $id)
-                 ->order('rand()', '')
+                 ->order('rand()')
                  ->limit(3)
                  ->get(['n.id id', 'n.text text', 'n.title title', 'c.name type', 'n.thumb'])
                  ->map(function($value) {

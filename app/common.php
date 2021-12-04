@@ -64,7 +64,7 @@ if (false === function_exists('api_success')) {
      */
     function api_success($data, string $message, int $code = 0): \Psr\Http\Message\ResponseInterface
     {
-        return \Max\Http\Response::json([
+        return \Max\Foundation\Http\Response::json([
             'data'    => $data,
             'message' => $message,
             'code'    => $code
