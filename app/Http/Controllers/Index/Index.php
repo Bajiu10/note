@@ -31,9 +31,7 @@ class Index extends Controller
             $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
             return $value;
         });
-        $links     = $this->cache->remember('links', function() {
-            return DB::table('links')->get();
-        }, 7200);
+        $links     = DB::table('links')->get();
         $comments  = DB::table('comments')->order('create_time', 'DESC')->limit(5)->get();
         return view(config('app.theme') . '/index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
     }
