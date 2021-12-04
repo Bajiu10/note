@@ -2,24 +2,15 @@
 
 namespace App\Http;
 
+use Max\Di\Annotations\Inject;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Controller extends \Max\Foundation\Controller
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+    #[Inject]
+    protected ContainerInterface $container;
 
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    public function __construct(ContainerInterface $container, ServerRequestInterface $request)
-    {
-        $this->container = $container;
-        $this->request   = $request;
-    }
+    #[Inject]
+    protected ServerRequestInterface $request;
 }
