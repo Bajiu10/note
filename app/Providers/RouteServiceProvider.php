@@ -14,10 +14,5 @@ class RouteServiceProvider extends RouteProvider
      */
     public function map()
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->group(env('route_path') . 'api.php');
-        Route::middleware('web')
-             ->group(env('route_path') . 'web.php');
     }
 }

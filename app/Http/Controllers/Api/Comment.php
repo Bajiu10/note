@@ -6,9 +6,13 @@ use App\Http\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Models\Comments;
 use Max\Foundation\Facades\DB;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\PostMapping;
 
+#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
 class Comment extends Controller
 {
+    #[PostMapping(path: '/comment')]
     public function create(CommentRequest $request)
     {
         try {
@@ -20,6 +24,7 @@ class Comment extends Controller
         return ['status' => 1, 'message' => 'Success', 'id' => $id];
     }
 
+    #[GetMapping(path: '/heart(\d+)')]
     public function heart($id)
     {
         if (!DB::table('comments')->where('id', '=', $id)->exists()) {

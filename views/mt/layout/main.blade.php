@@ -182,7 +182,7 @@
                     </form>
                 </li>
                 <li>
-                    <a href="https://docs.chengyao.xyz"><i
+                    <a href="https://docs.1kmb.com"><i
                                 class="fa fa-book"></i> 文档</a>
                 </li>
                 <li class="d-bg"><a href="/about">关于</a></li>

@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controller;
 use App\Models\Notes;
 use Max\Http\UploadedFile;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\PostMapping;
 
+#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
 class Note extends Controller
 {
+    #[GetMapping(path: '/list')]
     public function list(Notes $notes)
     {
         $page = $this->request->get('p', 1);
@@ -25,6 +29,7 @@ class Note extends Controller
      * @return array
      * @throws \Exception
      */
+    #[PostMapping(path: '/upload-thumb')]
     public function uploadImage(): array
     {
         /* @var UploadedFile $thumb */
@@ -45,6 +50,7 @@ class Note extends Controller
      * @return array
      * @throws \Exception
      */
+    #[PostMapping(path: '/uploadImage')]
     public function uploadImages(): array
     {
         $image = $this->request->file('editormd-image-file');

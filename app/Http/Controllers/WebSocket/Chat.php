@@ -11,7 +11,7 @@ use Max\Swoole\Pool\Pools\Table;
 /**
  * 这个要重构，等max/swoole重构后重写一遍
  */
-class Chat implements WebSocketControllerInterface
+class Chat
 {
     protected array $bannedKeywords = [
         '习近平', '政治', '中国', '国家', '总理', '杀', '操', '草', '草泥马', '傻逼', '母狗' . '日' . '草', '艹', 'sb', 'porn',

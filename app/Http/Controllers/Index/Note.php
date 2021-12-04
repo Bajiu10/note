@@ -7,8 +7,11 @@ use App\Http\Traits\Paginate;
 use App\Models\Comments;
 use App\Models\Notes;
 use Max\Di\Annotations\Inject;
+use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\DB;
 use Max\Foundation\Facades\Session;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\RequestMapping;
 
 class Note extends Controller
 {
@@ -22,6 +25,7 @@ class Note extends Controller
 
     protected const NUMBER_OF_PAGES = 8;
 
+    #[GetMapping(path: '/note/(\d+)\.html', alias: 'read')]
     public function read($id)
     {
         $note = DB::table('notes')
@@ -58,6 +62,7 @@ class Note extends Controller
         throw new \Exception('笔记不存在！', 404);
     }
 
+    #[GetMapping(path: '/search')]
     public function search()
     {
         $keyword = $this->request->get('kw');
@@ -77,6 +82,10 @@ class Note extends Controller
         return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
     }
 
+    #[
+        RequestMapping(path: 'notes/add'),
+        Middleware(\App\Http\Middleware\Common\Login::class)
+    ]
     public function create()
     {
         if ($this->request->isMethod('get')) {
@@ -96,6 +105,10 @@ class Note extends Controller
         return redirect(url('read', [$insertedId]));
     }
 
+    #[
+        RequestMapping(path: 'notes/edit/(\d+)', alias: 'edit'),
+        Middleware(\App\Http\Middleware\Common\Login::class)
+    ]
     public function edit($id = 0)
     {
         $note = DB::table('notes')
@@ -137,6 +150,10 @@ class Note extends Controller
         }
     }
 
+    #[
+        RequestMapping(path: 'notes/delete/(\d+)'),
+        Middleware(\App\Http\Middleware\Common\Login::class)
+    ]
     public function delete($id)
     {
         if (DB::table('notes')

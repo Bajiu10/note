@@ -4,11 +4,16 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Index;
 
 use App\Http\Controller;
+use App\Http\Middleware\Common\Logined;
 use Max\Foundation\Facades\DB;
 use Max\Foundation\Facades\Session;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\RequestMapping;
 
+#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web', Logined::class])]
 class User extends Controller
 {
+    #[RequestMapping(path: 'login')]
     public function login()
     {
         $from = $this->request->get('from', '/');
@@ -29,6 +34,7 @@ class User extends Controller
         }
     }
 
+    #[GetMapping(path: 'logout')]
     public function logout()
     {
         Session::destroy();

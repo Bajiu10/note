@@ -6,12 +6,12 @@ use App\Http\Controller;
 use App\Http\Traits\Paginate;
 use App\Models\Notes;
 use Max\Cache\Cache;
-use Max\Database\Manager;
 use Max\Di\Annotations\Inject;
 use Max\Foundation\Facades\DB;
 use Max\Redis\Redis;
 use Max\Routing\Annotations\GetMapping;
 
+#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
 class Index extends Controller
 {
     use Paginate;
@@ -21,6 +21,7 @@ class Index extends Controller
 
     protected const NUMBER_OF_PAGES = 8;
 
+    #[GetMapping(path: '/')]
     public function index(Notes $notes)
     {
         $page      = (int)$this->request->get('p', 1);
@@ -36,6 +37,7 @@ class Index extends Controller
         return view(config('app.theme') . '/index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
     }
 
+    #[GetMapping(path: '/about')]
     public function about()
     {
         $stat = $this->cache->get('stat');
