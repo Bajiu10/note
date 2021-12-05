@@ -6,7 +6,6 @@ use App\Http\Controller;
 use App\Http\Traits\Paginate;
 use App\Models\Notes;
 use Max\Cache\Cache;
-use Max\Di\Annotations\Inject;
 use Max\Foundation\Facades\DB;
 use Max\Redis\Redis;
 use Max\Routing\Annotations\GetMapping;
@@ -15,9 +14,6 @@ use Max\Routing\Annotations\GetMapping;
 class Index extends Controller
 {
     use Paginate;
-
-    #[Inject]
-    protected Cache $cache;
 
     protected const NUMBER_OF_PAGES = 8;
 
@@ -38,10 +34,30 @@ class Index extends Controller
     }
 
     #[GetMapping(path: '/about')]
-    public function about()
+    public function about(Cache $cache)
     {
-        $stat = $this->cache->get('stat');
+        $stat = $cache->get('stat');
         return view(config('app.theme') . '/about', compact(['stat']));
+    }
+
+    #[GetMapping(path: '/search')]
+    public function search(Notes $notes)
+    {
+        $keyword = $this->request->get('kw');
+        $page    = (int)$this->request->get('p', 1);
+        if (empty($keyword)) {
+            throw new \Exception('关键词不存在！😂😂😂');
+        }
+        $count     = $notes->searchCount($keyword);
+        $totalPage = ceil($count / self::NUMBER_OF_PAGES);
+        $notes     = $notes->search($keyword, self::NUMBER_OF_PAGES, ($page - 1) * 8);
+        $notes     = collect($notes)->map(function($value) {
+            $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+            return $value;
+        });
+        $paginate  = $this->paginate($page, $totalPage, self::NUMBER_OF_PAGES);
+
+        return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
     }
 
     #[GetMapping(path: '/chat/record')]
