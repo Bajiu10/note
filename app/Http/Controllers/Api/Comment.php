@@ -24,7 +24,7 @@ class Comment extends Controller
         return ['status' => 1, 'message' => 'Success', 'id' => $id];
     }
 
-    #[GetMapping(path: '/heart(\d+)')]
+    #[GetMapping(path: '/heart/(\d+)')]
     public function heart($id)
     {
         if (!DB::table('comments')->where('id', '=', $id)->exists()) {
