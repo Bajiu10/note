@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'name'          => 'MAXPHP_SESSION_ID',
-    'handler'       => [
-        'class'   => '\Max\Session\Handlers\Cache',
+    'name' => 'MAXPHP_SESSION_ID',
+    'handler' => [
+        'class' => '\Max\Session\Handlers\File',
         'options' => [
-            //    'path' => env('storage_path') . 'session',
+            'path' => env('storage_path') . 'session',
             'ttl' => 3600,
         ]
     ],
