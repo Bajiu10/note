@@ -23,8 +23,6 @@ class Note extends Controller
     #[Inject]
     protected Comments $comments;
 
-    protected const NUMBER_OF_PAGES = 8;
-
     #[GetMapping(path: '/note/(\d+)\.html', alias: 'read')]
     public function read($id)
     {
@@ -60,26 +58,6 @@ class Note extends Controller
             return view(config('app.theme') . '/notes/read', compact(['note', 'comments_count', 'comments', 'hots', 'recommended', 'sub_comments']));
         }
         throw new \Exception('笔记不存在！', 404);
-    }
-
-    #[GetMapping(path: '/search')]
-    public function search()
-    {
-        $keyword = $this->request->get('kw');
-        $page    = (int)$this->request->get('p', 1);
-        if (empty($keyword)) {
-            throw new \Exception('关键词不存在！😂😂😂');
-        }
-        $count     = $this->notes->searchCount($keyword);
-        $totalPage = ceil($count / self::NUMBER_OF_PAGES);
-        $notes     = $this->notes->search($keyword, self::NUMBER_OF_PAGES, ($page - 1) * 8);
-        $notes     = collect($notes)->map(function($value) {
-            $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
-            return $value;
-        });
-        $paginate  = $this->paginate($page, $totalPage, self::NUMBER_OF_PAGES);
-
-        return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
     }
 
     #[

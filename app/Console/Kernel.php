@@ -23,7 +23,6 @@ class Kernel extends ConsoleKernel
      */
     protected array $providers = [
         \App\Providers\RouteServiceProvider::class,
-        \Max\Cache\CacheServiceProvider::class,
     ];
 }
 

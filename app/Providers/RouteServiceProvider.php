@@ -7,12 +7,4 @@ use Max\Foundation\Providers\RouteServiceProvider as RouteProvider;
 
 class RouteServiceProvider extends RouteProvider
 {
-    /**
-     * 注册路由
-     *
-     * @throws \Exception
-     */
-    public function map()
-    {
-    }
 }
