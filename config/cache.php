@@ -5,15 +5,14 @@ return [
     'stores'  => [
         //文件缓存
         'file'      => [
-            // 默认为文件缓存
-            'handler' => \Max\Cache\Store\File::class,
+            'handler' => \Max\Cache\Handlers\File::class,
             'options' => [
                 'path' => env('cache_path') . 'app',
             ],
         ],
         // redis缓存
         'redis'     => [
-            'handler' => \Max\Cache\Store\Redis::class,
+            'handler' => \Max\Cache\Handlers\Redis::class,
             'options' => [
                 //所有Redis的host[不区分主从]
                 'host'   => [
@@ -37,12 +36,11 @@ return [
         ],
         //memcached缓存
         'memcached' => [
-            'handler' => \Max\Cache\Store\Memcached::class,
+            'handler' => \Max\Cache\Handlers\Memcached::class,
             'options' => [
                 'host' => '127.0.0.1', //主机
                 'port' => 11211        //端口
             ],
-
         ]
     ],
 ];

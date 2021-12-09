@@ -31,6 +31,5 @@ class Kernel extends Http
     protected array $providers = [
         \App\Providers\AppServiceProvider::class,
         \App\Providers\RouteServiceProvider::class,
-        \Max\Cache\CacheServiceProvider::class,
     ];
 }

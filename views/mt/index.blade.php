@@ -22,17 +22,18 @@
         <div class="left" style="width: 75%; margin-right: 1%">
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back"
+                         style="background: white url('/static/img/packages/routing.png') no-repeat; background-size: cover">
                     </div>
                     <div class="sm-title">
-                        分类
+                        <a href="https://github.com/topyao/max-routing">一款轻量的路由</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
                     </div>
                     <div class="sm-title">
-                        分类
+                        <a href="https://github.com/topyao/max-view">Blade视图引擎</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
