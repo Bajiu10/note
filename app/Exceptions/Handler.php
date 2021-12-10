@@ -10,6 +10,13 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    /**
+     * @param ServerRequestInterface $request
+     * @param Throwable $throwable
+     * @return ResponseInterface
+     * @throws Throwable
+     * @throws \Max\Foundation\Exceptions\HttpException
+     */
     public function render(ServerRequestInterface $request, Throwable $throwable): ResponseInterface
     {
         if ($this->app->isDebug()) {
