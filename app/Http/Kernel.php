@@ -2,10 +2,9 @@
 
 namespace App\Http;
 
-use App\Providers\AppServiceProvider;
-use Max\Foundation\Http;
+use Max\Foundation\Http\Kernel as HttpKernel;
 
-class Kernel extends Http
+class Kernel extends HttpKernel
 {
     /**
      * 中间件

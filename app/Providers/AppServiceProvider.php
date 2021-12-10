@@ -4,14 +4,14 @@ namespace App\Providers;
 
 use Max\Di\Contracts\PropertyAttribute;
 use Max\Di\Exceptions\ContainerException;
-use Max\Foundation\ServiceProvider;
+use Max\Foundation\Providers\AbstractProvider;
 use Psr\Container\ContainerInterface;
 
-class AppServiceProvider extends ServiceProvider
+class AppServiceProvider extends AbstractProvider
 {
     public function register()
     {
-        $this->app->afterResolving(function (ContainerInterface $container, \ReflectionClass $reflectionClass, object $object) {
+        $this->app->afterResolving(function(ContainerInterface $container, \ReflectionClass $reflectionClass, object $object) {
             if (PHP_VERSION_ID >= 80000 && config('app.annotation.enable')) {
                 foreach ($reflectionClass->getProperties() as $property) {
                     try {
