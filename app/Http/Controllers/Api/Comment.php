@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Dao\CommentDao;
+use App\Dao\HeartDao;
 use App\Http\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Models\Comments;
@@ -13,34 +15,29 @@ use Max\Routing\Annotations\PostMapping;
 class Comment extends Controller
 {
     #[PostMapping(path: '/comment')]
-    public function create(CommentRequest $request)
+    public function create(CommentRequest $request, CommentDao $commentDao)
     {
         try {
-            $comment = $request->post(['comment', 'note_id', 'name'], ['name' => '匿名用户']);
-            $id      = DB::table('comments')->insert($comment);
+            $id = $commentDao->createOne($request->post(['comment', 'note_id', 'name'], ['name' => '匿名用户']));
+
+            return ['status' => 1, 'message' => 'Success', 'id' => $id];
         } catch (\Exception $e) {
             return ['status' => 0, 'message' => $e->getMessage()];
         }
-        return ['status' => 1, 'message' => 'Success', 'id' => $id];
     }
 
     #[GetMapping(path: '/heart/(\d+)')]
-    public function heart($id)
+    public function heart($id, HeartDao $heartDao)
     {
         if (!DB::table('comments')->where('id', '=', $id)->exists()) {
             return ['status' => -1, 'message' => '评论不存在'];
         }
         $userId = $this->request->ip();
-        if (DB::table('hearts')
-              ->where('comment_id', '=', $id)
-              ->where('user_id', '=', $userId)->exists()
-        ) {
-            DB::table('hearts')
-              ->where('comment_id', '=', $id)
-              ->where('user_id', '=', $userId)->delete();
+        if ($heartDao->hasOneByCommentId($id, $userId)) {
+            $heartDao->deleteOneByCommentId($id, $userId);
             return ['status' => 0, 'message' => '取消喜欢成功!'];
         }
-        DB::table('hearts')->insert(['comment_id' => $id, 'user_id' => $userId]);
+        $heartDao->createOne(['comment_id' => $id, 'user_id' => $userId]);
         return ['status' => 1, 'message' => '喜欢成功!'];
     }
 

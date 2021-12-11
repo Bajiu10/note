@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Models\Notes;
 use Max\Http\UploadedFile;
@@ -12,15 +13,11 @@ use Max\Routing\Annotations\PostMapping;
 class Note extends Controller
 {
     #[GetMapping(path: '/list')]
-    public function list(Notes $notes)
+    public function list(NoteDao $noteDao)
     {
         $page = $this->request->get('p', 1);
-        return $notes->list($page, 8)->map(function($value) {
-            if (empty($value['thumb'])) {
-                $value['thumb'] = '/static/bg/bg' . rand(1, 18) . '.jpg';
-            }
-            return $value;
-        })->toArray();
+
+        return $noteDao->getSome($page)->toArray();
     }
 
     /**
@@ -34,9 +31,9 @@ class Note extends Controller
     {
         /* @var UploadedFile $thumb */
         $thumb = $this->request->file('thumb');
-        $type  = pathinfo($thumb->getClientFilename(), PATHINFO_EXTENSION);
-        $name  = md5(microtime(true)) . '.' . $type;
-        $path  = '/upload/thumb/' . date('Ymd/') . $name;
+        $type = pathinfo($thumb->getClientFilename(), PATHINFO_EXTENSION);
+        $name = md5(microtime(true)) . '.' . $type;
+        $path = '/upload/thumb/' . date('Ymd/') . $name;
         if ($thumb instanceof UploadedFile) {
             $thumb->moveTo(public_path(ltrim($path, '/')));
             return ['status' => true, 'path' => $path];
@@ -54,15 +51,15 @@ class Note extends Controller
     public function uploadImages(): array
     {
         $image = $this->request->file('editormd-image-file');
-        $type  = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
-        $name  = md5(microtime(true)) . '.' . $type;
-        $path  = '/upload/images/' . date('Ymd/') . $name;
+        $type = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
+        $name = md5(microtime(true)) . '.' . $type;
+        $path = '/upload/images/' . date('Ymd/') . $name;
         if ($image instanceof UploadedFile) {
             $image->moveTo(public_path(ltrim($path, '/')));
             return [
                 'success' => 1,
                 'message' => '图片上传成功！',
-                'url'     => $path
+                'url' => $path
             ];
         }
         return [
