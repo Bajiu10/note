@@ -9,29 +9,50 @@ use App\Http\Controller;
 use App\Http\Traits\Paginate;
 use Max\Cache\Annotations\Cacheable;
 use Max\Cache\Cache;
+use Max\Di\Annotations\Inject;
 use Max\Redis\Redis;
 use Max\Routing\Annotations\GetMapping;
 
+/**
+ * Class Index
+ * @package App\Http\Controllers\Index
+ */
 #[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
 class Index extends Controller
 {
     use Paginate;
 
+    /**
+     * @var NoteDao
+     */
+    #[Inject]
+    protected NoteDao $noteDao;
+
+    /**
+     * @param LinkDao $linkDao
+     * @param CommentDao $commentDao
+     * @return mixed
+     * @throws \Exception
+     */
     #[
         GetMapping(path: '/'),
         Cacheable(ttl: 1000)
     ]
-    public function index(LinkDao $linkDao, CommentDao $commentDao, NoteDao $noteDao)
+    public function index(LinkDao $linkDao, CommentDao $commentDao)
     {
         $page = (int)$this->request->get('p', 1);
-        $paginate = $this->paginate($page, ceil($noteDao->getAmount() / 8), 8);
-        $hots = $noteDao->recommend(10);
-        $notes = $noteDao->getSome($page);
+        $paginate = $this->paginate($page, ceil($this->noteDao->getAmount() / 8), 8);
+        $hots = $this->noteDao->recommend(10);
+        $notes = $this->noteDao->getSome($page);
         $links = $linkDao->all();
         $comments = $commentDao->getSome();
         return view(config('app.theme') . '/index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
     }
 
+    /**
+     * @param Cache $cache
+     * @return mixed
+     */
     #[GetMapping(path: '/about')]
     public function about(Cache $cache)
     {
@@ -39,15 +60,19 @@ class Index extends Controller
         return view(config('app.theme') . '/about', compact(['stat']));
     }
 
+    /**
+     * @return mixed
+     * @throws \Exception
+     */
     #[GetMapping(path: '/search')]
-    public function search(NoteDao $noteDao)
+    public function search()
     {
         $page = (int)$this->request->get('p', 1);
         if (empty($keyword = $this->request->get('kw'))) {
             throw new \Exception('关键词不存在！😂😂😂');
         }
-        $totalPage = ceil($noteDao->countSearch($keyword) / 8);
-        $notes = $noteDao->search($keyword, offset: ($page - 1) * 8);
+        $totalPage = ceil($this->noteDao->countSearch($keyword) / 8);
+        $notes = $this->noteDao->search($keyword, offset: ($page - 1) * 8);
         $paginate = $this->paginate($page, $totalPage, 8);
 
         return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));

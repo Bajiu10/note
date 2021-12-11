@@ -11,9 +11,18 @@ use Max\Foundation\Facades\DB;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
 
+/**
+ * Class Comment
+ * @package App\Http\Controllers\Api
+ */
 #[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
 class Comment extends Controller
 {
+    /**
+     * @param CommentRequest $request
+     * @param CommentDao $commentDao
+     * @return array
+     */
     #[PostMapping(path: '/comment')]
     public function create(CommentRequest $request, CommentDao $commentDao)
     {
@@ -26,6 +35,11 @@ class Comment extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @param HeartDao $heartDao
+     * @return array
+     */
     #[GetMapping(path: '/heart/(\d+)')]
     public function heart($id, HeartDao $heartDao)
     {
@@ -41,6 +55,12 @@ class Comment extends Controller
         return ['status' => 1, 'message' => '喜欢成功!'];
     }
 
+    /**
+     * @param $note_id
+     * @param $page
+     * @param Comments $comments
+     * @return array
+     */
     public function page($note_id, $page, Comments $comments)
     {
         $order = $this->request->get('order', 0);

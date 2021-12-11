@@ -12,9 +12,18 @@ use Max\Foundation\Facades\Session;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
 
+/**
+ * Class User
+ * @package App\Http\Controllers\Index
+ */
 #[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
 class User extends Controller
 {
+    /**
+     * @param UserDao $userDao
+     * @return mixed
+     * @throws \Exception
+     */
     #[
         RequestMapping(path: 'login'),
         Middleware(Logined::class)
@@ -32,6 +41,9 @@ class User extends Controller
         }
     }
 
+    /**
+     * @return mixed
+     */
     #[
         GetMapping(path: 'logout'),
         Middleware(Login::class)

@@ -9,9 +9,17 @@ use Max\Http\UploadedFile;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
 
+/**
+ * Class Note
+ * @package App\Http\Controllers\Api
+ */
 #[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
 class Note extends Controller
 {
+    /**
+     * @param NoteDao $noteDao
+     * @return array
+     */
     #[GetMapping(path: '/list')]
     public function list(NoteDao $noteDao)
     {
