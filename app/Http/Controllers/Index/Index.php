@@ -7,7 +7,6 @@ use App\Dao\LinkDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Traits\Paginate;
-use App\Models\Notes;
 use Max\Cache\Annotations\Cacheable;
 use Max\Cache\Cache;
 use Max\Redis\Redis;
