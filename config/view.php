@@ -10,7 +10,7 @@ return [
         // 模板调试
         'debug'       => false,
         // 模板缓存
-        'cache'       => false,
+        'cache'       => true,
         // 模板后缀
         'suffix'      => '.blade.php',
     ],

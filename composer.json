@@ -38,7 +38,8 @@
         "max/routing": "dev-master",
         "max/di": "dev-master",
         "ext-curl": "*",
-        "max/session": "dev-master"
+        "max/session": "dev-master",
+        "max/swoole": "dev-master"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.3",
