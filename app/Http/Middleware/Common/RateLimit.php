@@ -15,7 +15,7 @@ class RateLimit implements MiddlewareInterface
         $ip   = $request->ip();
         $freq = (int)Cache::get($ip) ?? 0;
         //这里的3和第24行的1 表示1秒钟最多请求3次
-        if ($freq > 3) {
+        if ($freq > 5) {
             if (99 != $freq) {
                 //这里的5表示超过限制的频率会被限制访问5秒
                 Cache::set($ip, 99, 5);

@@ -3,7 +3,9 @@
 namespace App\Exceptions;
 
 use Max\Foundation\Exceptions\Handler as ExceptionHandler;
+use Max\Foundation\Exceptions\HttpException;
 use Max\Foundation\Http\Response;
+use Max\Routing\Exceptions\RouteNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -12,7 +14,8 @@ class Handler extends ExceptionHandler
 {
     /**
      * @param ServerRequestInterface $request
-     * @param Throwable $throwable
+     * @param Throwable              $throwable
+     *
      * @return ResponseInterface
      * @throws Throwable
      * @throws \Max\Foundation\Exceptions\HttpException
@@ -22,6 +25,7 @@ class Handler extends ExceptionHandler
         if ($this->app->isDebug()) {
             return parent::render(...func_get_args());
         }
-        return Response::make(view('mt/error', ['code' => $throwable->getCode(), 'message' => $throwable->getMessage()]));
+        $code = $throwable instanceof HttpException || $throwable instanceof RouteNotFoundException ? $throwable->getCode() : 500;
+        return Response::make(view('mt/error', ['code' => $code, 'message' => $throwable->getMessage()]), [], $code);
     }
 }
