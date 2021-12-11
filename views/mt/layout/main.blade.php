@@ -234,7 +234,7 @@
             </div>
             <div style="height: 80%">
                 <h2>相关作品</h2>
-                <p><a href="//gitee.com/cheng-yao/note">MaxNote</a></p>
+                <p><a href="//github.com/topyao/note">MaxNote</a></p>
             </div>
             <div style="height: 80%">
                 <h2>关于</h2>
