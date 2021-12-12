@@ -38,7 +38,6 @@ class Index extends Controller
      */
     #[
         GetMapping(path: '/'),
-        //        Cacheable(ttl: 1000)
     ]
     public function index(LinkDao $linkDao, CommentDao $commentDao)
     {
