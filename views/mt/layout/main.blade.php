@@ -194,12 +194,12 @@
                 </li>
                 @if(!is_null(\Max\Foundation\Facades\Session::get('user.id')))
                     <li class="d-bg" style="min-width:2.5em">
-                        <a href="/logout?from={{request()->url(true)}}" title="退出"><i
+                        <a href="/logout?from={{get_url()}}" title="退出"><i
                                     class="fa fa-sign-out"></i></a>
                     </li>
                 @else
                     <li class="d-bg" style="min-width:2.5em">
-                        <a href="/login?from={{request()->url(true)}}" title="登录"><i
+                        <a href="/login?from={{get_url()}}" title="登录"><i
                                     class="fa fa-sign-in"></i></a>
                     </li>
                 @endif
@@ -210,9 +210,9 @@
                 <li><a href="/about">关于</a></li>
                 @if(!is_null(\Max\Foundation\Facades\Session::get('user.id')))
                     <li><a href="/notes/add">发布</a></li>
-                    <li><a href="/logout?from={{request()->url(true)}}">退出</a></li>
+                    <li><a href="/logout?from={{get_url()}}">退出</a></li>
                 @else
-                    <li><a href="/login?from={{request()->url(true)}}">登录</a></li>
+                    <li><a href="/login?from={{get_url()}}">登录</a></li>
                 @endif
                 <li>
                     <input style="width:100%;height: 2.5em;outline: none;border-radius: 5px;border: none;background-color: #eeeeee;padding:0 .7em;box-sizing: border-box"

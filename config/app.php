@@ -16,7 +16,6 @@ return [
     'aliases'           => [
         'console'                                                  => \App\Console\Kernel::class,
         'http'                                                     => \App\Http\Kernel::class,
-        'route'                                                    => \Max\Routing\Router::class,
         \Psr\SimpleCache\CacheInterface::class                     => \Max\Cache\Cache::class,
         \Max\Foundation\Contracts\ExceptionHandlerInterface::class => \App\Exceptions\Handler::class,
         \Psr\Http\Message\ServerRequestInterface::class            => \Max\Foundation\Http\Request::class,
@@ -24,6 +23,6 @@ return [
         \Psr\Log\LoggerInterface::class                            => \Max\Log\Logger::class,
         \Psr\Container\ContainerInterface::class                   => \Max\Foundation\App::class,
     ],
-
-    'theme' => 'mt'
+    'app_url'           => 'https://www.1kmb.com',
+    'theme'             => 'mt'
 ];

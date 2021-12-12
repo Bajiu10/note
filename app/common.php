@@ -78,3 +78,12 @@ if (false === function_exists('view')) {
         return make(\Max\View\Renderer::class)->render($template, $arguments);
     }
 }
+
+if (false === function_exists('get_url')) {
+    function get_url(bool $full = false): string
+    {
+        /** @var \Psr\Http\Message\UriInterface $uri */
+        $uri = make(\Psr\Http\Message\ServerRequestInterface::class)->getUri();
+        return $uri->__toString();
+    }
+}

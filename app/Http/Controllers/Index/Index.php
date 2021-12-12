@@ -15,6 +15,7 @@ use Max\Routing\Annotations\GetMapping;
 
 /**
  * Class Index
+ *
  * @package App\Http\Controllers\Index
  */
 #[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
@@ -29,28 +30,30 @@ class Index extends Controller
     protected NoteDao $noteDao;
 
     /**
-     * @param LinkDao $linkDao
+     * @param LinkDao    $linkDao
      * @param CommentDao $commentDao
+     *
      * @return mixed
      * @throws \Exception
      */
     #[
         GetMapping(path: '/'),
-        Cacheable(ttl: 1000)
+        //        Cacheable(ttl: 1000)
     ]
     public function index(LinkDao $linkDao, CommentDao $commentDao)
     {
-        $page = (int)$this->request->get('p', 1);
+        $page     = (int)$this->request->get('p', 1);
         $paginate = $this->paginate($page, ceil($this->noteDao->getAmount() / 8), 8);
-        $hots = $this->noteDao->recommend(10);
-        $notes = $this->noteDao->getSome($page);
-        $links = $linkDao->all();
+        $hots     = $this->noteDao->recommend(10);
+        $notes    = $this->noteDao->getSome($page);
+        $links    = $linkDao->all();
         $comments = $commentDao->getSome();
         return view(config('app.theme') . '/index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
     }
 
     /**
      * @param Cache $cache
+     *
      * @return mixed
      */
     #[GetMapping(path: '/about')]
@@ -72,14 +75,15 @@ class Index extends Controller
             throw new \Exception('关键词不存在！😂😂😂');
         }
         $totalPage = ceil($this->noteDao->countSearch($keyword) / 8);
-        $notes = $this->noteDao->search($keyword, offset: ($page - 1) * 8);
-        $paginate = $this->paginate($page, $totalPage, 8);
+        $notes     = $this->noteDao->search($keyword, offset: ($page - 1) * 8);
+        $paginate  = $this->paginate($page, $totalPage, 8);
 
         return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
     }
 
     /**
      * @param Redis $redis
+     *
      * @return mixed
      * @throws \Exception
      * @deprecated
@@ -87,19 +91,19 @@ class Index extends Controller
     #[GetMapping(path: '/chat/record')]
     public function record(Redis $redis)
     {
-        $page = $this->request->get('p', 1);
-        $limit = 20;
-        $start = $limit * max($page - 1, 0);
-        $end = $limit * $page;
-        $data = array_map(function ($value) {
+        $page     = $this->request->get('p', 1);
+        $limit    = 20;
+        $start    = $limit * max($page - 1, 0);
+        $end      = $limit * $page;
+        $data     = array_map(function($value) {
             $value = json_decode($value, true);
             if (str_starts_with($value['data'], 'img:')) {
-                $img = substr($value['data'], 4);
+                $img           = substr($value['data'], 4);
                 $value['data'] = "<img style='max-width:100%' src='{$img}'>";
             }
             return $value;
         }, $redis->handle()->lRange('chat', $start, $end));
-        $len = $redis->handle()->lLen('chat');
+        $len      = $redis->handle()->lLen('chat');
         $paginate = $this->paginate($page, ceil($len / $limit), $limit);
         return view(config('app.theme') . '/record', ['records' => $data, 'paginate' => $paginate]);
     }
