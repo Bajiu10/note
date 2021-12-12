@@ -1,6 +1,6 @@
 @extends('mt/layout/main')
 @section('body')
-    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 9)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
+    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
         <h1 style="color: white; font-weight: bold">Login</h1>
     </div>
     <main style="margin: -5em auto 8em;">

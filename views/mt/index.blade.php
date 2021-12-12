@@ -1,7 +1,7 @@
 @extends('mt/layout/main')
 @section('body')
     <div id="banner-content"
-         style="background: url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat center center; margin-bottom: 1em;">
+         style="background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center; margin-bottom: 1em;">
         <div>
             <p class="big-font">MAX</p>
             <p class="small-font">基于组件的轻量PHP框架！</p>
@@ -37,14 +37,14 @@
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat;">
                     </div>
                     <div class="sm-title">
                         分类
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat;">
                     </div>
                     <div class="sm-title">
                         分类

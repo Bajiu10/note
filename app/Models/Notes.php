@@ -60,7 +60,7 @@ class Notes extends Model
                  ->limit(3)
                  ->get(['n.id id', 'n.text text', 'n.title title', 'c.name type', 'n.thumb'])
                  ->map(function($value) {
-                     $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+                     $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
                      return $value;
                  })
                  ->toArray();

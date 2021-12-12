@@ -108,7 +108,7 @@ class NoteDao
             ->limit($limit)->offset(($page - 1) * $limit)
             ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
             ->map(function ($value) {
-                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
                 return $value;
             });
     }
@@ -153,7 +153,7 @@ class NoteDao
             ->offset($offset)
             ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
             ->map(function ($value) {
-                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
                 return $value;
             });
     }

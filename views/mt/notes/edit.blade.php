@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/static/editor/css/editormd.css"/>
 @endsection
 @section('body')
-    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 9)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
+    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
     </div>
     <main style="margin-top: -15em">
         <form action="{{url('edit',[$note['id']])}}" method="post" enctype="multipart/form-data">
