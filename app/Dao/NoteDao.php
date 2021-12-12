@@ -81,7 +81,7 @@ class NoteDao
             ->order('sort', 'DESC')
             ->order('create_time', 'DESC')
             ->limit($limit)->offset(($page - 1) * $limit)
-            ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
+            ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
             ->map(function ($value) {
                 $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
                 return $value;
@@ -113,7 +113,7 @@ class NoteDao
             ->whereRaw('(`n`.`title` LIKE ? OR MATCH(`n`.`title`,`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
             ->limit($limit)
             ->offset($offset)
-            ->get(['n.title title, n.text text, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
+            ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
             ->map(function ($value) {
                 $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
                 return $value;

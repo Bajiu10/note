@@ -10,7 +10,7 @@
                 <div>
                     <div class="list-content-title">
                         <a target="_blank" class="article-title"
-                           href="{{url('read',[$note['id']])}}">{{$note['title']}}</a>
+                           href="{{url('read',[$note['id']])}}">@if(0 != $note['permission']) <i class="fa fa-lock" aria-hidden="true"></i> @endif {{$note['title']}}</a>
                     </div>
                     <div class="description">
                         {{$note['abstract']}}
