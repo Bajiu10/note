@@ -50,8 +50,14 @@ class NoteDao
             ->update(['hits' => $old + 1]);
     }
 
+    /**
+     * @param $userId
+     * @param $data
+     * @return false|string
+     */
     public function createOne($userId, $data)
     {
+        $data['permission'] = 'on' == $data['permission'] ? 0 : 1;
         if (empty($data['abstract'])) {
             $data['abstract'] = substr($data['text'], 0, 300);
         }
@@ -59,12 +65,26 @@ class NoteDao
         return DB::table('notes')->insert($data);
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return int
+     */
     public function updateOne($id, $data)
     {
         $data['update_time'] = date('Y-m-d H:i:s');
+        $data['permission'] = 'on' == $data['permission'] ? 0 : 1;
+        if (empty($data['abstract'])) {
+            $data['abstract'] = substr($data['text'], 0, 300);
+        }
         return DB::table('notes')->where('id', '=', $id)->update($data);
     }
 
+    /**
+     * @param $id
+     * @param $userId
+     * @return int
+     */
     public function deleteOne($id, $userId)
     {
         return DB::table('notes')
@@ -73,6 +93,11 @@ class NoteDao
             ->update(['delete_time' => date('Y-m-d H:i:s')]);
     }
 
+    /**
+     * @param $page
+     * @param int $limit
+     * @return \Max\Database\Collection
+     */
     public function getSome($page, $limit = 8)
     {
         return DB::table('notes', 'n')
@@ -88,6 +113,10 @@ class NoteDao
             });
     }
 
+    /**
+     * @param int $limit
+     * @return array
+     */
     public function recommend($limit = 8)
     {
         return DB::table('notes')
@@ -100,11 +129,20 @@ class NoteDao
             ->toArray();
     }
 
+    /**
+     * @return int
+     */
     public function getAmount()
     {
         return DB::table('notes')->count();
     }
 
+    /**
+     * @param $kw
+     * @param int $limit
+     * @param int $offset
+     * @return \Max\Database\Collection
+     */
     public function search($kw, $limit = 8, $offset = 0)
     {
         return DB::table('notes', 'n')
@@ -120,6 +158,10 @@ class NoteDao
             });
     }
 
+    /**
+     * @param $kw
+     * @return int
+     */
     public function countSearch($kw)
     {
         return DB::table('notes')

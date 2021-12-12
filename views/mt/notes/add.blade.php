@@ -28,7 +28,7 @@
                 </div>
                 <aside>
                     <div class="card">
-                        <div class="tips2">摘要</div>
+                        <div class="tips">摘要</div>
                         <div style="padding: .5em">
                             <input type="hidden" name="abstract" id="abstract-field">
                             <div id="abstract" contenteditable="true"
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="tips2">分类</div>
+                        <div class="tips">分类</div>
                         <div style="padding: .5em">
                             <select name="cid" style="width: 100%;height: 2.5em">
                                 @foreach($categories as $category)
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="tips2">缩略图</div>
+                        <div class="tips">缩略图</div>
                         <div class="p-1" id="thumb-choose" style="cursor: pointer">
                             <div style="width:100%;min-height:5em;box-sizing: border-box;text-align: center"
                                  id="thumb-area">
@@ -56,6 +56,14 @@
                         </div>
                         <input type="file" id="thumb" style="display: none">
                         <input type="hidden" name="thumb">
+                    </div>
+                    <div class="card">
+                        <div class="tips">其他</div>
+                        <div style="padding: .5em">
+                            <label>
+                                <input type="checkbox" name="permission" checked>公开
+                            </label>
+                        </div>
                     </div>
                     <input type="submit" class="btn-submit">
                 </aside>

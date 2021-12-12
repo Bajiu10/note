@@ -32,14 +32,14 @@
                 </div>
                 <aside>
                     <div class="card">
-                        <div class="tips2">摘要</div>
+                        <div class="tips">摘要</div>
                         <div style="padding: .5em">
                         <textarea name="abstract" rows="7"
                                   style="width: 100%;height: 100%;box-sizing: border-box;resize: vertical;padding: .5em;border: 1px solid #DDDDDD;outline: none">{!! $note['abstract'] !!}</textarea>
                         </div>
                     </div>
                     <div class="card">
-                        <div class="tips2">分类</div>
+                        <div class="tips">分类</div>
                         <div style="padding: .5em">
                             <select name="cid" style="width: 100%;height: 2.5em">
                                 @foreach($categories as $key => $category)
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="tips2">缩略图</div>
+                        <div class="tips">缩略图</div>
                         <div class="p-1">
                             <div style="width:100%;min-height:5em;box-sizing: border-box;text-align: center"
                                  id="thumb-area">
@@ -67,6 +67,14 @@
                             </div>
                             <input type="file" id="thumb" style="display: none">
                             <input type="hidden" name="thumb" value="{{$note['thumb']}}">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="tips">其他</div>
+                        <div style="padding: .5em">
+                            <label>
+                                <input type="checkbox" name="permission" @if(0 == $note['permission']) checked @endif>公开
+                            </label>
                         </div>
                     </div>
                     <input type="submit" class="btn-submit">

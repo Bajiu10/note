@@ -85,8 +85,9 @@ class Note extends Controller
             return view(config('app.theme') . '/notes/add', ['categories' => $categoryDao->all()]);
         }
         try {
-            $insertedId = $this->noteDao->createOne(Session::get('user.id'), $this->request->post(
-                ['title', 'text', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => ''])
+            $insertedId = $this->noteDao->createOne(
+                Session::get('user.id'),
+                $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
             );
         } catch (\Exception $e) {
             throw new \Exception('新增失败了: ' . $e->getMessage());
@@ -112,9 +113,8 @@ class Note extends Controller
             $categories = $categoryDao->all();
             return view(config('app.theme') . '/notes/edit', compact(['note', 'categories']));
         }
-        $note = $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']);
         try {
-            $this->noteDao->updateOne($id, $note);
+            $this->noteDao->updateOne($id, $this->request->post(['title', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']));
             return redirect(url('read', [$id]));
         } catch (\Exception $exception) {
             throw new \Exception('更新失败了！');
