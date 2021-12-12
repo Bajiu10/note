@@ -72,6 +72,7 @@ CREATE TABLE `notes` (
   `abstract` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `sort` tinyint,
   `cid` mediumint DEFAULT '1',
+  `permission` tinyint not null default 0 comment '权限0公开，1仅自己'
   PRIMARY KEY (`id`) USING BTREE,
   FULLTEXT KEY `ft_title_text` (`title`,`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC

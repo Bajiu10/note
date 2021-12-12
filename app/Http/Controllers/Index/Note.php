@@ -52,6 +52,9 @@ class Note extends Controller
     public function read($id, CommentDao $commentDao)
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
+            if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
+                throw new \Exception('你没有权限查看~');
+            }
             $this->noteDao->incrHits($id, $note['hits']);
             $order = $this->request->get('order', 0);
             $comments_count = $commentDao->amountOfOneNote($id);

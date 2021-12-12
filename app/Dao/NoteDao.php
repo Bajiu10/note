@@ -31,6 +31,7 @@ class NoteDao
             'UNIX_TIMESTAMP(`update_time`) update_time',
             'text',
             'hits',
+            'permission',
             'tags',
             'thumb',
             'abstract',
