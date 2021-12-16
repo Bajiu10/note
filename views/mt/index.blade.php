@@ -1,25 +1,25 @@
 @extends('mt/layout/main')
 @section('body')
-    <div id="banner-content"
-         style="background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center; margin-bottom: 1em;">
-        <div>
-            <p class="big-font">MAX</p>
-            <p class="small-font">基于组件的轻量PHP框架！</p>
-            <a id="recommend" href="https://docs.1kmb.com"><i
-                        class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
-            <p class="links" style="flex-wrap: wrap">
-                <span id="version">Loading... </span>
-                <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
-                <a href="https://packagist.org/packages/max/max" target="_blank"
-                   rel="noopener"> Packagist</a>
-            </p>
-        </div>
-        <div class="d-bg">
-            <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;" aria-hidden="true"></i>
-        </div>
-    </div>
-    <main class="container">
+    <main class="container" style="margin-top: 3.8em">
         <div class="left" style="width: 75%; margin-right: 1%">
+            <div id="banner-content"
+                 style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
+                <div>
+                    <p class="big-font">MAX</p>
+                    <p class="small-font">基于组件的轻量PHP框架！</p>
+                    <a id="recommend" href="https://docs.1kmb.com"><i
+                                class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
+                    <p class="links" style="flex-wrap: wrap">
+                        <span id="version">Loading... </span>
+                        <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
+                        <a href="https://packagist.org/packages/max/max" target="_blank"
+                           rel="noopener"> Packagist</a>
+                    </p>
+                </div>
+                <div class="d-bg">
+                    <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;" aria-hidden="true"></i>
+                </div>
+            </div>
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
                     <div class="sm-back"
@@ -30,21 +30,22 @@
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
+                    <div class="sm-back"
+                         style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
                     </div>
                     <div class="sm-title">
                         <a href="https://github.com/topyao/max-view">Blade视图引擎</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: linear-gradient(28deg, #ff0000e6, rgb(20 0 255 / 63%));">
                     </div>
                     <div class="sm-title">
                         分类
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: linear-gradient(28deg, #320bff, #e5690ba1);">
                     </div>
                     <div class="sm-title">
                         分类

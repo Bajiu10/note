@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MaxPHP - 基于组件的轻量PHP框架！')</title>
     <meta name="keywords" content="MaxPHP,PHP框架,MVC框架">
-    <link rel="stylesheet" href="/static/css/css.css?20210753">
+    <link rel="stylesheet" href="/static/css/css.css?20210755">
     <link rel="stylesheet" href="/static/css/loading.css">
     <link href="//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     @yield('head')
@@ -177,7 +177,7 @@
             <ul style="display: flex;justify-content: flex-end">
                 <li class="d-bg">
                     <form action="/search">
-                        <input required autocomplete="off" placeholder="Search..." type="text" name="kw"
+                        <input required autocomplete="off" placeholder="太低调，百度搜不到" type="text" name="kw"
                                value="@isset($keyword){{$keyword}}@endisset"/>
                     </form>
                 </li>
@@ -216,7 +216,7 @@
                 @endif
                 <li>
                     <input style="width:100%;height: 2.5em;outline: none;border-radius: 5px;border: none;background-color: #eeeeee;padding:0 .7em;box-sizing: border-box"
-                           type="text" placeholder="Search..." value="@isset($keyword){{$keyword}}@endif" name="kw">
+                           type="text" placeholder="太低调，百度搜不到" value="@isset($keyword){{$keyword}}@endif" name="kw">
                 </li>
             </ul>
         </form>
@@ -263,13 +263,16 @@
                 dropdown.html('<i class="fa fa-bars"></i>')
             }
         });
-        $('.left-items').hover(function () {
-            item = $(this)
-            item.children('ul').toggle()
-        })
+
+        $(".left-items").hover(function () {
+            //stop是当执行其他动画的时候停止当前的
+            $(this).children('ul').stop().slideDown()
+        }, function () {
+            $(this).children('ul').hide();
+        });
 
         var _hmt = _hmt || [];
-        (function() {
+        (function () {
             var hm = document.createElement("script");
             hm.src = "https://hm.baidu.com/hm.js?da5d43badbfffca5860bc60a1348ebfd";
             var s = document.getElementsByTagName("script")[0];
