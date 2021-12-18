@@ -120,7 +120,7 @@
     <script>
         document.onscroll = function () {
             let catalog = document.getElementById('recommend-notes');
-            if (document.documentElement.scrollTop > 830) {
+            if (document.documentElement.scrollTop > 400) {
                 catalog.style.position = 'fixed';
                 catalog.style.top = '3.5em';
             } else {
