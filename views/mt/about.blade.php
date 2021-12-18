@@ -3,7 +3,7 @@
     关于 | MaxPHP - 基于组件的轻量PHP框架！
 @endsection
 @section('body')
-    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 9)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center; background-size: cover">
+    <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center; background-size: cover">
         <h1 style="color: white; font-weight: bold">About</h1>
     </div>
     <main id="app" style="margin-top: .8em">

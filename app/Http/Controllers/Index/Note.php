@@ -52,6 +52,9 @@ class Note extends Controller
     public function read($id, CommentDao $commentDao)
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
+            if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
+                throw new \Exception('你没有权限查看~');
+            }
             $this->noteDao->incrHits($id, $note['hits']);
             $order = $this->request->get('order', 0);
             $comments_count = $commentDao->amountOfOneNote($id);
@@ -82,8 +85,9 @@ class Note extends Controller
             return view(config('app.theme') . '/notes/add', ['categories' => $categoryDao->all()]);
         }
         try {
-            $insertedId = $this->noteDao->createOne(Session::get('user.id'), $this->request->post(
-                ['title', 'text', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => ''])
+            $insertedId = $this->noteDao->createOne(
+                Session::get('user.id'),
+                $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
             );
         } catch (\Exception $e) {
             throw new \Exception('新增失败了: ' . $e->getMessage());
@@ -109,9 +113,8 @@ class Note extends Controller
             $categories = $categoryDao->all();
             return view(config('app.theme') . '/notes/edit', compact(['note', 'categories']));
         }
-        $note = $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']);
         try {
-            $this->noteDao->updateOne($id, $note);
+            $this->noteDao->updateOne($id, $this->request->post(['title', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']));
             return redirect(url('read', [$id]));
         } catch (\Exception $exception) {
             throw new \Exception('更新失败了！');

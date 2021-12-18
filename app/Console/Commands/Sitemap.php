@@ -14,7 +14,7 @@ class Sitemap extends Command
 
     public function handle()
     {
-        $notes   = DB::name('notes')->fields(['create_time', 'id'])->select();
+        $notes   = DB::table('notes')->get(['create_time', 'id']);
         $sitemap = "<urlset>";
         foreach ($notes as $note) {
             $sitemap .= <<<TOR

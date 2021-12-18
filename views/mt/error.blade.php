@@ -6,7 +6,7 @@
     {{$message}}
 @endsection
 @section('body')
-    <div style="height:100vh;background: url('/static/bg/bg{{rand(1, 9)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center; background-size: cover">
+    <div style="height:100vh;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center; background-size: cover">
         <div style="max-width: 65%">
             <h1 style="font-size: 5em; color: white; text-align: center">
                 @if(empty($code))

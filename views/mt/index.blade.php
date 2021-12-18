@@ -1,25 +1,25 @@
 @extends('mt/layout/main')
 @section('body')
-    <div id="banner-content"
-         style="background: url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat center center; margin-bottom: 1em;">
-        <div>
-            <p class="big-font">MAX</p>
-            <p class="small-font">基于组件的轻量PHP框架！</p>
-            <a id="recommend" href="https://docs.1kmb.com"><i
-                        class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
-            <p class="links" style="flex-wrap: wrap">
-                <span id="version">Loading... </span>
-                <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
-                <a href="https://packagist.org/packages/max/max" target="_blank"
-                   rel="noopener"> Packagist</a>
-            </p>
-        </div>
-        <div class="d-bg">
-            <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;" aria-hidden="true"></i>
-        </div>
-    </div>
-    <main class="container">
+    <main class="container" style="margin-top: 3.8em">
         <div class="left" style="width: 75%; margin-right: 1%">
+            <div id="banner-content"
+                 style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
+                <div>
+                    <p class="big-font">MAX</p>
+                    <p class="small-font">基于组件的轻量PHP框架！</p>
+                    <a id="recommend" href="https://docs.1kmb.com"><i
+                                class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
+                    <p class="links" style="flex-wrap: wrap">
+                        <span id="version">Loading... </span>
+                        <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
+                        <a href="https://packagist.org/packages/max/max" target="_blank"
+                           rel="noopener"> Packagist</a>
+                    </p>
+                </div>
+                <div class="d-bg">
+                    <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;" aria-hidden="true"></i>
+                </div>
+            </div>
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
                     <div class="sm-back"
@@ -30,21 +30,22 @@
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
+                    <div class="sm-back"
+                         style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
                     </div>
                     <div class="sm-title">
                         <a href="https://github.com/topyao/max-view">Blade视图引擎</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: linear-gradient(28deg, #ff0000e6, rgb(20 0 255 / 63%));">
                     </div>
                     <div class="sm-title">
                         分类
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: white url('/static/bg/bg{{rand(1, 10)}}.jpg') no-repeat;">
+                    <div class="sm-back" style="background: linear-gradient(28deg, #320bff, #e5690ba1);">
                     </div>
                     <div class="sm-title">
                         分类
@@ -54,34 +55,7 @@
             <div class="card">
                 <div class="tips">最新发布</div>
                 <div id="content">
-                    @foreach($notes as $note)
-                        <div class="list-item">
-                            <div>
-                                <a href="{{url('read',[$note['id']])}}"><img id="thumb"
-                                                                             data-original="{{$note['thumb']}}"
-                                                                             alt=""></a>
-                            </div>
-                            <div class="list-content">
-                                <div>
-                                    <div class="list-content-title">
-                                        <a class="article-title"
-                                           href="{{url('read',[$note['id']])}}">{{$note['title']}}</a>
-                                    </div>
-                                    <div class="description">
-                                        {{$note['abstract']}}
-                                    </div>
-                                </div>
-                                <div class="list-content-bottom">
-                            <span><i class="fa fa-calendar"></i>&nbsp;&nbsp;{{time_convert($note['create_time'])}}&nbsp;&nbsp;&nbsp;&nbsp;<i
-                                        class="fa fa-folder"></i>&nbsp;&nbsp;{{$note['type']}}</span>
-                                    <span> <i class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<a
-                                                style="margin-left: .5em;color: #309bee"
-                                                href="{{url('read',[$note['id']])}}"><i
-                                                    class="fa fa-book"></i>&nbsp;&nbsp;继续阅读</a></span>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+                    @include('mt/layout/list')
                 </div>
             </div>
             <ul class="paginate" style="text-align: center">

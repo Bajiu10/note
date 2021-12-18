@@ -31,6 +31,7 @@ class NoteDao
             'UNIX_TIMESTAMP(`update_time`) update_time',
             'text',
             'hits',
+            'permission',
             'tags',
             'thumb',
             'abstract',
@@ -49,8 +50,14 @@ class NoteDao
             ->update(['hits' => $old + 1]);
     }
 
+    /**
+     * @param $userId
+     * @param $data
+     * @return false|string
+     */
     public function createOne($userId, $data)
     {
+        $data['permission'] = 'on' == $data['permission'] ? 0 : 1;
         if (empty($data['abstract'])) {
             $data['abstract'] = substr($data['text'], 0, 300);
         }
@@ -58,12 +65,26 @@ class NoteDao
         return DB::table('notes')->insert($data);
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return int
+     */
     public function updateOne($id, $data)
     {
         $data['update_time'] = date('Y-m-d H:i:s');
+        $data['permission'] = 'on' == $data['permission'] ? 0 : 1;
+        if (empty($data['abstract'])) {
+            $data['abstract'] = substr($data['text'], 0, 300);
+        }
         return DB::table('notes')->where('id', '=', $id)->update($data);
     }
 
+    /**
+     * @param $id
+     * @param $userId
+     * @return int
+     */
     public function deleteOne($id, $userId)
     {
         return DB::table('notes')
@@ -72,6 +93,11 @@ class NoteDao
             ->update(['delete_time' => date('Y-m-d H:i:s')]);
     }
 
+    /**
+     * @param $page
+     * @param int $limit
+     * @return \Max\Database\Collection
+     */
     public function getSome($page, $limit = 8)
     {
         return DB::table('notes', 'n')
@@ -80,13 +106,17 @@ class NoteDao
             ->order('sort', 'DESC')
             ->order('create_time', 'DESC')
             ->limit($limit)->offset(($page - 1) * $limit)
-            ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
+            ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
             ->map(function ($value) {
-                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
                 return $value;
             });
     }
 
+    /**
+     * @param int $limit
+     * @return array
+     */
     public function recommend($limit = 8)
     {
         return DB::table('notes')
@@ -99,11 +129,20 @@ class NoteDao
             ->toArray();
     }
 
+    /**
+     * @return int
+     */
     public function getAmount()
     {
         return DB::table('notes')->count();
     }
 
+    /**
+     * @param $kw
+     * @param int $limit
+     * @param int $offset
+     * @return \Max\Database\Collection
+     */
     public function search($kw, $limit = 8, $offset = 0)
     {
         return DB::table('notes', 'n')
@@ -112,13 +151,17 @@ class NoteDao
             ->whereRaw('(`n`.`title` LIKE ? OR MATCH(`n`.`title`,`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
             ->limit($limit)
             ->offset($offset)
-            ->get(['n.title title, n.text text, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
+            ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
             ->map(function ($value) {
-                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 18) . '.jpg';
+                $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
                 return $value;
             });
     }
 
+    /**
+     * @param $kw
+     * @return int
+     */
     public function countSearch($kw)
     {
         return DB::table('notes')

@@ -102,7 +102,7 @@ span#end::before, span#end::after {
 
 .dropdown-menu-box {
     padding: 0;
-    width: 100%;
+    width: 19em;
     list-style: none;
     position: absolute;
     top: 3.5em;
@@ -664,13 +664,15 @@ div.input-area > input:focus {
 
 #banner-content {
     display: flex;
+    background-size: cover;
     text-align: center;
-    height: 60vh;
     width: 100%;
     justify-content: space-around;
-    padding: 5em .5em 0;
     box-sizing: border-box;
     align-items: center;
+    margin-bottom: 1em;
+    height: 22em;
+    border-radius: 5px
 }
 
 .big-font {
