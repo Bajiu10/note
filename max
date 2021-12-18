@@ -7,7 +7,7 @@ use Max\Console\{Input, Output};
 
 require './vendor/autoload.php';
 
-(new App('.'))->start(function(App $app) {
+(new App('.'))->handle(function(App $app) {
     $console = $app->console;
     $console->run(
         $app->make(Input::class),
