@@ -80,7 +80,7 @@
                 height: "632px",
                 path: "/static/editor/lib/",
                 imageUpload: true,
-                watch: true,
+                watch: false,
                 autoFocus: false,
                 imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                 imageUploadURL: "/api/notes/uploadImage",
