@@ -12,7 +12,7 @@ class AppServiceProvider extends AbstractProvider
     public function register()
     {
         $this->app->afterResolving(function(ContainerInterface $container, \ReflectionClass $reflectionClass, object $object) {
-            if (PHP_VERSION_ID >= 80000 && config('app.annotation.enable')) {
+            if (PHP_VERSION_ID >= 80000 && config('app.annotation')) {
                 foreach ($reflectionClass->getProperties() as $property) {
                     try {
                         foreach ($property->getAttributes() as $attribute) {

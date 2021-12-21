@@ -2,46 +2,68 @@
 
 namespace App\Exceptions;
 
-use Max\Foundation\App;
-use Max\Foundation\Exceptions\Handler as ExceptionHandler;
 use Max\Foundation\Exceptions\HttpException;
+use Max\Foundation\Http\Middleware\HttpErrorHandler;
 use Max\Foundation\Http\Response;
-use Max\Log\LoggerFactory;
-use Max\Routing\Exceptions\RouteNotFoundException;
+use Max\Foundation\View\Renderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Throwable;
+use Psr\Log\LoggerInterface;
 
-class Handler extends ExceptionHandler
+/**
+ * @class   Handler
+ * @author  ChengYao
+ * @date    2021/12/18
+ * @time    13:00
+ * @package App\Exceptions
+ */
+class Handler extends HttpErrorHandler
 {
-
-    protected LoggerFactory $loggerFactory;
-
-    public function __construct(App $app)
-    {
-        parent::__construct($app);
-        /** @var LoggerFactory $loggerFactory */
-        $this->loggerFactory = $app->make(LoggerFactory::class);
-    }
-
+    /**
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $logger;
 
     /**
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @param \Throwable             $throwable
      * @param ServerRequestInterface $request
-     * @param Throwable $throwable
+     *
+     * @return void
+     */
+    protected function reportException(\Throwable $throwable, ServerRequestInterface $request)
+    {
+        $this->logger->error($throwable->getMessage(), [
+            'Method'  => $request->getMethod(),
+            'Uri'     => $request->getUri()->__toString(),
+            'Request' => $request->all(),
+            'Headers' => $request->getHeaders(),
+            'File: '  => $throwable->getFile(),
+            'Line: '  => $throwable->getLine(),
+            'Code: '  => $throwable->getCode(),
+        ]);
+    }
+
+    /**
+     * @param \Throwable             $throwable
+     * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
-     * @throws Throwable
-     * @throws \Max\Foundation\Exceptions\HttpException
+     * @throws HttpException
+     * @throws \Throwable
      */
-    public function render(ServerRequestInterface $request, Throwable $throwable): ResponseInterface
+    protected function renderException(\Throwable $throwable, ServerRequestInterface $request): ResponseInterface
     {
-        if ($this->app->isDebug()) {
-            return parent::render(...func_get_args());
+        if (app()->isDebug()) {
+            return parent::renderException(...func_get_args());
         }
-        $this->loggerFactory->get('business')->info(
-            $throwable->getMessage(), [
-            'request' => $request->all(),
-        ]);
-        return Response::make(view('mt/error', ['code' => $throwable->getCode(), 'message' => $throwable->getMessage()]), [], $throwable instanceof HttpException || $throwable instanceof RouteNotFoundException ? $throwable->getCode() : 500);
+        return Response::make(make(Renderer::class)->render('error'), [], $this->getCode($throwable));
     }
 }

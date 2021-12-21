@@ -7,21 +7,19 @@ return [
     'log'               => env('app.log', true),
     //默认时区
     'default_timezone'  => env('app.default_timezone', 'PRC'),
-    'annotation'        => [
-        'enable' => true,
-    ],
+    // 开启注解
+    'annotation'        => true,
     //异常处理类
     'exception_handler' => \App\Exceptions\Handler::class,
     //类别名
     'aliases'           => [
-        'console'                                                  => \App\Console\Kernel::class,
-        'http'                                                     => \App\Http\Kernel::class,
-        \Psr\SimpleCache\CacheInterface::class                     => \Max\Cache\Cache::class,
-        \Max\Foundation\Contracts\ExceptionHandlerInterface::class => \App\Exceptions\Handler::class,
-        \Psr\Http\Message\ServerRequestInterface::class            => \Max\Foundation\Http\Request::class,
-        \Psr\Http\Message\ResponseInterface::class                 => \Max\Foundation\Http\Response::class,
-        \Psr\Log\LoggerInterface::class                            => \Max\Log\Logger::class,
-        \Psr\Container\ContainerInterface::class                   => \Max\Foundation\App::class,
+        'console'                                       => \App\Console\Kernel::class,
+        'http'                                          => \App\Http\Kernel::class,
+        \Psr\SimpleCache\CacheInterface::class          => \Max\Cache\Cache::class,
+        \Psr\Http\Message\ServerRequestInterface::class => \Max\Foundation\Http\Request::class,
+        \Psr\Http\Message\ResponseInterface::class      => \Max\Foundation\Http\Response::class,
+        \Psr\Log\LoggerInterface::class                 => \Max\Log\Logger::class,
+        \Psr\Container\ContainerInterface::class        => \Max\Foundation\App::class,
     ],
     'app_url'           => 'https://www.1kmb.com',
     'theme'             => 'mt'
