@@ -1,6 +1,6 @@
 @extends('mt/layout/main')
 @php
-    $message = $message ?? 500;
+    $message = $message ?? 400;
 @endphp
 @section('title')
     {{$message}}

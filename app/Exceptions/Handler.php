@@ -64,6 +64,9 @@ class Handler extends HttpErrorHandler
         if (app()->isDebug()) {
             return parent::renderException(...func_get_args());
         }
-        return Response::make(make(Renderer::class)->render('error'), [], $this->getCode($throwable));
+        return Response::make(make(Renderer::class)->render('mt.error', [
+            'message' => $throwable->getMessage(),
+            'code'    => $throwable->getCode(),
+        ]), [], $this->getCode($throwable));
     }
 }
