@@ -24,7 +24,7 @@ class NoteDao
         if ($userId) {
             $note->where('user_id', '=', $userId);
         }
-        return $note->first([
+        $note =  $note->first([
             'title',
             'notes.id',
             'categories.name category',
@@ -39,6 +39,9 @@ class NoteDao
             'user_id',
             'cid'
         ]);
+        $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
+
+        return $note;
     }
 
     /**
