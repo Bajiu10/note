@@ -18,6 +18,7 @@ use Max\Routing\Annotations\RequestMapping;
 
 /**
  * Class Note
+ *
  * @package App\Http\Controllers\Index
  */
 class Note extends Controller
@@ -43,8 +44,9 @@ class Note extends Controller
     protected Comments $comments;
 
     /**
-     * @param $id
+     * @param            $id
      * @param CommentDao $commentDao
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -55,13 +57,14 @@ class Note extends Controller
             if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
                 throw new \Exception('你没有权限查看~');
             }
+            $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
             $this->noteDao->incrHits($id, $note['hits']);
-            $order = $this->request->get('order', 0);
+            $order          = $this->request->get('order', 0);
             $comments_count = $commentDao->amountOfOneNote($id);
-            $comments = $this->comments->read($id, 1, $order);
-            $sub_comments = $comments['sub'];
-            $hots = $this->notes->hots();
-            $recommended = $this->notes->getRecommended($note['cid'], $id);
+            $comments       = $this->comments->read($id, 1, $order);
+            $sub_comments   = $comments['sub'];
+            $hots           = $this->notes->hots();
+            $recommended    = $this->notes->getRecommended($note['cid'], $id);
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }
@@ -72,6 +75,7 @@ class Note extends Controller
 
     /**
      * @param CategoryDao $categoryDao
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -96,8 +100,9 @@ class Note extends Controller
     }
 
     /**
-     * @param $id
+     * @param             $id
      * @param CategoryDao $categoryDao
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -123,6 +128,7 @@ class Note extends Controller
 
     /**
      * @param $id
+     *
      * @return mixed
      * @throws \Exception
      */

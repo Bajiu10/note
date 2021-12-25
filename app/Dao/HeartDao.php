@@ -8,6 +8,7 @@ use Max\Foundation\Facades\DB;
 
 /**
  * Class HeartDao
+ *
  * @package App\Dao
  */
 class HeartDao
@@ -15,9 +16,9 @@ class HeartDao
     public function hasOneByCommentId($commentId, $userId = null)
     {
         $heart = DB::table('hearts')
-            ->where('comment_id', '=', $commentId);
+                   ->where('comment_id', $commentId);
         if ($userId) {
-            $heart->where('user_id', '=', $userId);
+            $heart->where('user_id', $userId);
         }
 
         return $heart->exists();
@@ -25,9 +26,9 @@ class HeartDao
 
     public function deleteOneByCommentId($commentId, $userId = null)
     {
-        $heart = DB::table('hearts')->where('comment_id', '=', $commentId);
+        $heart = DB::table('hearts')->where('comment_id', $commentId);
         if ($userId) {
-            $heart->where('user_id', '=', $userId);
+            $heart->where('user_id', $userId);
         }
         return $heart->delete();
     }

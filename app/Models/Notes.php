@@ -22,7 +22,8 @@ class Notes extends Model
     public function list($page, $limit)
     {
         return DB::table('notes', 'n')
-                 ->leftJoin('categories', 'c')->on('n.cid', '=', 'c.id')
+                 ->leftJoin('categories', 'c')
+                 ->on('n.cid', 'c.id')
                  ->whereNull('delete_time')
                  ->order('sort', 'DESC')
                  ->order('create_time', 'DESC')
@@ -33,7 +34,8 @@ class Notes extends Model
     public function search($kw, $limit, $offset)
     {
         return DB::table('notes', 'n')
-                 ->leftJoin('categories', 'c')->on('n.cid', '=', 'c.id')
+                 ->leftJoin('categories', 'c')
+                 ->on('n.cid', 'c.id')
                  ->whereNull('n.delete_time')
                  ->whereRaw('(`n`.`title` LIKE ? OR MATCH(`n`.`title`,`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
                  ->limit($limit)
@@ -52,10 +54,11 @@ class Notes extends Model
     public function getRecommended($cid, $id): array
     {
         return DB::table('notes', 'n')
-                 ->leftJoin('categories', 'c')->on('n.cid', '=', 'c.id')
+                 ->leftJoin('categories', 'c')
+                 ->on('n.cid', 'c.id')
                  ->whereNull('delete_time')
-                 ->where('n.cid', '=', $cid)
-                 ->where('n.id', '!=', $id)
+                 ->where('n.cid', $cid)
+                 ->where('n.id', $id, '!=')
                  ->order('rand()')
                  ->limit(3)
                  ->get(['n.id id', 'n.text text', 'n.title title', 'c.name type', 'n.thumb'])

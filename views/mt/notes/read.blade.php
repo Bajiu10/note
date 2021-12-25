@@ -145,7 +145,7 @@
                                             </div>
                                             <div style="font-size:.9em;text-align:right;padding:0 0 .3em;border-bottom: 1px solid #dbdbdb;color: grey">
                                                 <i class="fa
-@if(empty(\Max\Foundation\Facades\DB::table('hearts')->where('comment_id', '=', $comment['id'])->where('user_id', '=', request()->ip())->exists()))
+@if(empty(\Max\Foundation\Facades\DB::table('hearts')->where('comment_id', $comment['id'])->where('user_id', request()->ip())->exists()))
                                                         fa-heart-o
 @else
                                                         fa-heart
