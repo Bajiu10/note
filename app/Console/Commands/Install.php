@@ -8,6 +8,8 @@ use Max\Foundation\Facades\DB;
 class Install extends Command
 {
 
+    protected string $lock = './install.lock';
+
     protected $userinfo = [
         'username' => '',
         'password' => '',
@@ -16,6 +18,10 @@ class Install extends Command
 
     public function handle()
     {
+        if (file_exists($this->lock)) {
+            echo '已经安装过，请先删除install.lock: ', $this->lock, "\n";
+            exit;
+        }
         $this->createTable();
         echo "输入用户名：";
         $this->getString($this->userinfo['username']);
@@ -25,6 +31,7 @@ class Install extends Command
         echo "输入邮箱: ";
         $this->getString($this->userinfo['email']);
         DB::table('users')->insert($this->userinfo);
+        touch($this->lock);
         echo "安装成功！输入php max serve 快速体验！ \n";
     }
 
