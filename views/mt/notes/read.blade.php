@@ -44,9 +44,9 @@
                                 href="/">首页</a> /
                         {!! $note['title'] !!}
                     </div>
-                    <i id="qrcode-btn"
-                       style="cursor:pointer; font-size:1.5em; position: absolute; top: .2em; right: .3em;"
-                       class="fa fa-qrcode"></i>
+{{--                    <i id="qrcode-btn"--}}
+{{--                       style="cursor:pointer; font-size:1.5em; position: absolute; top: .2em; right: .3em;"--}}
+{{--                       class="fa fa-qrcode"></i>--}}
                     <div id="content-loading" style="text-align: center">
                         <span style="font-size: .9em">Loading...</span>
                     </div>
@@ -378,11 +378,11 @@
             $('#catalog-box').css('width', $('.card-content')[0].offsetWidth);
         });
 
-        $('#qrcode-btn').on('click', () => {
-            $('#poster').css('visibility', 'visible');
-        });
-        $('#poster-close').on('click', () => {
-            $('#poster').css('visibility', 'hidden');
-        })
+        // $('#qrcode-btn').on('click', () => {
+        //     $('#poster').css('visibility', 'visible');
+        // });
+        // $('#poster-close').on('click', () => {
+        //     $('#poster').css('visibility', 'hidden');
+        // })
     </script>
 @endsection
