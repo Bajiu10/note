@@ -11,7 +11,7 @@ class Install extends Command
     protected $userinfo = [
         'username' => '',
         'password' => '',
-        'email' => '',
+        'email'    => '',
     ];
 
     public function handle()
@@ -24,7 +24,7 @@ class Install extends Command
         $this->userinfo['password'] = md5($this->userinfo['password']);
         echo "输入邮箱: ";
         $this->getString($this->userinfo['email']);
-        DB::name('users')->insert($this->userinfo);
+        DB::table('users')->insert($this->userinfo);
         echo "安装成功！输入php max serve 快速体验！ \n";
     }
 
@@ -59,7 +59,7 @@ class Install extends Command
     {
         $table = <<<TABLE
 CREATE TABLE `notes` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -72,8 +72,7 @@ CREATE TABLE `notes` (
   `abstract` varchar(1000) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `sort` tinyint,
   `cid` mediumint DEFAULT '1',
-  `permission` tinyint not null default 0 comment '权限0公开，1仅自己'
-  PRIMARY KEY (`id`) USING BTREE,
+  `permission` tinyint not null default 0 comment '权限0公开，1仅自己',
   FULLTEXT KEY `ft_title_text` (`title`,`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
 TABLE;
@@ -140,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `age` tinyint DEFAULT '0',
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_time` int DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
 TABLE;
         try {
