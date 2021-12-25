@@ -10,9 +10,11 @@ use App\Models\Comments;
 use Max\Foundation\Facades\DB;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Class Comment
+ *
  * @package App\Http\Controllers\Api
  */
 #[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
@@ -20,11 +22,12 @@ class Comment extends Controller
 {
     /**
      * @param CommentRequest $request
-     * @param CommentDao $commentDao
+     * @param CommentDao     $commentDao
+     *
      * @return array
      */
     #[PostMapping(path: '/comment')]
-    public function create(CommentRequest $request, CommentDao $commentDao)
+    public function create(ServerRequestInterface $request, CommentDao $commentDao)
     {
         try {
             $id = $commentDao->createOne($request->post(['comment', 'note_id', 'name'], ['name' => '匿名用户']));
@@ -36,14 +39,15 @@ class Comment extends Controller
     }
 
     /**
-     * @param $id
+     * @param          $id
      * @param HeartDao $heartDao
+     *
      * @return array
      */
     #[GetMapping(path: '/heart/(\d+)')]
     public function heart($id, HeartDao $heartDao)
     {
-        if (!DB::table('comments')->where('id', '=', $id)->exists()) {
+        if (!DB::table('comments')->where('id', $id)->exists()) {
             return ['status' => -1, 'message' => '评论不存在'];
         }
         $userId = $this->request->ip();
@@ -56,9 +60,10 @@ class Comment extends Controller
     }
 
     /**
-     * @param $note_id
-     * @param $page
+     * @param          $note_id
+     * @param          $page
      * @param Comments $comments
+     *
      * @return array
      */
     public function page($note_id, $page, Comments $comments)

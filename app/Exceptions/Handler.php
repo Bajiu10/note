@@ -64,6 +64,14 @@ class Handler extends HttpErrorHandler
         if (app()->isDebug()) {
             return parent::renderException(...func_get_args());
         }
+        if ($request->isAjax()) {
+            return Response::make([
+                'status'  => false,
+                'code'    => 1000,
+                'data'    => $throwable->getTrace(),
+                'message' => $throwable->getMessage(),
+            ]);
+        }
         return Response::make(make(Renderer::class)->render('mt.error', [
             'message' => $throwable->getMessage(),
             'code'    => $throwable->getCode(),
