@@ -183,7 +183,7 @@ class NoteDao
         return DB::table('notes', 'n')
             ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
             ->whereNull('n.delete_time')
-            ->whereRaw('(MATCH(`n`.`title`,`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
+            ->whereRaw('(`n`.`title` like ? OR MATCH(`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
             ->limit($limit)
             ->offset($offset)
             ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
@@ -202,7 +202,7 @@ class NoteDao
     {
         return DB::table('notes')
             ->whereNull('delete_time')
-            ->whereRaw('(MATCH(`title`,`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])
+            ->whereRaw('(`title` like ? OR MATCH(`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])
             ->count(1);
     }
 
