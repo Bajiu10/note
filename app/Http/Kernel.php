@@ -12,14 +12,15 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected array $middleware = [
-        \Max\Foundation\Http\Middleware\SessionInit::class,
         \App\Http\Middleware\Common\RateLimit::class,
         \App\Http\Middleware\Common\Statistic::class,
     ];
 
     protected array $middlewareGroups = [
         'api' => [],
-        'web' => [],
+        'web' => [
+            \Max\Foundation\Http\Middleware\SessionInit::class,
+        ],
     ];
 
     /**

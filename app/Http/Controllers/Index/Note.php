@@ -21,6 +21,7 @@ use Max\Routing\Annotations\RequestMapping;
  *
  * @package App\Http\Controllers\Index
  */
+#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
 class Note extends Controller
 {
     use Paginate;
