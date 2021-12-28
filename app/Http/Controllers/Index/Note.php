@@ -62,10 +62,10 @@ class Note extends Controller
             $this->noteDao->incrHits($id, $note['hits']);
             $order          = $this->request->get('order', 0);
             $comments_count = $commentDao->amountOfOneNote($id);
-            $comments       = $this->comments->read($id, 1, $order);
+            $comments       = $commentDao->read($id, 1, $order);
             $sub_comments   = $comments['sub'];
-            $hots           = $this->notes->hots();
-            $recommended    = $this->notes->getRecommended($note['cid'], $id);
+            $hots           = $this->noteDao->hots();
+            $recommended    = $this->noteDao->getRecommended($note['cid'], $id);
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }

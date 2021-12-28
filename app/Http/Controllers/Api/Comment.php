@@ -58,17 +58,4 @@ class Comment extends Controller
         $heartDao->createOne(['comment_id' => $id, 'user_id' => $userId]);
         return ['status' => 1, 'message' => '喜欢成功!'];
     }
-
-    /**
-     * @param          $note_id
-     * @param          $page
-     * @param Comments $comments
-     *
-     * @return array
-     */
-    public function page($note_id, $page, Comments $comments)
-    {
-        $order = $this->request->get('order', 0);
-        return $comments->read($note_id, $page, $order);
-    }
 }

@@ -5,17 +5,29 @@ namespace App\Console\Commands;
 use Max\Console\Command;
 use Max\Foundation\Facades\DB;
 
+/**
+ * Class Install
+ * @package App\Console\Commands
+ */
 class Install extends Command
 {
-
+    /**
+     * @var string
+     */
     protected string $lock = './install.lock';
 
+    /**
+     * @var string[]
+     */
     protected $userinfo = [
         'username' => '',
         'password' => '',
         'email'    => '',
     ];
 
+    /**
+     * @throws \Exception
+     */
     public function handle()
     {
         if (file_exists($this->lock)) {
@@ -36,16 +48,26 @@ class Install extends Command
     }
 
 
+    /**
+     * @param $variable
+     */
     public function getString(&$variable)
     {
         fscanf(STDIN, '%s', $variable);
     }
 
+    /**
+     * @param $table
+     */
     public function drop($table)
     {
         DB::exec("DROP TABLE IF EXISTS {$table}");
     }
 
+    /**
+     * @param $str
+     * @return string
+     */
     protected function quote($str)
     {
         $type = $this->app->config->get('database.default');
@@ -62,6 +84,9 @@ class Install extends Command
         return "{$delimiter}{$str}{$delimiter}";
     }
 
+    /**
+     * @throws \Exception
+     */
     public function createTable()
     {
         $table = <<<TABLE
@@ -80,7 +105,7 @@ CREATE TABLE `notes` (
   `sort` tinyint,
   `cid` mediumint DEFAULT '1',
   `permission` tinyint not null default 0 comment '权限0公开，1仅自己',
-  FULLTEXT KEY `ft_title_text` (`title`,`text`)
+  FULLTEXT KEY `ft_text` (text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
 TABLE;
         try {
@@ -126,7 +151,7 @@ TABLE;
  CREATE TABLE IF NOT EXISTS `hearts` (
   `comment_id` int NOT NULL DEFAULT '0',
   `user_id` char(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 TABLE;
         try {
             $this->drop('hearts');
@@ -163,7 +188,7 @@ CREATE TABLE `links` (
   `description` varchar(100) DEFAULT NULL,
   `hits` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4
 TABLE;
         try {
             $this->drop('links');

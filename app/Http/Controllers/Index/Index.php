@@ -7,7 +7,6 @@ use App\Dao\LinkDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Traits\Paginate;
-use Max\Cache\Annotations\Cacheable;
 use Max\Cache\Cache;
 use Max\Di\Annotations\Inject;
 use Max\Redis\Redis;
@@ -18,7 +17,7 @@ use Max\Routing\Annotations\GetMapping;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/')]
 class Index extends Controller
 {
     use Paginate;
