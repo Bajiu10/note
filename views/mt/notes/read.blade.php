@@ -24,7 +24,7 @@
                     <i class="fa fa-user"></i>&nbsp;Yao&nbsp;&nbsp;<i
                             class="fa fa-folder"></i>&nbsp;{{$note['category']}}&nbsp;&nbsp;<i
                             class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<i
-                            class="fa fa-comment"></i>&nbsp;{{$comments_count}}
+                            class="fa fa-comment"></i>&nbsp;{{$commentsCount}}
                     @if(\Max\Foundation\Facades\Session::get('user.id') == $note['user_id'])
                         <a href="/notes/edit/{{$note['id']}}">&nbsp;&nbsp;<i style="color: white"
                                                                              class="fa fa-edit"></i></a>
@@ -44,9 +44,6 @@
                                 href="/">首页</a> /
                         {!! $note['title'] !!}
                     </div>
-{{--                    <i id="qrcode-btn"--}}
-{{--                       style="cursor:pointer; font-size:1.5em; position: absolute; top: .2em; right: .3em;"--}}
-{{--                       class="fa fa-qrcode"></i>--}}
                     <div id="content-loading" style="text-align: center">
                         <span style="font-size: .9em">Loading...</span>
                     </div>
@@ -100,7 +97,7 @@
                     <div class="card">
                         <div
                                 style="border-bottom:1px solid #e0e0e0;display: flex;justify-content: space-between;padding:.5em 1em 1em;font-size: .95em">
-                            <b>{{$comments_count}}条评论</b>
+                            <b>{{$commentsCount}}条评论</b>
                             @if(request()->get('order') == 1)
                                 <a id="sort" data-id="1" href="?order=0"><span style="color: grey">按时间排序</span></a>
                             @else
@@ -115,84 +112,23 @@
                                 <div style="display: flex;justify-content: space-between;box-sizing: border-box">
                                     <input type="text" placeholder="用户名" name="name">
                                     <input type="hidden" name="note_id" value="{{$note['id']}}">
-                                    <div style="width: 2.8em;text-align: center;margin: 0 .3em"><i
+                                    <div id="select-meme" style="width: 2.8em;text-align: center;margin: 0 .3em"><i
                                                 style="font-size: 2.1em;color: black;cursor:pointer;"
-                                                title="输入{狗头}可以发送狗头表情"
                                                 class="fa fa-smile-o"></i></div>
-                                    <div style="width: 10%;min-width: 3em;">
-                                        <input class="btn-submit" type="button"
-                                               style="height: 100%; margin-top: 0"
-                                               id="comment" value="评论">
+                                    <div style="width: 2em;">
+                                        <i id="comment" style="cursor: pointer; line-height: 1.4em; font-size: 1.5em"
+                                           class="fa fa-paper-plane-o" aria-hidden="true" title="发送"></i>
                                     </div>
+                                </div>
+                                <div id="meme" style="margin-top: .5em; display: none">
                                 </div>
                             </form>
                             <div id="comments">
-                                @foreach($comments['top'] as $comment)
-                                    <div style="margin: 1em 0 0;font-size: 14px;">
-                                        <div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em">
-                                            <div><img src="/favicon.ico" alt=""
-                                                      style="width: 2em;height: 2em;border-radius: 50%"><b
-                                                        style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">
-                                                    {{$comment['name']}}</b>
-                                            </div>
-                                            <span style="color:grey;font-size: 13px">{{time_convert($comment['create_time'])}}</span>
-                                        </div>
-                                        <div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word;color: #626262">
-                                            <div>
-                                                <div style="margin-bottom: .5em;display: flex;color: #626262">
-                                                    {{nl2br($comment['comment'])}}
-                                                </div>
-                                            </div>
-                                            <div style="font-size:.9em;text-align:right;padding:0 0 .3em;border-bottom: 1px solid #dbdbdb;color: grey">
-                                                <i class="fa
-@if(empty(\Max\Foundation\Facades\DB::table('hearts')->where('comment_id', $comment['id'])->where('user_id', request()->ip())->exists()))
-                                                        fa-heart-o
-@else
-                                                        fa-heart
-@endif like"
-                                                   data-id="{{$comment['id']}}"
-                                                   style="color: red;cursor:pointer;"></i> <span
-                                                        class="count-heart">{{$comment['hearts']}}</span>
-                                                <i class="fa fa-comment-o" style="margin-left: 1em"></i><!-- <span
-                                        class="review">回复</span>-->
-                                            </div>
-                                            @foreach($sub_comments as $sub)
-                                                @if($sub['parent_id'] == $comment['id'])
-                                                    <div style="margin: 1em 0 0;font-size: 14px;">
-                                                        <div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em">
-                                                            <div><img src="/favicon.ico" alt=""
-                                                                      style="width: 2em;height: 2em;border-radius: 50%"><b
-                                                                        style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">
-                                                                    {{$sub['name']}}</b>
-                                                            </div>
-                                                            <span style="color:grey;font-size: 13px">{{time_convert($sub['create_time'])}}</span>
-                                                        </div>
-                                                        <div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word;">
-                                                            <div>
-                                                                <div style="margin-bottom: .5em;display: flex;color: #626262">
-                                                                    {{$sub['comment']}}
-                                                                </div>
-                                                            </div>
-                                                            <div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: grey;font-size:.9em;">
-                                                                <i class="fa fa-heart like" data-id="{{$sub['id']}}"
-                                                                   style="color: red;cursor:pointer;"></i> <span
-                                                                        class="count-heart">{{$sub['hearts']}}</span>
-                                                                <i class="fa fa-comment-o" style="margin-left: 1em"></i>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endforeach
                             </div>
-                            @if(count($comments) == 5)
-                                <p id="comments-more"
-                                   style="font-size:.8em;text-align: center;font-weight: bold;color:grey;margin: 1em 0 .5em;cursor: pointer">
-                                    <i class="fa fa-long-arrow-down"></i> &nbsp;&nbsp;加载更多
-                                </p>
-                            @endif
+                            <p id="comments-more"
+                               style="font-size:.8em;text-align: center;font-weight: bold;color:grey;margin: 1em 0 .5em;cursor: pointer">
+                                <i class="fa fa-long-arrow-down"></i> &nbsp;&nbsp;加载更多
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -235,7 +171,6 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
     <script src="/static/editor/lib/marked.min.js"></script>
     <script src="/static/editor/lib/prettify.min.js"></script>
     <script src="/static/editor/lib/raphael.min.js"></script>
@@ -257,17 +192,38 @@
             }
             $('#catalog-box').css('width', $('.card-content')[0].offsetWidth);
         }
-    </script>
-    <script>
-        $(() => {
-            jQuery('#qrcode').qrcode({
-                render: 'canvas',
-                width: 100,
-                height: 100,
-                text: 'http://www.chengyao.xyz/note/{{$note['id']}}.html'
-            });
 
-            var testEditormdView, testEditormdView2;
+        let meme = [
+            '{汗}', '{囧}', '{斜眼笑}', '{生气}', '{哈欠}', '{滑稽}', '{笑哭}', '{抠鼻}', '{叹气}', '{挨揍}', '{吃瓜}', '{托腮}', '{偷看}', '{吹水}', '{黑线}', '{严肃}', '{鞭炮}', '{打脸}', '{滑稽2}', '{捂嘴}', '{睡觉}', '{挑逗}', '{狗头}', '{上吊}', '{摸头}'
+        ]
+
+        function loadComments(page) {
+            $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '?order=' + $('#sort').attr('data-id'), function (data, status) {
+                data = data.data
+                if ('success' === status) {
+                    if (data.top.length < 5) {
+                        $('#comments-more').remove();
+                    }
+                    for (let i in data.top) {
+                        for (let j in meme) {
+                            data.top[i].comment = data.top[i].comment.replace(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
+                        }
+                        let hearted = data.top[i].hearted ? 'fa-heart' : 'fa-heart-o';
+                        let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
+                        div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2.5em;height: 2.5em;border-radius: 50%"><b style="position:absolute;font-size:14px;line-height: 2.5em;margin-left:.5em">' + data.top[i].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.top[i].create_time) + '</span></div><div data-id="' + data.top[i].id + '" style="padding:.5em 0 0 3em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em; line-height: 2em; display: flex;color: #626262">' + data.top[i].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: grey;font-size: .9em"><i class="fa ' + hearted + ' like" data-id="' + data.top[i].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.top[i].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i> </div></div></div>');
+                        div.appendTo('#comments');
+                    }
+                    for (let j in data.sub) {
+                        let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
+                        div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2em;height: 2em;border-radius: 50%"><b style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">' + data.sub[j].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.sub[j].create_time) + '</span></div><div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em;display: flex;color: grey">' + data.sub[j].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: #626262;font-size: .9em"><i class="fa fa-heart-o like" data-id="' + data.sub[j].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.sub[j].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i></div></div></div>');
+                        div.appendTo('div[data-id=' + data.sub[j].parent_id + ']');
+                    }
+                }
+            }, 'json');
+        }
+
+        $(() => {
+            let testEditormdView, testEditormdView2;
             testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
                 htmlDecode: "style,script,iframe",  // you can filter tags decode
                 emoji: false,
@@ -277,27 +233,28 @@
                 sequenceDiagram: true,  // 默认不解析
             });
 
-            var comment_page = 2;
-            $('#comments-more').on('click', function () {
-                $.get('/note/{{$note['id']}}/comment/p/' + comment_page++ + '?order=' + $('#sort').attr('data-id'), function (data, status) {
-                    if ('success' === status) {
-                        if (data.top.length < 5) {
-                            $('#comments-more').remove();
-                        }
-                        for (let i in data.top) {
-                            let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
-                            div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2em;height: 2em;border-radius: 50%"><b style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">' + data.top[i].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.top[i].create_time) + '</span></div><div data-id="' + data.top[i].id + '" style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em;display: flex;color: #626262">' + data.top[i].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: grey;font-size: .9em"><i class="fa fa-heart-o like" data-id="' + data.top[i].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.top[i].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i> </div></div></div>');
-                            div.appendTo('#comments');
-                        }
-                        for (let j in data.sub) {
-                            let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
-                            div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2em;height: 2em;border-radius: 50%"><b style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">' + data.sub[j].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.sub[j].create_time) + '</span></div><div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em;display: flex;color: grey">' + data.sub[j].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: #626262;font-size: .9em"><i class="fa fa-heart-o like" data-id="' + data.sub[j].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.sub[j].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i></div></div></div>');
-                            div.appendTo('div[data-id=' + data.sub[j].parent_id + ']');
-                        }
-                    }
-                }, 'json');
-            });
+            $('#select-meme').on('click', function () {
+                $('#meme').slideToggle()
+            })
 
+
+            let memeBox = $('#meme')
+            for (let i in meme) {
+                memeBox.append(`<img src="/static/img/meme/${i}.png" alt="" title="${meme[i]}" class="meme">`)
+            }
+
+            let commentField = $('#comment-field')
+            $('.meme').on('click', function () {
+                let commentText = commentField.html()
+                commentField.text(commentText + $(this).attr('title'))
+                $('input[name=comment]').val(commentField.text());
+            })
+
+            var page = 1;
+            loadComments(page++)
+            $('#comments-more').on('click', function () {
+                loadComments(page++)
+            });
 
             $('#comment').on('click', function () {
                 // $(this).prop('disabled', true);
@@ -377,12 +334,5 @@
         $(window).on('resize', (e) => {
             $('#catalog-box').css('width', $('.card-content')[0].offsetWidth);
         });
-
-        // $('#qrcode-btn').on('click', () => {
-        //     $('#poster').css('visibility', 'visible');
-        // });
-        // $('#poster-close').on('click', () => {
-        //     $('#poster').css('visibility', 'hidden');
-        // })
     </script>
 @endsection

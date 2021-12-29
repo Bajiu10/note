@@ -105,7 +105,7 @@ CREATE TABLE `notes` (
   `sort` tinyint,
   `cid` mediumint DEFAULT '1',
   `permission` tinyint not null default 0 comment '权限0公开，1仅自己',
-  FULLTEXT KEY `ft_text` (text`)
+  FULLTEXT KEY `ft_text`(`text`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC
 TABLE;
         try {

@@ -8,8 +8,6 @@ use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Middleware\Common\Login;
 use App\Http\Traits\Paginate;
-use App\Models\Comments;
-use App\Models\Notes;
 use Max\Di\Annotations\Inject;
 use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
@@ -27,22 +25,10 @@ class Note extends Controller
     use Paginate;
 
     /**
-     * @var Notes
-     */
-    #[Inject]
-    protected Notes $notes;
-
-    /**
      * @var NoteDao
      */
     #[Inject]
     protected NoteDao $noteDao;
-
-    /**
-     * @var Comments
-     */
-    #[Inject]
-    protected Comments $comments;
 
     /**
      * @param            $id
@@ -60,16 +46,13 @@ class Note extends Controller
             }
             $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
             $this->noteDao->incrHits($id, $note['hits']);
-            $order          = $this->request->get('order', 0);
-            $comments_count = $commentDao->amountOfOneNote($id);
-            $comments       = $commentDao->read($id, 1, $order);
-            $sub_comments   = $comments['sub'];
-            $hots           = $this->noteDao->hots();
-            $recommended    = $this->noteDao->getRecommended($note['cid'], $id);
+            $commentsCount = $commentDao->amountOfOneNote($id);
+            $hots          = $this->noteDao->hots();
+            $recommended   = $this->noteDao->getRecommended($note['cid'], $id);
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }
-            return view(config('app.theme') . '/notes/read', compact(['note', 'comments_count', 'comments', 'hots', 'recommended', 'sub_comments']));
+            return view(config('app.theme') . '/notes/read', compact(['note', 'commentsCount', 'hots', 'recommended']));
         }
         throw new \Exception('笔记不存在！', 404);
     }

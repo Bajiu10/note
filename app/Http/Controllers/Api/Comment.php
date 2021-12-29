@@ -6,10 +6,10 @@ use App\Dao\CommentDao;
 use App\Dao\HeartDao;
 use App\Http\Controller;
 use App\Http\Requests\CommentRequest;
-use App\Models\Comments;
 use Max\Foundation\Facades\DB;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use Max\Validator;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -20,6 +20,23 @@ use Psr\Http\Message\ServerRequestInterface;
 #[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
 class Comment extends Controller
 {
+    #[GetMapping(path: '/(\d+)/comments')]
+    public function index($noteId, CommentDao $commentDao, HeartDao $heartDao)
+    {
+        $page         = (int)$this->request->get('page', 1);
+        $order        = $this->request->get('order', 0);
+        $commentCount = $commentDao->amountOfOneNote($noteId);
+        $comments     = $commentDao->read($noteId, $page, $order);
+        $hearts       = $heartDao->getIdsByIp($this->request->ip())->toArray();
+        foreach ($comments['top'] as &$value) {
+            $value['hearted'] = in_array($value['id'], $hearts);
+        }
+        return [
+            'total' => $commentCount,
+            'data'  => $comments,
+        ];
+    }
+
     /**
      * @param CommentRequest $request
      * @param CommentDao     $commentDao
@@ -29,9 +46,13 @@ class Comment extends Controller
     #[PostMapping(path: '/comment')]
     public function create(ServerRequestInterface $request, CommentDao $commentDao)
     {
+        $data      = $request->post(['comment', 'note_id', 'name'], ['name' => '匿名用户']);
+        $validator = new Validator($data, [
+            'comment' => ['required' => true, 'max' => 255],
+        ]);
+        $validator->throwAble(true)->check();
         try {
-            $id = $commentDao->createOne($request->post(['comment', 'note_id', 'name'], ['name' => '匿名用户']));
-
+            $id = $commentDao->createOne($data);
             return ['status' => 1, 'message' => 'Success', 'id' => $id];
         } catch (\Exception $e) {
             return ['status' => 0, 'message' => $e->getMessage()];

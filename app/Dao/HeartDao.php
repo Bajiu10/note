@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Dao;
-
 
 use Max\Foundation\Facades\DB;
 
@@ -13,6 +11,12 @@ use Max\Foundation\Facades\DB;
  */
 class HeartDao
 {
+
+    public function getIdsByIp($ip)
+    {
+        return DB::table('hearts')->where('user_id', $ip)->column('comment_id');
+    }
+
     public function hasOneByCommentId($commentId, $userId = null)
     {
         $heart = DB::table('hearts')

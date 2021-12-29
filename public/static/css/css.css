@@ -13,6 +13,12 @@ html, body {
     background-color: #fdfdfb;;
 }
 
+.meme {
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+}
+
 .p-1 {
     padding: .5em;
 }
