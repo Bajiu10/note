@@ -206,7 +206,7 @@
                     }
                     for (let i in data.top) {
                         for (let j in meme) {
-                            data.top[i].comment = data.top[i].comment.replace(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
+                            data.top[i].comment = data.top[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
                         }
                         let hearted = data.top[i].hearted ? 'fa-heart' : 'fa-heart-o';
                         let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
