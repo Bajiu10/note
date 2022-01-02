@@ -160,10 +160,17 @@ li.left-items:after {
 }
 
 #test-editormd-view2 {
-    color: #626262;
     box-sizing: border-box;
     padding: 1em !important;
     transition: all .5s;
+}
+
+.markdown-body p {
+    font-size: .95em;
+}
+
+#test-editormd-view2 li {
+    font-size: .95em;
 }
 
 #phone-nav {
