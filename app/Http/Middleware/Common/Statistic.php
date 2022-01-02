@@ -14,11 +14,6 @@ class Statistic implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        DB::table('stats')->insert([
-            'ip' => $request->ip(),
-            'referrer' => $request->header('referer'),
-            'path' => $request->url(true),
-        ]);
         try {
             $stat = (int)Cache::get('stat');
             Cache::set('stat', ++$stat);
