@@ -1,6 +1,6 @@
 @extends('mt/layout/main')
 @section('title')
-    关于 | MaxPHP - 基于组件的轻量PHP框架！
+    关于 | MaxPHP - 组件化的轻量PHP框架！
 @endsection
 @section('body')
     <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center; background-size: cover">

@@ -6,7 +6,7 @@
                  style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
                 <div>
                     <p class="big-font">MAX</p>
-                    <p class="small-font">基于组件的轻量PHP框架！</p>
+                    <p class="small-font">组件化的轻量PHP框架！</p>
                     <a id="recommend" href="https://docs.1kmb.com"><i
                                 class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
                     <p class="links" style="flex-wrap: wrap">
@@ -168,7 +168,8 @@
                         }
                         for (i in e) {
                             time_convert(e[i]['create_time']);
-                            var html = `<div class="list-item"><div><a target="_blank" href="/note/${e[i]['id']}.html"><img id="thumb" src="${e[i]['thumb']}" alt=""></a></div><div class="list-content"><div><div class="list-content-title"><a target="_blank" class="article-title" href="/note/${e[i]['id']}.html">${e[i]['title']}</a></div><div class="description">${e[i]['abstract']}</div></div><div class="list-content-bottom"><span><i class="fa fa-calendar"></i>&nbsp;&nbsp;${time_convert(e[i]['create_time'])}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-folder"></i>&nbsp;&nbsp;${e[i]['type']}</span><span> <i class="fa fa-eye"></i>&nbsp;${e[i]['hits']}&nbsp;&nbsp;<a target="_blank" style="margin-left: .5em;color: #309bee" href="/note/${e[i]['id']}.html"><i class="fa fa-book"></i>&nbsp;&nbsp;继续阅读</a></span></div></div></div>`;
+                            var lock = '0' === e[i]['permission'] ? '' : '<i class="fa fa-lock" aria-hidden="true"></i> ';
+                            var html = `<div class="list-item"><div><a target="_blank" href="/note/${e[i]['id']}.html"><img id="thumb" src="${e[i]['thumb']}" alt=""></a></div><div class="list-content"><div><div class="list-content-title"><a target="_blank" class="article-title" href="/note/${e[i]['id']}.html">${lock + e[i]['title']}</a></div><div class="description">${e[i]['abstract']}</div></div><div class="list-content-bottom"><span><i class="fa fa-calendar"></i>&nbsp;&nbsp;${time_convert(e[i]['create_time'])}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-folder"></i>&nbsp;&nbsp;${e[i]['type']}</span><span> <i class="fa fa-eye"></i>&nbsp;${e[i]['hits']}&nbsp;&nbsp;<a target="_blank" style="margin-left: .5em;color: #309bee" href="/note/${e[i]['id']}.html"><i class="fa fa-book"></i>&nbsp;&nbsp;继续阅读</a></span></div></div></div>`;
                             $(html).appendTo('#content');
                         }
                     }

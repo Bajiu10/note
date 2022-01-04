@@ -1,6 +1,6 @@
 @extends('mt/layout/main')
 @section('title')
-    {{$keyword}} | MaxPHP - 基于组件的轻量PHP框架！
+    {{$keyword}} | MaxPHP - 组件化的轻量PHP框架！
 @endsection
 @section('head')
 @endsection

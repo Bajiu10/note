@@ -72,14 +72,12 @@ if (false === function_exists('api_success')) {
     }
 }
 
-if (false === function_exists('view')) {
-    function view(string $template, array $arguments = [])
-    {
-        return make(\Max\View\Renderer::class)->render($template, $arguments);
-    }
-}
-
 if (false === function_exists('get_url')) {
+    /**
+     * @param bool $full
+     *
+     * @return string
+     */
     function get_url(bool $full = false): string
     {
         /** @var \Psr\Http\Message\UriInterface $uri */
