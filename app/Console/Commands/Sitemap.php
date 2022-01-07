@@ -7,20 +7,19 @@ use Max\Foundation\Facades\DB;
 
 class Sitemap extends Command
 {
-
-    protected $name = 'baidu';
-
+    protected $name        = 'baidu';
     protected $description = '生成sitemap';
 
     public function handle()
     {
         $notes   = DB::table('notes')->get(['create_time', 'id']);
         $sitemap = "<urlset>";
+        $url     = config('app.url');
         foreach ($notes as $note) {
             $sitemap .= <<<TOR
 
     <url>
-        <loc>https://www.chengyao.xyz/note/{$note['id']}.html</loc>
+        <loc>{$url}/note/{$note['id']}.html</loc>
         <priority>1.00</priority>
         <lastmod>{$note['create_time']}</lastmod>
         <changefreq>Always</changefreq>
