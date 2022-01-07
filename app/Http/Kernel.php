@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\RateLimit;
+use App\Http\Middleware\Statistic;
 use Max\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -12,8 +14,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected array $middleware = [
-        \App\Http\Middleware\Common\RateLimit::class,
-        \App\Http\Middleware\Common\Statistic::class,
+        RateLimit::class,
+        Statistic::class,
     ];
 
     protected array $middlewareGroups = [

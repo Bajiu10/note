@@ -1,10 +1,9 @@
 <?php
 
 
-namespace App\Http\Middleware\Common;
+namespace App\Http\Middleware;
 
 use Max\Foundation\Facades\Cache;
-use Max\Foundation\Facades\DB;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

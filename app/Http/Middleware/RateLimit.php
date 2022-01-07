@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware\Common;
+namespace App\Http\Middleware;
 
 use Max\Foundation\Facades\Cache;
 use Psr\Http\Message\ResponseInterface;

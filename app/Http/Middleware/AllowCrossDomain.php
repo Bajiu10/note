@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use Max\Http\Middleware\AllowCrossDomain as AllowCross;
+use Max\Foundation\Http\Middleware\AllowCrossDomain as AllowCross;
 
 /**
  * Class Cors

@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Middleware\Common;
+
+namespace App\Http\Middleware;
 
 use Max\Foundation\Facades\Session;
 use Psr\Http\Message\ResponseInterface;
@@ -8,15 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class Login implements MiddlewareInterface
+class Logined implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $userId = Session::get('user.id');
         if (!is_null($userId)) {
-            return $handler->handle($request);
+            throw new \Exception('你已经登录了！😊😊😊');
         }
-        throw new \Exception('你还没有登录哦！😢😢😢');
+        return $handler->handle($request);
     }
-
 }

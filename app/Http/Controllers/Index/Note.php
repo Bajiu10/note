@@ -6,7 +6,7 @@ use App\Dao\CategoryDao;
 use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
-use App\Http\Middleware\Common\Login;
+use App\Http\Middleware\Login;
 use App\Http\Traits\Paginate;
 use Max\Di\Annotations\Inject;
 use Max\Foundation\Di\Annotations\Middleware;

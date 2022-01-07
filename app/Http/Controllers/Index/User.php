@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Index;
 
 use App\Dao\UserDao;
 use App\Http\Controller;
-use App\Http\Middleware\Common\Login;
-use App\Http\Middleware\Common\Logined;
+use App\Http\Middleware\Login;
+use App\Http\Middleware\Logined;
 use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
 use Max\Routing\Annotations\GetMapping;
