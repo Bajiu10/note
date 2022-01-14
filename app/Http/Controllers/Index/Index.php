@@ -10,7 +10,10 @@ use App\Http\Traits\Paginate;
 use Exception;
 use Max\Cache\Cache;
 use Max\Di\Annotations\Inject;
+use Max\Foundation\Exceptions\HttpException;
 use Max\Routing\Annotations\GetMapping;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * Class Index
@@ -32,11 +35,12 @@ class Index extends Controller
      * @param LinkDao    $linkDao
      * @param CommentDao $commentDao
      *
-     * @return false|string
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws HttpException
+     * @throws Throwable
      */
     #[GetMapping(path: '/')]
-    public function index(LinkDao $linkDao, CommentDao $commentDao)
+    public function index(LinkDao $linkDao, CommentDao $commentDao):ResponseInterface
     {
         $page     = (int)$this->request->get('p', 1);
         $paginate = $this->paginate($page, ceil($this->noteDao->getAmount() / 8), 8);
@@ -50,21 +54,24 @@ class Index extends Controller
     /**
      * @param Cache $cache
      *
-     * @return false|string
+     * @return ResponseInterface
+     * @throws HttpException
+     * @throws Throwable
      */
     #[GetMapping(path: '/about')]
-    public function about(Cache $cache)
+    public function about(Cache $cache): ResponseInterface
     {
         $stat = $cache->get('stat');
         return view(config('app.theme') . '/about', compact(['stat']));
     }
 
     /**
-     * @return false|string
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws HttpException
+     * @throws Throwable
      */
     #[GetMapping(path: '/search')]
-    public function search(): bool|string
+    public function search(): ResponseInterface
     {
         $page = (int)$this->request->get('p', 1);
         if (empty($keyword = $this->request->get('kw'))) {
