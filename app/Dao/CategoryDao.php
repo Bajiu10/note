@@ -2,6 +2,7 @@
 
 namespace App\Dao;
 
+use Max\Database\Collection;
 use Max\Foundation\Facades\DB;
 
 /**
@@ -12,9 +13,10 @@ class CategoryDao
 {
     /**
      * @param string $order
-     * @return \Max\Database\Collection
+     *
+     * @return Collection
      */
-    public function all($order = 'id')
+    public function all(string $order = 'id'): Collection
     {
         return DB::table('categories')->order($order)->get();
     }

@@ -23,16 +23,13 @@
                         一、&nbsp;组件和框架核心分离<br>
                         二、&nbsp;基于 Psr7 的 HTTP-Message<br>
                         三、&nbsp;基于 Psr11 的容器，支持接口注入[支持注解 PHP8.0]<br>
-                        四、&nbsp;友好的 IDE 自动完成<br>
-                        五、&nbsp;支持门面<br>
-                        六、&nbsp;方便的数据库操作方法，支持 MySQL、PostgreSQL 等[可扩展]<br>
-                        七、&nbsp;基于 Psr14 的事件[支持注解 PHP8.0]<br>
-                        八、&nbsp;基于 Psr15 的中间件[支持注解 PHP8.0]<br>
-                        九、&nbsp;支持路由功能[支持注解 PHP8.0]<br>
-                        十、&nbsp;基于 Psr16 的缓存组件,支持 File,Memcached,Redis,APC[可扩展]<br>
-                        十、&nbsp;支持 Blade 的可扩展驱<br>
-                        十、&nbsp;简单易用的命令行操作<br>
-                        十、&nbsp;命令行，验证器，trace<br>
+                        四、&nbsp;方便的数据库操作方法，支持 MySQL、PostgreSQL 等[可扩展]<br>
+                        五、&nbsp;基于 Psr14 的事件[支持注解 PHP8.0]<br>
+                        六、&nbsp;基于 Psr15 的中间件[支持注解 PHP8.0]<br>
+                        七、&nbsp;基于 Psr16 的缓存组件,支持 File,Memcached,Redis,APC[可扩展]<br>
+                        八、&nbsp;支持路由功能[支持注解 PHP8.0]<br>
+                        九、&nbsp;支持 Blade 的可扩展驱<br>
+                        十、&nbsp;门面，命令行，验证器，trace<br>
                     </code>
                 </div>
             </div>

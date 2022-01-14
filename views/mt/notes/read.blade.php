@@ -6,6 +6,7 @@
 @section('head')
     <meta name="description" content="{!! $note['abstract'] !!}">
     <link rel="stylesheet" href="/static/editor/css/editormd.preview.css"/>
+    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
 @endsection
 
 @section('body')
@@ -99,9 +100,9 @@
                                 style="border-bottom:1px solid #e0e0e0;display: flex;justify-content: space-between;padding:.5em 1em 1em;font-size: .95em">
                             <b>{{$commentsCount}}条评论</b>
                             @if(request()->get('order') == 1)
-                                <a id="sort" data-id="1" href="?order=0"><span style="color: grey">按时间排序</span></a>
+                                <a id="sort" data-id="1" href="&order=0"><span style="color: grey">按时间排序</span></a>
                             @else
-                                <a id="sort" data-id="0" href="?order=1"><span style="color: grey">按点赞排序</span></a>
+                                <a id="sort" data-id="0" href="&order=1"><span style="color: grey">按点赞排序</span></a>
                             @endif
                         </div>
                         <div style="margin:.5em">
@@ -116,13 +117,25 @@
                                                 style="font-size: 2.1em;color: black;cursor:pointer;"
                                                 class="fa fa-smile-o"></i></div>
                                     <div style="width: 2em;">
-                                        <i id="comment" style="cursor: pointer; line-height: 1.4em; font-size: 1.5em"
+                                        <input type="hidden" id="TencentCaptcha" data-appid="2004706694"
+                                               data-cbfn="callbackName"
+                                               data-biz-state="data-biz-state">
+                                        <i id="comment"
+                                           style="cursor: pointer; line-height: 1.4em; font-size: 1.5em"
                                            class="fa fa-paper-plane-o" aria-hidden="true" title="发送"></i>
                                     </div>
                                 </div>
                                 <div id="meme" style="margin-top: .5em; display: none">
                                 </div>
                             </form>
+                            <!--点击此元素会自动激活验证码, 此例使用的button元素, 也可以使用div、span等-->
+                            <!--id :            (不可变) 元素的 ID, 值必须是 "TencentCaptcha"-->
+                            <!--data-appid :    (必须) 验证码CaptchaAppId, 从腾讯云的验证码控制台中获取, 验证码控制台页面内【图形验证】>【验证列表】进行查看 。如果未新建验证，请根据业务需求选择适合的验证渠道、验证场景进行新建-->
+                            <!--data-cbfn :     (必须) 回调函数名, 函数名要与 data-cbfn 相同-->
+                            <!--data-biz-state :(可选) 业务自定义透传参数, 会在回调函数内获取到 （res.bizState）-->
+                            {{--                            <button id="TencentCaptcha" data-appid="2004706694" data-cbfn="callbackName"--}}
+                            {{--                                    data-biz-state="data-biz-state" type="button">验证--}}
+                            {{--                            </button>--}}
                             <div id="comments">
                             </div>
                             <p id="comments-more"
@@ -143,7 +156,7 @@
                         <ul class="card-content">
                             @foreach($hots as $hot)
                                 <li>
-                                    <a href="{{url('read',[$hot['id']])}}">{{$hot['title']}}</a>
+                                    <a href="/note/{{$hot['id']}}.html">{{$hot['title']}}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -181,6 +194,56 @@
     <script src="/static/editor/editormd.min.js"></script>
     <script type="text/javascript" src="/static/js/qrcode.min.js" id="corepress_jquery_qrcode-js"></script>
     <script>
+        // 回调函数需要放在全局对象window下
+        window.callbackName = function (res) {
+            // $(this).prop('disabled', true);
+            // 返回结果
+            // ret         Int       验证结果，0：验证成功。2：用户主动关闭验证码。
+            // ticket      String    验证成功的票据，当且仅当 ret = 0 时 ticket 有值。
+            // CaptchaAppId       String    验证码应用ID。
+            // bizState    Any       自定义透传参数。
+            // randstr     String    本次验证的随机串，请求后台接口时需带上。
+            // console.log("callback:", res);
+            // res（用户主动关闭验证码）= {ret: 2, ticket: null}
+            // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+            if (res.ret === 0) {
+                // 复制结果至剪切板
+                // let str = `【randstr】->【${res.randstr}】      【ticket】->【${res.ticket}】`
+                // let ipt = document.createElement("input");
+                // ipt.value = str;
+                // document.body.appendChild(ipt);
+                // ipt.select();
+                // document.execCommand("Copy");
+                // document.body.removeChild(ipt);
+                // alert("1. 返回结果（randstr、ticket）已复制到剪切板，ctrl+v 查看。2. 打开浏览器控制台，查看完整返回结果。");
+                let data = $(form).serialize();
+                data += `&ticket=${res.ticket}&randstr=${res.randstr}`
+                $.ajax({
+                    url: '/api/notes/comment',
+                    type: 'post',
+                    data: data,
+                    dataType: 'json',
+                    success: function (e) {
+                        if (e.status) {
+                            window.location.reload();
+                        } else {
+                            alert(e.message);
+                        }
+                    },
+                    error: function (e) {
+                        alert('服务器异常!');
+                    }
+                });
+            }
+        }
+
+        $('#comment').on('click', function () {
+            if (0 === $('#comment-field').text().length) {
+                return false;
+            }
+            $('#TencentCaptcha').click();
+        })
+
         document.onscroll = function () {
             let catalog = document.getElementById('catalog-box');
             if (document.documentElement.scrollTop > 300) {
@@ -198,8 +261,8 @@
         ]
 
         function loadComments(page) {
-            $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '?order=' + $('#sort').attr('data-id'), function (data, status) {
-                data = data.data
+            $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '&order=' + $('#sort').attr('data-id'), function (data, status) {
+                data = data.data.data
                 if ('success' === status) {
                     if (data.top.length < 5) {
                         $('#comments-more').remove();
@@ -250,34 +313,10 @@
                 $('input[name=comment]').val(commentField.text());
             })
 
-            var page = 1;
+            let page = 1;
             loadComments(page++)
             $('#comments-more').on('click', function () {
                 loadComments(page++)
-            });
-
-            $('#comment').on('click', function () {
-                // $(this).prop('disabled', true);
-                if ($('textarea[name=comment]').val() === '') {
-                    return false;
-                }
-                let data = $(form).serialize();
-                $.ajax({
-                    url: '/api/notes/comment',
-                    type: 'post',
-                    data: data,
-                    dataType: 'json',
-                    success: function (e) {
-                        if (e.status) {
-                            window.location.reload();
-                        } else {
-                            alert(e.message);
-                        }
-                    },
-                    error: function (e) {
-                        alert('服务器异常!');
-                    }
-                });
             });
 
             $('#comment-field').on('input', function () {
@@ -293,7 +332,7 @@
                     type: 'get',
                     dataType: 'json',
                     success: function (e) {
-                        if (e.status) {
+                        if (e.code === 1) {
                             heart.removeClass('fa-heart-o').addClass('fa-heart').siblings('span.count-heart').text(++count);
                         } else {
                             heart.removeClass('fa-heart').addClass('fa-heart-o').siblings('span.count-heart').text(--count);

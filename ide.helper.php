@@ -6,9 +6,9 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $alias            别名
+         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -18,9 +18,9 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $alias            别名
+         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -30,9 +30,9 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $alias            别名
+         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -42,9 +42,9 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $alias            别名
+         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -54,9 +54,9 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $alias            别名
+         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -67,9 +67,9 @@ namespace Max\Routing\Annotations {
          * @param string            $path
          * @param array|string|null $allowCrossDomain
          * @param array|string[]    $methods
-         * @param string|null       $alias
+         * @param string|null       $name
          */
-        public function __construct(string $path, ?string $alias = null, array|string|null $allowCrossDomain = null, array $methods = ['GET', 'POST', 'HEAD'])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, array $methods = ['GET', 'POST', 'HEAD'])
         {
         }
     }

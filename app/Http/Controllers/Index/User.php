@@ -7,6 +7,7 @@ use App\Dao\UserDao;
 use App\Http\Controller;
 use App\Http\Middleware\Login;
 use App\Http\Middleware\Logined;
+use Exception;
 use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
 use Max\Routing\Annotations\GetMapping;
@@ -21,8 +22,9 @@ class User extends Controller
 {
     /**
      * @param UserDao $userDao
-     * @return mixed
-     * @throws \Exception
+     *
+     * @return false|string
+     * @throws Exception
      */
     #[
         RequestMapping(path: 'login'),
@@ -37,7 +39,7 @@ class User extends Controller
             Session::set('user', $user);
             return redirect($this->request->get('from', '/'));
         } else {
-            throw new \Exception('用户名或者密码错误！😢😢😢');
+            throw new Exception('用户名或者密码错误！😢😢😢');
         }
     }
 

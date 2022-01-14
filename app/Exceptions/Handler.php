@@ -5,10 +5,10 @@ namespace App\Exceptions;
 use Max\Foundation\Exceptions\HttpException;
 use Max\Foundation\Http\Middleware\HttpErrorHandler;
 use Max\Foundation\Http\Response;
-use Max\Foundation\View\Renderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * @class   Handler
@@ -33,12 +33,12 @@ class Handler extends HttpErrorHandler
     }
 
     /**
-     * @param \Throwable             $throwable
+     * @param Throwable             $throwable
      * @param ServerRequestInterface $request
      *
      * @return void
      */
-    protected function reportException(\Throwable $throwable, ServerRequestInterface $request)
+    protected function reportException(Throwable $throwable, ServerRequestInterface $request)
     {
         $this->logger->error($throwable->getMessage(), [
             'Method'  => $request->getMethod(),
@@ -52,14 +52,14 @@ class Handler extends HttpErrorHandler
     }
 
     /**
-     * @param \Throwable             $throwable
+     * @param Throwable             $throwable
      * @param ServerRequestInterface $request
      *
      * @return ResponseInterface
      * @throws HttpException
-     * @throws \Throwable
+     * @throws Throwable
      */
-    protected function renderException(\Throwable $throwable, ServerRequestInterface $request): ResponseInterface
+    protected function renderException(Throwable $throwable, ServerRequestInterface $request): ResponseInterface
     {
         if (app()->isDebug()) {
             return parent::renderException(...func_get_args());
@@ -72,7 +72,7 @@ class Handler extends HttpErrorHandler
                 'message' => $throwable->getMessage(),
             ]);
         }
-        return Response::make(make(Renderer::class)->render('mt.error', [
+        return Response::make(view('mt.error', [
             'message' => $throwable->getMessage(),
             'code'    => $throwable->getCode(),
         ]), [], $this->getCode($throwable));

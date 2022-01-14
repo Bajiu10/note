@@ -2,6 +2,7 @@
 
 namespace App\Dao;
 
+use Max\Database\Collection;
 use Max\Foundation\Facades\DB;
 
 /**
@@ -16,7 +17,7 @@ class CommentDao
      *
      * @return int
      */
-    public function amountOfOneNote($id)
+    public function amountOfOneNote($id): int
     {
         return DB::table('comments')->where('note_id', $id)->count($id);
     }
@@ -26,9 +27,9 @@ class CommentDao
      * @param string $order
      * @param string $seq
      *
-     * @return \Max\Database\Collection
+     * @return Collection
      */
-    public function getSome($limit = 5, $order = 'create_time', $seq = 'DESC')
+    public function getSome(int $limit = 5, string $order = 'create_time', string $seq = 'DESC'): Collection
     {
         return DB::table('comments')->order($order, $seq)->limit($limit)->get();
     }
@@ -38,7 +39,7 @@ class CommentDao
      *
      * @return false|string
      */
-    public function createOne($data)
+    public function createOne($data): bool|string
     {
         return DB::table('comments')->insert($data);
     }
@@ -51,7 +52,7 @@ class CommentDao
      *
      * @return array
      */
-    public function read(int $id, $page = 1, int $order = 0, $pageSize = 5)
+    public function read(int $id, int $page = 1, int $order = 0, int $pageSize = 5): array
     {
         $orders       = $order ? ['hearts', 'DESC'] : ['create_time', 'DESC'];
         $fields       = [
@@ -81,6 +82,4 @@ class CommentDao
                           ->get($fields);
         return ['top' => $comments, 'sub' => $sub_comments];
     }
-
-
 }

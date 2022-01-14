@@ -38,10 +38,11 @@
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: linear-gradient(28deg, #ff0000e6, rgb(20 0 255 / 63%));">
+                    <div class="sm-back"
+                         style="background: white url('/static/img/packages/maxgo.png') no-repeat; background-size: cover">
                     </div>
                     <div class="sm-title">
-                        分类
+                        <a href="https://github.com/topyao/maxgo-skeleton">MaxGo</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
@@ -107,7 +108,7 @@
                 <ul class="card-content">
                     @foreach($hots as $hot)
                         <li>
-                            <a href="{{url('read',[$hot['id']])}}">{{$hot['title']}}</a>
+                            <a href="/note/{{$hot['id']}}.html">{{$hot['title']}}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -159,7 +160,7 @@
             $('#get-more').on('click', function () {
                 page++;
                 $.ajax({
-                    url: '/api/notes/list?p=' + page,
+                    url: '/api/notes?p=' + page,
                     type: 'GET',
                     dataType: 'json',
                     success: function (e) {

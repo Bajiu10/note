@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Dao\NoteDao;
-use App\Http\Controller;
+use App\Http\Controllers\ApiController;
 use Max\Http\Message\UploadedFile;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
@@ -14,15 +14,15 @@ use Max\Routing\Annotations\PostMapping;
  * @package App\Http\Controllers\Api
  */
 #[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
-class Note extends Controller
+class Note extends ApiController
 {
     /**
      * @param NoteDao $noteDao
      *
      * @return array
      */
-    #[GetMapping(path: '/list')]
-    public function list(NoteDao $noteDao)
+    #[GetMapping(path: '')]
+    public function index(NoteDao $noteDao): array
     {
         $page = $this->request->get('p', 1);
 
@@ -45,9 +45,12 @@ class Note extends Controller
         $path  = '/upload/thumb/' . date('Ymd/') . $name;
         if ($thumb instanceof UploadedFile) {
             $thumb->moveTo(public_path(ltrim($path, '/')));
-            return ['status' => true, 'path' => $path];
+            return $this->success([
+                'path' => $path,
+            ]);
         }
-        return ['status' => false, 'path' => ''];
+
+        return $this->error();
     }
 
     /**

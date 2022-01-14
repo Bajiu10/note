@@ -8,6 +8,7 @@ use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Middleware\Login;
 use App\Http\Traits\Paginate;
+use Exception;
 use Max\Di\Annotations\Inject;
 use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
@@ -34,15 +35,15 @@ class Note extends Controller
      * @param            $id
      * @param CommentDao $commentDao
      *
-     * @return mixed
-     * @throws \Exception
+     * @return false|string
+     * @throws Exception
      */
-    #[GetMapping(path: '/note/(\d+)\.html', alias: 'read')]
-    public function read($id, CommentDao $commentDao)
+    #[GetMapping(path: '/note/<id>.html', name: 'read')]
+    public function show($id, CommentDao $commentDao)
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
             if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
-                throw new \Exception('你没有权限查看~');
+                throw new Exception('你没有权限查看~');
             }
             $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
             $this->noteDao->incrHits($id, $note['hits']);
@@ -54,14 +55,14 @@ class Note extends Controller
             }
             return view(config('app.theme') . '/notes/read', compact(['note', 'commentsCount', 'hots', 'recommended']));
         }
-        throw new \Exception('笔记不存在！', 404);
+        throw new Exception('笔记不存在！', 404);
     }
 
     /**
      * @param CategoryDao $categoryDao
      *
-     * @return mixed
-     * @throws \Exception
+     * @return false|string
+     * @throws Exception
      */
     #[
         RequestMapping(path: 'notes/add'),
@@ -77,10 +78,10 @@ class Note extends Controller
                 Session::get('user.id'),
                 $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
             );
-        } catch (\Exception $e) {
-            throw new \Exception('新增失败了: ' . $e->getMessage());
+        } catch (Exception $e) {
+            throw new Exception('新增失败了: ' . $e->getMessage());
         }
-        return redirect(url('read', [$insertedId]));
+        return redirect('/note/' . $insertedId . '.html');
     }
 
     /**
@@ -88,10 +89,10 @@ class Note extends Controller
      * @param CategoryDao $categoryDao
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     #[
-        RequestMapping(path: 'notes/edit/(\d+)', alias: 'edit'),
+        RequestMapping(path: 'notes/edit/<id>', name: 'edit'),
         Middleware(Login::class)
     ]
     public function edit($id, CategoryDao $categoryDao)
@@ -104,9 +105,9 @@ class Note extends Controller
         }
         try {
             $this->noteDao->updateOne($id, $this->request->post(['title', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']));
-            return redirect(url('read', [$id]));
-        } catch (\Exception $exception) {
-            throw new \Exception('更新失败了！');
+            return redirect('/note/' . $id . '.html');
+        } catch (Exception $exception) {
+            throw new Exception('更新失败了！');
         }
     }
 
@@ -114,17 +115,17 @@ class Note extends Controller
      * @param $id
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     #[
-        RequestMapping(path: 'notes/delete/(\d+)'),
+        RequestMapping(path: 'notes/delete/<id>'),
         Middleware(Login::class)
     ]
-    public function delete($id)
+    public function destroy($id)
     {
         if ($this->noteDao->deleteOne($id, Session::get('user.id'))) {
             return redirect('/');
         }
-        throw new \Exception('删除失败了！');
+        throw new Exception('删除失败了！');
     }
 }

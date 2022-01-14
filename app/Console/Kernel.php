@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
         'baidu'   => Commands\Baidu::class,
         'install' => Commands\Install::class,
         'sitemap' => Commands\Sitemap::class,
-        'swoole'  => \Max\Swoole\Server::class,
     ];
 
     /*

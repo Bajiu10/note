@@ -2,7 +2,7 @@
     @foreach($notes as $note)
         <div class="list-item">
             <div>
-                <a href="{{url('read',[$note['id']])}}" target="_blank">
+                <a href="/note/{{$note['id']}}.html" target="_blank">
                     <img id="thumb" data-original="{{$note['thumb']}}" alt="">
                 </a>
             </div>
@@ -10,7 +10,7 @@
                 <div>
                     <div class="list-content-title">
                         <a target="_blank" class="article-title"
-                           href="{{url('read',[$note['id']])}}">@if(0 != $note['permission']) <i class="fa fa-lock" aria-hidden="true"></i> @endif {{$note['title']}}</a>
+                           href="/note/{{$note['id']}}.html">@if(0 != $note['permission']) <i class="fa fa-lock" aria-hidden="true"></i> @endif {{$note['title']}}</a>
                     </div>
                     <div class="description">
                         {{$note['abstract']}}
@@ -21,7 +21,7 @@
                                         class="fa fa-folder"></i>&nbsp;&nbsp;{{$note['type']}}</span>
                     <span> <i class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<a target="_blank"
                                                                                           style="margin-left: .5em;color: #309bee"
-                                                                                          href="{{url('read',[$note['id']])}}"><i
+                                                                                          href="/note/{{$note['id']}}.html"><i
                                     class="fa fa-book"></i>&nbsp;&nbsp;继续阅读</a></span>
                 </div>
             </div>

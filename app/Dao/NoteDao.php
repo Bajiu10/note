@@ -2,6 +2,7 @@
 
 namespace App\Dao;
 
+use Max\Database\Collection;
 use Max\Foundation\Facades\DB;
 
 /**
@@ -12,11 +13,12 @@ use Max\Foundation\Facades\DB;
 class NoteDao
 {
     /**
-     * @param $id
+     * @param      $id
+     * @param null $userId
      *
      * @return mixed
      */
-    public function findOne($id, $userId = null)
+    public function findOne($id, $userId = null): mixed
     {
         $note = DB::table('notes')
                   ->leftJoin('categories')
@@ -27,7 +29,7 @@ class NoteDao
         if ($userId) {
             $note->where('user_id', $userId);
         }
-        $note = $note->first([
+        return $note->first([
             'title',
             'notes.id',
             'categories.name category',
@@ -42,12 +44,11 @@ class NoteDao
             'user_id',
             'cid'
         ]);
-
-        return $note;
     }
 
     /**
      * @param $id
+     * @param $old
      */
     public function incrHits($id, $old)
     {
@@ -61,7 +62,7 @@ class NoteDao
      *
      * @return false|string
      */
-    public function createOne($userId, $data)
+    public function createOne($userId, $data): bool|string
     {
         $data['permission'] = 'on' == $data['permission'] ? 0 : 1;
         if (empty($data['abstract'])) {
@@ -77,7 +78,7 @@ class NoteDao
      *
      * @return int
      */
-    public function updateOne($id, $data)
+    public function updateOne($id, $data): int
     {
         $data['update_time'] = date('Y-m-d H:i:s');
         $data['permission']  = 'on' == $data['permission'] ? 0 : 1;
@@ -93,7 +94,7 @@ class NoteDao
      *
      * @return int
      */
-    public function deleteOne($id, $userId)
+    public function deleteOne($id, $userId): int
     {
         return DB::table('notes')
                  ->where('id', $id)
@@ -103,11 +104,11 @@ class NoteDao
 
     /**
      * @param $page
-     * @param $limit
+     * @param int $limit
      *
-     * @return \Max\Database\Collection
+     * @return Collection
      */
-    public function getSome($page, $limit = 8)
+    public function getSome($page, int $limit = 8): Collection
     {
         return DB::table('notes', 'n')
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
@@ -127,7 +128,7 @@ class NoteDao
      *
      * @return array
      */
-    public function recommend($limit = 8)
+    public function recommend(int $limit = 8): array
     {
         return DB::table('notes')
                  ->order('hits', 'DESC')
@@ -167,7 +168,7 @@ class NoteDao
     /**
      * @return int
      */
-    public function getAmount()
+    public function getAmount(): int
     {
         return DB::table('notes')->count();
     }
@@ -177,9 +178,9 @@ class NoteDao
      * @param int $limit
      * @param int $offset
      *
-     * @return \Max\Database\Collection
+     * @return Collection
      */
-    public function search($kw, $limit = 8, $offset = 0)
+    public function search($kw, int $limit = 8, int $offset = 0): Collection
     {
         return DB::table('notes', 'n')
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
@@ -199,7 +200,7 @@ class NoteDao
      *
      * @return int
      */
-    public function countSearch($kw)
+    public function countSearch($kw): int
     {
         return DB::table('notes')
                  ->whereNull('delete_time')
@@ -207,7 +208,12 @@ class NoteDao
                  ->count(1);
     }
 
-    public function hots($limit = 8)
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function hots(int $limit = 8): array
     {
         return DB::table('notes')
                  ->order('hits', 'DESC')

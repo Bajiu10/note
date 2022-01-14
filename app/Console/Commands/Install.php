@@ -19,7 +19,7 @@ class Install extends Command
     /**
      * @var string[]
      */
-    protected $userinfo = [
+    protected $userInfo = [
         'username' => '',
         'password' => '',
         'email'    => '',
@@ -36,13 +36,13 @@ class Install extends Command
         }
         $this->createTable();
         echo "输入用户名：";
-        $this->getString($this->userinfo['username']);
+        $this->getString($this->userInfo['username']);
         echo "输入密码: ";
-        $this->getString($this->userinfo['password']);
-        $this->userinfo['password'] = md5($this->userinfo['password']);
+        $this->getString($this->userInfo['password']);
+        $this->userInfo['password'] = md5($this->userInfo['password']);
         echo "输入邮箱: ";
-        $this->getString($this->userinfo['email']);
-        DB::table('users')->insert($this->userinfo);
+        $this->getString($this->userInfo['email']);
+        DB::table('users')->insert($this->userInfo);
         touch($this->lock);
         echo "安装成功！输入php max serve 快速体验！ \n";
     }

@@ -7,9 +7,18 @@ use Max\Foundation\Facades\DB;
 
 class Sitemap extends Command
 {
-    protected $name        = 'baidu';
+    /**
+     * @var string
+     */
+    protected $name = 'baidu';
+    /**
+     * @var string
+     */
     protected $description = '生成sitemap';
 
+    /**
+     * @throws \Exception
+     */
     public function handle()
     {
         $notes   = DB::table('notes')->get(['create_time', 'id']);
