@@ -446,6 +446,7 @@
                             commentList.children().remove();
                         }
                         for (let i in data) {
+                            data[i].comment = htmlSpecialChars(data[i].comment)
                             for (let j in meme) {
                                 data[i].comment = data[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
                             }
@@ -457,7 +458,7 @@
                  src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
         </div>
         <div class="content">
-            <div class="name"><a href="">${data[i].name}</a></div>
+            <div class="name"><a href="">${htmlSpecialChars(data[i].name)}</a></div>
             <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
                 <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
                 <a href="#respond-post-150" rel="nofollow">
@@ -472,6 +473,7 @@
                                 commentList.append($('<div class="children"><div class="comment-list">'))
                                 child = data[i].children
                                 for (let i in child) {
+                                    child[i].comment = htmlSpecialChars(child[i].comment)
                                     for (let j in meme) {
                                         child[i].comment = child[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
                                     }
@@ -484,14 +486,14 @@
                          src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
                     <span class="avatar-dd"></span></div>
                 <div class="content">
-                    <div class="name"><a href="">${child[i].name}</a></div>
+                    <div class="name"><a href="">${htmlSpecialChars(child[i].name)}</a></div>
                     <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
                         <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
                         <a href="#respond-post-150" rel="nofollow">
                              <i class="fa ${hearted} like" data-id="${child[i].id}" style="cursor:pointer;"></i>&nbsp;<span>${child[i].hearts}</span>
                          </a>
                     </div>
-                    <div class="text"><span class="reply-name">@${data[i].name}</span>
+                    <div class="text"><span class="reply-name">@${htmlSpecialChars(data[i].name)}</span>
                         <p>${child[i].comment}</p></div>
                 </div>
             </div>
