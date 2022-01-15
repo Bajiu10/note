@@ -28,7 +28,7 @@
                         六、&nbsp;基于 Psr15 的中间件[支持注解 PHP8.0]<br>
                         七、&nbsp;基于 Psr16 的缓存组件,支持 File,Memcached,Redis,APC[可扩展]<br>
                         八、&nbsp;支持路由功能[支持注解 PHP8.0]<br>
-                        九、&nbsp;支持 Blade 的可扩展驱<br>
+                        九、&nbsp;支持 Blade 的可扩展的视图功能<br>
                         十、&nbsp;门面，命令行，验证器，trace<br>
                     </code>
                 </div>
