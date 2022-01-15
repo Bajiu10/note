@@ -14,7 +14,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected array $middleware = [
-        RateLimit::class,
+//        RateLimit::class,
         Statistic::class,
     ];
 

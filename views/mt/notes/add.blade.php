@@ -114,8 +114,8 @@
                     processData: false,
                     data: form,
                     success: function (e) {
-                        let img = `<img src="${e.path}" style="width: 100%;height: 100%;" id="show-thumb" alt="thumb">`;
-                        $('[name=thumb]').val(e.path)
+                        let img = `<img src="${e.data.path}" style="width: 100%;height: 100%;" id="show-thumb" alt="thumb">`;
+                        $('[name=thumb]').val(e.data.path)
                         $('#thumb-area').html(img);
                     },
                     error: function (e) {

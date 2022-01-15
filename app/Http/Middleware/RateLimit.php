@@ -10,6 +10,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class RateLimit implements MiddlewareInterface
 {
+    /**
+     * @throws \Exception
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $ip   = $request->ip();

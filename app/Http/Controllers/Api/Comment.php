@@ -21,26 +21,18 @@ use Psr\Http\Message\ServerRequestInterface;
 class Comment extends ApiController
 {
     /**
-     * @param            $noteId
+     * @param            $id
      * @param CommentDao $commentDao
      * @param HeartDao   $heartDao
      *
      * @return array
      */
     #[GetMapping(path: '/<id>/comments')]
-    public function index($noteId, CommentDao $commentDao, HeartDao $heartDao): array
+    public function index($id, CommentDao $commentDao, HeartDao $heartDao): array
     {
-        $page         = (int)$this->request->get('page', 1);
-        $order        = $this->request->get('order', 0);
-        $commentCount = $commentDao->amountOfOneNote($noteId);
-        $comments     = $commentDao->read($noteId, $page, $order);
-        $hearts       = $heartDao->getIdsByIp($this->request->ip())->toArray();
-        foreach ($comments['top'] as &$value) {
-            $value['hearted'] = in_array($value['id'], $hearts);
-        }
         return $this->success([
-            'total' => $commentCount,
-            'data'  => $comments,
+            'total' => $commentDao->amountOfOneNote($id),
+            'data'  => $commentDao->read($this->request, $id),
         ]);
     }
 

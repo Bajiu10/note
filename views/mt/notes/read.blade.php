@@ -99,11 +99,8 @@
                         <div
                                 style="border-bottom:1px solid #e0e0e0;display: flex;justify-content: space-between;padding:.5em 1em 1em;font-size: .95em">
                             <b>{{$commentsCount}}条评论</b>
-                            @if(request()->get('order') == 1)
-                                <a id="sort" data-id="1" href="&order=0"><span style="color: grey">按时间排序</span></a>
-                            @else
-                                <a id="sort" data-id="0" href="&order=1"><span style="color: grey">按点赞排序</span></a>
-                            @endif
+                            <a id="sort" data-id="0" href="javascript: void(0)"><span
+                                        style="color: grey">按时间排序</span></a>
                         </div>
                         <div style="margin:.5em">
                             <form action="" name="form">
@@ -136,7 +133,144 @@
                             {{--                            <button id="TencentCaptcha" data-appid="2004706694" data-cbfn="callbackName"--}}
                             {{--                                    data-biz-state="data-biz-state" type="button">验证--}}
                             {{--                            </button>--}}
-                            <div id="comments">
+                            <style>
+                                p {
+                                    margin-top: 0;
+                                    margin-bottom: 1rem;
+                                }
+
+                                a {
+                                    color: #0d6efd;
+                                    text-decoration: underline;
+                                }
+
+                                ::-moz-focus-inner {
+                                    padding: 0;
+                                    border-style: none;
+                                }
+
+                                a {
+                                    text-decoration: none;
+                                }
+
+                                .comment-title {
+                                    font-weight: 700;
+                                    letter-spacing: -0.025em;
+                                    padding: 0.5rem 0.5rem 0 0.5rem;
+                                }
+
+                                .comment-list .comment-item {
+                                    padding: .5rem;
+                                    margin-top: 1rem;
+                                }
+
+                                .comment-list .comment-item .body {
+                                    display: flex;
+                                }
+
+                                .comment-list {
+                                    padding: 0;
+                                }
+
+                                .comment-list .comment-item .avatar {
+                                    margin-right: 0.75rem;
+                                    position: relative;
+                                }
+
+                                .comment-list .comment-item .avatar img {
+                                    width: 32px;
+                                    height: 32px;
+                                    border-radius: 8px;
+                                }
+
+                                .comment-list .comment-item .avatar .avatar-dd {
+                                    position: absolute;
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50rem;
+                                    background-color: var(--theme-color);
+                                    top: 26px;
+                                    left: 26px;
+                                    border: 2px solid #fff;
+                                }
+
+                                .comment-list .comment-item .content .name a {
+                                    font-size: .9rem;
+                                    font-weight: 700;
+                                    color: var(--color-text);
+                                }
+
+                                .comment-list .comment-item .content .text {
+                                    font-size: .85rem;
+                                    padding: .8rem;
+                                    font-weight: 400;
+                                    background-color: #f5f5f5;
+                                    border-radius: 0 .8rem .8rem .8rem;
+                                    letter-spacing: .08rem;
+                                    line-height: 1.45rem;
+                                    color: var(--color-title);
+                                    text-align: justify;
+                                    margin-top: .25rem;
+                                }
+
+                                .comment-list .comment-item .content .text p {
+                                    margin: 0;
+                                    display: inline;
+                                    word-wrap: break-spaces;
+                                    word-break: break-word;
+                                }
+
+                                .comment-list .comment-item .content .info, .comment-list .comment-item .content .info a {
+                                    font-size: .75rem;
+                                    font-weight: 400;
+                                    color: #aab1ce;
+                                }
+
+                                .comment-list .comment-item .content .info a:hover {
+                                    border-bottom: 1px solid var(--color-text);
+                                    color: var(--color-text);
+                                }
+
+                                .comment-box-list > .comment-list > .children {
+                                    margin-left: 2.75rem;
+                                }
+
+                                .comment-list .children .comment-item .reply-name {
+                                    font-weight: 700;
+                                    padding-right: .25rem;
+                                }
+
+                                @media (max-width: 991.98px) {
+                                    .comment-list .comment-item .content .name {
+                                        font-size: .8rem;
+                                        font-weight: 700;
+                                        color: var(--color-text);
+                                    }
+
+                                    .comment-list .comment-item .content .text {
+                                        font-size: .75rem;
+                                        padding: .8rem;
+                                        letter-spacing: .1rem;
+                                        line-height: 1.2rem;
+                                        margin-top: .25rem;
+                                    }
+
+                                    .comment-list .comment-item .content .info, .comment-list .comment-item .content .info a {
+                                        font-size: .65rem;
+                                        font-weight: 400;
+                                    }
+
+                                    .comment-box-list > .comment-list > .children {
+                                        padding-left: .75em;
+                                        margin-left: .5rem;
+                                        border-left: .125rem solid #f5f5f5;
+                                    }
+                                }
+                            </style>
+                            <div class="comment-box-list" id="comments">
+                                <div class="comment-list">
+
+                                </div>
                             </div>
                             <p id="comments-more"
                                style="font-size:.8em;text-align: center;font-weight: bold;color:grey;margin: 1em 0 .5em;cursor: pointer">
@@ -256,35 +390,6 @@
             $('#catalog-box').css('width', $('.card-content')[0].offsetWidth);
         }
 
-        let meme = [
-            '{汗}', '{囧}', '{斜眼笑}', '{生气}', '{哈欠}', '{滑稽}', '{笑哭}', '{抠鼻}', '{叹气}', '{挨揍}', '{吃瓜}', '{托腮}', '{偷看}', '{吹水}', '{黑线}', '{严肃}', '{鞭炮}', '{打脸}', '{滑稽2}', '{捂嘴}', '{睡觉}', '{挑逗}', '{狗头}', '{上吊}', '{摸头}', '{鸡冻}', '{厉害}'
-        ]
-
-        function loadComments(page) {
-            $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '&order=' + $('#sort').attr('data-id'), function (data, status) {
-                data = data.data.data
-                if ('success' === status) {
-                    if (data.top.length < 5) {
-                        $('#comments-more').remove();
-                    }
-                    for (let i in data.top) {
-                        for (let j in meme) {
-                            data.top[i].comment = data.top[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
-                        }
-                        let hearted = data.top[i].hearted ? 'fa-heart' : 'fa-heart-o';
-                        let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
-                        div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2.5em;height: 2.5em;border-radius: 50%"><b style="position:absolute;font-size:14px;line-height: 2.5em;margin-left:.5em">' + data.top[i].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.top[i].create_time) + '</span></div><div data-id="' + data.top[i].id + '" style="padding:.5em 0 0 3em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em; line-height: 2em; display: flex;color: #626262">' + data.top[i].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: grey;font-size: .9em"><i class="fa ' + hearted + ' like" data-id="' + data.top[i].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.top[i].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i> </div></div></div>');
-                        div.appendTo('#comments');
-                    }
-                    for (let j in data.sub) {
-                        let div = $('<div style="margin: 1em 0 0;font-size: 14px;"></div>');
-                        div.html('<div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em"><div><img src="/favicon.ico" alt="" style="width: 2em;height: 2em;border-radius: 50%"><b style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">' + data.sub[j].name + '</b></div><span style="color:grey;font-size: 13px">' + time_convert(data.sub[j].create_time) + '</span></div><div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word"><div><div style="margin-bottom: .5em;display: flex;color: grey">' + data.sub[j].comment.replace(/\n/g, '<br>') + '</div></div><div style="text-align:right;padding:0 0 .3em 0;border-bottom: 1px solid #dbdbdb;color: #626262;font-size: .9em"><i class="fa fa-heart-o like" data-id="' + data.sub[j].id + '" style="color: red;cursor:pointer;"></i> <span class="count-heart">' + data.sub[j].hearts + '</span><i class="fa fa-comment-o" style="margin-left: 1em"></i></div></div></div>');
-                        div.appendTo('div[data-id=' + data.sub[j].parent_id + ']');
-                    }
-                }
-            }, 'json');
-        }
-
         $(() => {
             let testEditormdView, testEditormdView2;
             testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
@@ -296,10 +401,14 @@
                 sequenceDiagram: true,  // 默认不解析
             });
 
+            let page = 1;
+            let meme = [
+                '{汗}', '{囧}', '{斜眼笑}', '{生气}', '{哈欠}', '{滑稽}', '{笑哭}', '{抠鼻}', '{叹气}', '{挨揍}', '{吃瓜}', '{托腮}', '{偷看}', '{吹水}', '{黑线}', '{严肃}', '{鞭炮}', '{打脸}', '{滑稽2}', '{捂嘴}', '{睡觉}', '{挑逗}', '{狗头}', '{上吊}', '{摸头}', '{鸡冻}', '{厉害}'
+            ]
+
             $('#select-meme').on('click', function () {
                 $('#meme').slideToggle()
             })
-
 
             let memeBox = $('#meme')
             for (let i in meme) {
@@ -313,29 +422,112 @@
                 $('input[name=comment]').val(commentField.text());
             })
 
-            let page = 1;
-            loadComments(page++)
+            const sortElement = $('#sort')
+            let sort = sortElement.attr('data-id')
+            const sortText = ['按时间排序', '按人气排序']
+            sortElement.on('click', function () {
+                sort = 0 == sort ? 1 : 0
+                $(this).children('span').text(sortText[sort])
+                page = 1
+                loadComments(page, sort, true)
+            })
+
+            function loadComments(page, sort, refresh) {
+                $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '&order=' + sort, function (data, status) {
+                    data = data.data.data
+                    let commentList;
+                    if ('success' === status) {
+                        // if (data.length < 5) {
+                        //     $('#comments-more').remove();
+                        // }
+                        commentList = $('.comment-list')
+                        if (refresh) {
+                            commentList.children().remove();
+                        }
+                        for (let i in data) {
+                            for (let j in meme) {
+                                data[i].comment = data[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
+                            }
+                            let hearted = data[i].hearted ? 'fa-heart' : 'fa-heart-o';
+                            commentList.append($(`<div class="comment-item" id="comment-37">
+    <div class="body">
+        <div class="avatar">
+            <img class="lazyload"
+                 src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
+        </div>
+        <div class="content">
+            <div class="name"><a href="http://biana.cn">${data[i].name}</a></div>
+            <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
+                <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
+                <a href="#respond-post-150" rel="nofollow">
+                    <i class="fa ${hearted} like" data-id="${data[i].id}" style="cursor:pointer;"></i>&nbsp;<span>${data[i].hearts}</span>
+                </a>
+            </div>
+            <div class="text"><p>${data[i].comment}</p></div>
+        </div>
+    </div>
+</div>`))
+                            if (data[i].children.length > 0) {
+                                commentList.append($('<div class="children"><div class="comment-list">'))
+                                child = data[i].children
+                                for (let i in child) {
+                                    for (let j in meme) {
+                                        child[i].comment = child[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
+                                    }
+                                    hearted = child[i].hearted ? 'fa-heart' : 'fa-heart-o';
+                                    $('.comment-list').append($(`
+        <div class="comment-item" id="comment-38">
+            <div class="body">
+                <div class="avatar">
+                    <img class="lazyload"
+                         src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
+                    <span class="avatar-dd"></span></div>
+                <div class="content">
+                    <div class="name"><a href="https://yuanm.ren">${child[i].name}</a></div>
+                    <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
+                        <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
+                        <a href="#respond-post-150" rel="nofollow">
+                             <i class="fa ${hearted} like" data-id="${child[i].id}" style="cursor:pointer;"></i>&nbsp;<span>${child[i].hearts}</span>
+                         </a>
+                    </div>
+                    <div class="text"><span class="reply-name">@${data[i].name}</span>
+                        <p>${child[i].comment}</p></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+`))
+                                }
+                                commentList.append($('</div></div>'))
+                            }
+                        }
+                    }
+                }, 'json');
+            }
+
+            loadComments(page, sort)
             $('#comments-more').on('click', function () {
-                loadComments(page++)
+                loadComments(++page, sort)
             });
 
             $('#comment-field').on('input', function () {
                 $('input[name=comment]').val($(this).text());
             });
 
-            $('#comments').on('click', '.like', function () {
-                console.log($(this));
+            $('.comment-list').on('click', '.like', function () {
                 let heart = $(this);
-                let count = heart.siblings('span.count-heart').text();
+                let count = heart.siblings('span').text();
                 $.ajax({
                     url: '/api/notes/heart/' + heart.attr('data-id'),
                     type: 'get',
                     dataType: 'json',
                     success: function (e) {
                         if (e.code === 1) {
-                            heart.removeClass('fa-heart-o').addClass('fa-heart').siblings('span.count-heart').text(++count);
+                            heart.removeClass('fa-heart-o').addClass('fa-heart').siblings('span').text(++count);
                         } else {
-                            heart.removeClass('fa-heart').addClass('fa-heart-o').siblings('span.count-heart').text(--count);
+                            heart.removeClass('fa-heart').addClass('fa-heart-o').siblings('span').text(--count);
                         }
                     },
                     error: function (e) {
@@ -343,12 +535,6 @@
                     }
                 });
             })
-
-            $('.review').on('click', function () {
-                let html = $('<form action="" name="form"><textarea style="font-size:.9em;box-sizing:border-box;padding:.5em .5em;outline:none;border:1px solid #dbdbdb;line-height:1.4em;height: 2em;width:100%;min-height:8em;border-radius: 5px;resize:vertical;margin-bottom: .5em;" name="comment" placeholder="留下你的笔迹..."></textarea><div style="display: flex;justify-content: space-between;box-sizing: border-box"><input type="text" placeholder="用户名" name="name" style="font-size:13px;padding:0 .6em;width: 90%;outline:none;border:1px solid #dbdbdb;line-height:2.5em;height: 2.5em;border-radius: 5px;"><input type="hidden" name="note_id" value="122"><div style="font-size: 2.1em;color: #4F70F6;cursor:pointer;" title="输入{狗头}可以发送狗头表情" class="fa fa-smile-o"></i></div><div style="width: 10%;min-width: 3em;"><input type="button" style="height: 100%;cursor:pointer;outline: none;width:100%;border:none;background-color: #4F70F6;color: white;border-radius: 5px" id="comment" value="发布"></div></div></form>');
-                html.insertAfter($(this));
-            });
-
             $('#test-editormd-view2 > h1,#test-editormd-view2 h2').each(function (index, element) {
                 if ($(element).is('h1')) {
                     $('<a style="font-weight: bold;" href="#' + $(element).attr('id') + '"><i class="fa fa-genderless" style="margin-right: .15em"></i>' + element.innerText + '</a>').appendTo('#catalog');
@@ -365,6 +551,7 @@
                 return false;
             });
         })
+
 
         $('#test-editormd-view2').on('DOMNodeInserted', function () {
             $('#content-loading').remove();
