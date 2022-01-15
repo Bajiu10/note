@@ -430,6 +430,7 @@
                 $(this).children('span').text(sortText[sort])
                 page = 1
                 loadComments(page, sort, true)
+                $('#comments-more').show();
             })
 
             function loadComments(page, sort, refresh) {
@@ -437,9 +438,9 @@
                     data = data.data.data
                     let commentList;
                     if ('success' === status) {
-                        // if (data.length < 5) {
-                        //     $('#comments-more').remove();
-                        // }
+                        if (data.length < 5) {
+                            $('#comments-more').hide();
+                        }
                         commentList = $('.comment-list')
                         if (refresh) {
                             commentList.children().remove();
