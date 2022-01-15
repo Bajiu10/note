@@ -164,9 +164,9 @@
                                  src="https://sdn.geekzu.org/avatar/7097810a7f79562ebe95ad5ad50b3c5a?d=mm"
                                  data-src="https://sdn.geekzu.org/avatar/7097810a7f79562ebe95ad5ad50b3c5a?d=mm">
                             <div class="content w-100">
-                                <p class="comment-text">{{$comment['comment']}}</p>
+                                <p class="comment-text">{{$comment['name']}}</p>
                                 <div class="d-flex justify-content-between"><p class="comment-author">
-                                        @{{$comment['name']}}</p>
+                                        {{$comment['comment']}}</p>
                                     <p class="comment-date">{{time_convert(strtotime($comment['create_time']))}}</p>
                                 </div>
                             </div>
