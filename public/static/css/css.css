@@ -13,6 +13,10 @@ html, body {
     background-color: #fdfdfb;;
 }
 
+a {
+    text-decoration: none;
+}
+
 .meme {
     width: 2em;
     height: 2em;

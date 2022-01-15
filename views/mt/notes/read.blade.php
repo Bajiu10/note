@@ -450,14 +450,14 @@
                                 data[i].comment = data[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
                             }
                             let hearted = data[i].hearted ? 'fa-heart' : 'fa-heart-o';
-                            commentList.append($(`<div class="comment-item" id="comment-37">
+                            commentList.append($(`<div class="comment-item" id="comment-${data[i].id}">
     <div class="body">
         <div class="avatar">
             <img class="lazyload"
                  src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
         </div>
         <div class="content">
-            <div class="name"><a href="http://biana.cn">${data[i].name}</a></div>
+            <div class="name"><a href="">${data[i].name}</a></div>
             <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
                 <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
                 <a href="#respond-post-150" rel="nofollow">
@@ -477,14 +477,14 @@
                                     }
                                     hearted = child[i].hearted ? 'fa-heart' : 'fa-heart-o';
                                     $('.comment-list').append($(`
-        <div class="comment-item" id="comment-38">
+        <div class="comment-item" id="comment-${data[i].id}">
             <div class="body">
                 <div class="avatar">
                     <img class="lazyload"
                          src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937">
                     <span class="avatar-dd"></span></div>
                 <div class="content">
-                    <div class="name"><a href="https://yuanm.ren">${child[i].name}</a></div>
+                    <div class="name"><a href="">${child[i].name}</a></div>
                     <div class="info"><span class="date">${time_convert(data[i].create_time)}</span>
                         <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;
                         <a href="#respond-post-150" rel="nofollow">
