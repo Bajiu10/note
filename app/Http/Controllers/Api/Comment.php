@@ -17,7 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @package App\Http\Controllers\Api
  */
-#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
+#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middlewares: ['api'])]
 class Comment extends ApiController
 {
     /**

@@ -17,7 +17,7 @@ use Max\Routing\Annotations\RequestMapping;
  * Class User
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
 class User extends Controller
 {
     /**

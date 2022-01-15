@@ -12,6 +12,7 @@ use Max\Cache\Cache;
 use Max\Di\Annotations\Inject;
 use Max\Foundation\Exceptions\HttpException;
 use Max\Routing\Annotations\GetMapping;
+use Max\Routing\RouteCollector;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -20,7 +21,7 @@ use Throwable;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
 class Index extends Controller
 {
     use Paginate;

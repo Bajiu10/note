@@ -1,14 +1,37 @@
 <?php
 
+namespace Psr\Http\Message {
+
+    use Max\Foundation\Http\{Request, Response};
+
+    /**
+     * @mixin Request
+     */
+    interface ServerRequestInterface
+    {
+
+    }
+
+    /**
+     * @mixin Response
+     */
+    interface ResponseInterface
+    {
+
+    }
+}
+
 namespace Max\Routing\Annotations {
     class GetMapping
     {
         /**
          * @param string            $path
+         * @param string|null       $name             别名
+         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $name            别名
+         * @param array             $patterns         变量规则
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
         {
         }
     }
@@ -17,10 +40,12 @@ namespace Max\Routing\Annotations {
     {
         /**
          * @param string            $path
+         * @param string|null       $name             别名
+         * @param array             $middlewares
+         * @param array             $patterns
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $name            别名
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array $patterns = [], array|string|null $allowCrossDomain = null)
         {
         }
     }
@@ -29,10 +54,12 @@ namespace Max\Routing\Annotations {
     {
         /**
          * @param string            $path
+         * @param string|null       $name             别名
+         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $name            别名
+         * @param array             $patterns
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
         {
         }
     }
@@ -41,10 +68,12 @@ namespace Max\Routing\Annotations {
     {
         /**
          * @param string            $path
+         * @param string|null       $name             别名
+         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $name            别名
+         * @param array             $patterns
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
         {
         }
     }
@@ -53,10 +82,12 @@ namespace Max\Routing\Annotations {
     {
         /**
          * @param string            $path
-         * @param array|string|null $allowCrossDomain 跨域列表
-         * @param string|null       $name            别名
+         * @param string|null       $name
+         * @param array             $middlewares
+         * @param array|string|null $allowCrossDomain
+         * @param array             $patterns
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
         {
         }
     }
@@ -65,11 +96,13 @@ namespace Max\Routing\Annotations {
     {
         /**
          * @param string            $path
-         * @param array|string|null $allowCrossDomain
-         * @param array|string[]    $methods
          * @param string|null       $name
+         * @param array             $middlewares
+         * @param array|string|null $allowCrossDomain
+         * @param array             $patterns
+         * @param array             $methods
          */
-        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, array $methods = ['GET', 'POST', 'HEAD'])
+        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [], array $methods = ['GET', 'POST', 'HEAD'])
         {
         }
     }
@@ -77,10 +110,10 @@ namespace Max\Routing\Annotations {
     class Controller
     {
         /**
-         * @param string       $prefix
-         * @param array|string $middleware
+         * @param string $prefix
+         * @param array  $middlewares
          */
-        public function __construct(string $prefix = '', array|string $middleware = [])
+        public function __construct(string $prefix = '', array $middlewares = [])
         {
         }
     }
@@ -90,13 +123,15 @@ namespace Max\Di\Annotations {
     class Inject
     {
         /**
-         * @param string|null $class
+         * @param string|null $id
          */
-        public function __construct(?string $class = null)
+        public function __construct(?string $id = null)
         {
         }
     }
+}
 
+namespace Max\Config\Annotations {
     class Config
     {
         /**
@@ -109,7 +144,7 @@ namespace Max\Di\Annotations {
     }
 }
 
-namespace Max\Http\Annotations {
+namespace Max\Foundation\Http\Annotations {
     class Middleware
     {
         /**
@@ -118,5 +153,31 @@ namespace Max\Http\Annotations {
         public function __construct(...$middlewares)
         {
         }
+    }
+}
+
+namespace Psr\Container {
+
+    use Max\Foundation\App;
+
+    /**
+     * @mixin App
+     */
+    interface ContainerInterface
+    {
+
+    }
+}
+
+namespace Psr\SimpleCache {
+
+    use Max\Foundation\Cache;
+
+    /**
+     * @mixin Cache
+     */
+    interface CacheInterface
+    {
+
     }
 }

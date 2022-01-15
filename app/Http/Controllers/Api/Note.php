@@ -13,7 +13,7 @@ use Max\Routing\Annotations\PostMapping;
  *
  * @package App\Http\Controllers\Api
  */
-#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middleware: ['api'])]
+#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middlewares: ['api'])]
 class Note extends ApiController
 {
     /**

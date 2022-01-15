@@ -14,13 +14,15 @@ use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
+use Psr\Http\Message\ResponseInterface;
+use Throwable;
 
 /**
  * Class Note
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middleware: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
 class Note extends Controller
 {
     use Paginate;
@@ -35,11 +37,11 @@ class Note extends Controller
      * @param            $id
      * @param CommentDao $commentDao
      *
-     * @return false|string
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws Exception|Throwable
      */
     #[GetMapping(path: '/note/<id>.html', name: 'read')]
-    public function show($id, CommentDao $commentDao)
+    public function show($id, CommentDao $commentDao): ResponseInterface
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
             if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
@@ -61,14 +63,14 @@ class Note extends Controller
     /**
      * @param CategoryDao $categoryDao
      *
-     * @return false|string
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws Exception|Throwable
      */
     #[
         RequestMapping(path: 'notes/add'),
         Middleware(Login::class)
     ]
-    public function create(CategoryDao $categoryDao)
+    public function create(CategoryDao $categoryDao): ResponseInterface
     {
         if ($this->request->isMethod('get')) {
             return view(config('app.theme') . '/notes/add', ['categories' => $categoryDao->all()]);
@@ -88,14 +90,14 @@ class Note extends Controller
      * @param             $id
      * @param CategoryDao $categoryDao
      *
-     * @return mixed
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws Exception|Throwable
      */
     #[
         RequestMapping(path: 'notes/edit/<id>', name: 'edit'),
         Middleware(Login::class)
     ]
-    public function edit($id, CategoryDao $categoryDao)
+    public function edit($id, CategoryDao $categoryDao): ResponseInterface
     {
         $note = $this->noteDao->findOne($id, Session::get('user.id'));
 
