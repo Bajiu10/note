@@ -107,6 +107,7 @@
 
                 .widget-box {
                     padding: .5rem;
+                    word-break: break-all;
                 }
 
                 .widget-box .widget-box-title {
@@ -174,36 +175,6 @@
                     @endforeach
                 </div>
             </div>
-
-            {{--            <div class="card" id="news-comments">--}}
-            {{--                <div class="tips">最新评论</div>--}}
-            {{--                <div id="comments" style="padding:0 .5em">--}}
-            {{--                    <div style="margin: 1em 0 0;font-size: 14px;">--}}
-            {{--                        <div style="display: flex;justify-content: space-between;line-height: 2em;height: 2em">--}}
-            {{--                            <div><img src="/favicon.ico" alt="" style="width: 2em;height: 2em;border-radius: 50%"><b--}}
-            {{--                                        style="position:absolute;font-size:14px;height: 2em;margin-left:.5em">--}}
-            {{--                                    </b>--}}
-            {{--                            </div>--}}
-            {{--                            <span style="color:grey;font-size: 13px"></span>--}}
-            {{--                        </div>--}}
-            {{--                        <div style="padding:.5em 0 0 2.5em;word-break: break-all;word-wrap: break-word;color: #626262">--}}
-            {{--                            <div>--}}
-            {{--                                <div style="margin-bottom: .5em;display: flex;color: #626262">--}}
-            {{--                                                                               </div>--}}
-            {{--                            </div>--}}
-            {{--                            --}}{{--                                <div style="font-size:.9em;text-align:right;padding:0 0 .3em;border-bottom: 1px solid #dbdbdb;color: grey">--}}
-            {{--                            --}}{{--                                    <i class="fa--}}
-            {{--                            --}}{{--                                                                                    fa-heart--}}
-            {{--                            --}}{{--                                 like" data-id="5" style="color: red;cursor:pointer;"></i> <span--}}
-            {{--                            --}}{{--                                            class="count-heart">1</span>--}}
-            {{--                            --}}{{--                                    <i class="fa fa-comment-o" style="margin-left: 1em"></i>--}}
-            {{--                            --}}{{--                                   <span class="review">回复</span>--}}
-            {{--                            --}}{{--                                </div>--}}
-            {{--                        </div>--}}
-            {{--                    </div>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
-
             <div class="card" id="recommend-notes" style="box-sizing: border-box;">
                 <div class="tips">推荐</div>
                 <ul class="card-content">
