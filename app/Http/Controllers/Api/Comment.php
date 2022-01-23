@@ -46,7 +46,7 @@ class Comment extends ApiController
     #[PostMapping(path: '/comment')]
     public function store(ServerRequestInterface $request, CommentDao $commentDao, Captcha $captcha): array
     {
-        $data      = $request->post(['comment', 'note_id', 'name', 'ticket', 'randstr'], ['name' => '匿名用户']);
+        $data      = $request->post(['comment', 'email', 'note_id', 'name', 'ticket', 'randstr'], ['name' => '匿名用户']);
         $validator = \Max\Foundation\Facades\Validator::make($data, [
             'comment' => 'required|max:255',
             'ticket'  => 'required',

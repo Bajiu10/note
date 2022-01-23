@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'default' => 'redis',
+    'default' => 'file',
     'stores'  => [
         //文件缓存
         'file'      => [

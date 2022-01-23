@@ -387,10 +387,11 @@ input[name=kw] {
     transition: all .3s;
 }
 
-input[name=name] {
+input.user-info {
     font-size: 13px;
     padding: 0 .6em;
-    width: 90%;
+    width: 30%;
+    margin-right: .5em;
     outline: none;
     border: 1px solid #dbdbdb;
     line-height: 2.5em;

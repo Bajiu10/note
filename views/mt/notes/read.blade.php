@@ -21,7 +21,7 @@
             <div style="max-width: 90%">
                 <p id="headline">{!! $note['title'] !!}</p>
                 <p style="text-align: center;font-size: .9em;margin: 0;color: white"><i
-                            class="fa fa-clock-o"></i>&nbsp;{{time_convert($note['create_time'])}}&nbsp;&nbsp;
+                            class="fa fa-calendar"></i>&nbsp;{{time_convert($note['create_time'])}}&nbsp;&nbsp;
                     <i class="fa fa-user"></i>&nbsp;Yao&nbsp;&nbsp;<i
                             class="fa fa-folder"></i>&nbsp;{{$note['category']}}&nbsp;&nbsp;<i
                             class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<i
@@ -108,18 +108,22 @@
                                 <div contenteditable="true"
                                      id="comment-field"></div>
                                 <div style="display: flex;justify-content: space-between;box-sizing: border-box">
-                                    <input type="text" placeholder="用户名" name="name">
-                                    <input type="hidden" name="note_id" value="{{$note['id']}}">
-                                    <div id="select-meme" style="width: 2.8em;text-align: center;margin: 0 .3em"><i
-                                                style="font-size: 2.1em;color: black;cursor:pointer;"
-                                                class="fa fa-smile-o"></i></div>
-                                    <div style="width: 2em;">
-                                        <input type="hidden" id="TencentCaptcha" data-appid="2004706694"
-                                               data-cbfn="callbackName"
-                                               data-biz-state="data-biz-state">
-                                        <i id="comment"
-                                           style="cursor: pointer; line-height: 1.4em; font-size: 1.5em"
-                                           class="fa fa-paper-plane-o" aria-hidden="true" title="发送"></i>
+                                    <div style="width: 100%; display: flex; justify-content: space-between;">
+                                        <input type="text" placeholder="姓名" name="name" class="user-info">
+                                        <input type="text" placeholder="邮箱" name="email" class="user-info">
+                                        <input type="text" placeholder="网站" name="website" class="user-info">
+                                        <input type="hidden" name="note_id" value="{{$note['id']}}">
+                                    </div>
+                                    <input type="hidden" id="TencentCaptcha" data-appid="2004706694"
+                                           data-cbfn="callbackName"
+                                           data-biz-state="data-biz-state">
+                                    <div style="width: 6em; text-align: right">
+                                        <span id="select-meme" style="width: 2.8em;text-align: center;margin: 0 .3em"><i
+                                                    style="font-size: 2.1em;color: black;cursor:pointer;"
+                                                    class="fa fa-smile-o"></i></span>
+                                        <span id="comment"
+                                              style="cursor: pointer; line-height: 1.4em; font-size: 1.7em"
+                                              class="fa fa-paper-plane-o" aria-hidden="true" title="发送"></span>
                                     </div>
                                 </div>
                                 <div id="meme" style="margin-top: .5em; display: none">
@@ -478,7 +482,7 @@
                                         child[i].comment = child[i].comment.replaceAll(meme[j], `<img src="/static/img/meme/${j}.png" class="meme">`)
                                     }
                                     hearted = child[i].hearted ? 'fa-heart' : 'fa-heart-o';
-                                    $('.comment-list').append($(`
+                                    commentList.append($(`
         <div class="comment-item" id="comment-${data[i].id}">
             <div class="body">
                 <div class="avatar">

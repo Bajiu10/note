@@ -68,7 +68,8 @@ class NoteDao
         if (empty($data['abstract'])) {
             $data['abstract'] = substr($data['text'], 0, 300);
         }
-        $data['user_id'] = $userId;
+        $data['user_id']     = $userId;
+        $data['update_time'] = date('Y-m-d H:i:s');
         return DB::table('notes')->insert($data);
     }
 
@@ -103,7 +104,7 @@ class NoteDao
     }
 
     /**
-     * @param $page
+     * @param     $page
      * @param int $limit
      *
      * @return Collection
@@ -114,7 +115,7 @@ class NoteDao
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
                  ->whereNull('delete_time')
                  ->order('sort', 'DESC')
-                 ->order('create_time', 'DESC')
+                 ->order('update_time', 'DESC')
                  ->limit($limit)->offset(($page - 1) * $limit)
                  ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
                  ->map(function($value) {
@@ -186,6 +187,7 @@ class NoteDao
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
                  ->whereNull('n.delete_time')
                  ->whereRaw('(`n`.`title` like ? OR MATCH(`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
+                 ->order('update_time', 'DESC')
                  ->limit($limit)
                  ->offset($offset)
                  ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])

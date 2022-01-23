@@ -21,7 +21,7 @@ class Note extends ApiController
      *
      * @return array
      */
-    #[GetMapping(path: '')]
+    #[GetMapping(path: '', allowCrossDomain: ['*'])]
     public function index(NoteDao $noteDao): array
     {
         $page = $this->request->get('p', 1);

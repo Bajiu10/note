@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MaxPHP - 组件化的轻量PHP框架！')</title>
     <meta name="keywords" content="MaxPHP,PHP框架,MVC框架">
-    <link rel="stylesheet" href="/static/css/css.css?20210766">
+    <link rel="stylesheet" href="/static/css/css.css?20210767">
     <link rel="stylesheet" href="/static/css/loading.css">
     <link href="//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     @yield('head')
@@ -240,7 +240,7 @@
                 <h2>关于</h2>
                 <p><a href="//github.com/topyao/max">使用MaxPHP框架开发</a></p>
                 <p>感谢 <a href="//www.jetbrains.com/?from=topyao">Phpstorm</a></p>
-                <p><a href="//beian.miit.gov.cn" target="_blank" class="text">陕ICP备20000693号-1</a></p>
+                <p><a href="//beian.miit.gov.cn" target="_blank" class="text">陕ICP备20000693号-2</a></p>
             </div>
         </div>
     </footer>

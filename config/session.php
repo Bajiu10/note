@@ -3,7 +3,7 @@
 return [
     'name'          => 'MAXPHP_SESSION_ID',
     'handler'       => [
-        'class'   => '\Max\Session\Handlers\Cache',
+        'class'   => '\Max\Session\Handlers\File',
         'options' => [
             'path' => env('storage_path') . 'session',
             'ttl'  => 3600,
