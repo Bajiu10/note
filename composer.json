@@ -36,7 +36,9 @@
         "max/routing": "dev-master",
         "ext-curl": "*",
         "max/session": "2.x-dev",
-        "max/swoole": "2.x-dev"
+        "max/swoole": "2.x-dev",
+        "tencentcloud/tencentcloud-sdk-php": "^3.0",
+        "tencentcloud/cvm": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.3",
