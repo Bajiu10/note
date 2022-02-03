@@ -16,7 +16,7 @@ class UserDao
      *
      * @return mixed
      */
-    public function findOneByCredentials(array $credentials): mixed
+    public function findOneByCredentials(array $credentials)
     {
         return DB::table('users')
                  ->where('username', $credentials['username'])

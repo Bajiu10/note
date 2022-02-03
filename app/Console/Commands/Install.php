@@ -47,7 +47,6 @@ class Install extends Command
         echo "安装成功！输入php max serve 快速体验！ \n";
     }
 
-
     /**
      * @param $variable
      */

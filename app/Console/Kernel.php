@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use Max\Foundation\Console\Kernel as ConsoleKernel;
+use Max\Swoole\Server;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
         'baidu'   => Commands\Baidu::class,
         'install' => Commands\Install::class,
         'sitemap' => Commands\Sitemap::class,
+        'swoole'  => Server::class,
     ];
 
     /*

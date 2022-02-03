@@ -245,7 +245,7 @@
         </div>
     </footer>
 </div>
-<script src="//cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/js/jquery-3.5.1.js"></script>
 <script src="/static/js/lazyload.js"></script>
 <script src="/static/js/custom.js"></script>
 <script>

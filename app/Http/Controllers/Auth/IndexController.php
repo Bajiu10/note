@@ -1,30 +1,30 @@
 <?php
-declare(strict_types=1);
 
-namespace App\Http\Controllers\Index;
+namespace App\Http\Controllers\Auth;
 
 use App\Dao\UserDao;
 use App\Http\Controller;
 use App\Http\Middleware\Login;
 use App\Http\Middleware\Logined;
-use Exception;
 use Max\Foundation\Di\Annotations\Middleware;
 use Max\Foundation\Facades\Session;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class User
- * @package App\Http\Controllers\Index
+ *
+ * @package App\Http\Controllers\Auth
  */
 #[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
-class User extends Controller
+class IndexController extends Controller
 {
     /**
      * @param UserDao $userDao
      *
-     * @return false|string
-     * @throws Exception
+     * @return ResponseInterface
+     * @throws Exception|\Throwable
      */
     #[
         RequestMapping(path: 'login'),
@@ -35,6 +35,7 @@ class User extends Controller
         if ($this->request->isMethod('GET')) {
             return view(config('app.theme') . '/users/login');
         }
+        dump($this->request->input());
         if ($user = $userDao->findOneByCredentials($this->request->post(['username', 'password']))) {
             Session::set('user', $user);
             return redirect($this->request->get('from', '/'));
