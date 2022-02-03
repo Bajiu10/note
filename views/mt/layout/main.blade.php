@@ -7,7 +7,7 @@
     <meta name="keywords" content="MaxPHP,PHP框架,MVC框架">
     <link rel="stylesheet" href="/static/css/css.css?20210767">
     <link rel="stylesheet" href="/static/css/loading.css">
-    <link href="//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.css" rel="stylesheet">
     @yield('head')
 </head>
 <body>
