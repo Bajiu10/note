@@ -4,8 +4,8 @@ namespace App\Services\TencentCloud;
 
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Facades\Logger;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use TencentCloud\Captcha\V20190722\CaptchaClient;
 use TencentCloud\Captcha\V20190722\Models\DescribeCaptchaResultRequest;
 use TencentCloud\Common\Credential;
@@ -20,6 +20,9 @@ class Captcha
      */
     #[Inject]
     protected ServerRequestInterface $request;
+
+    #[Inject]
+    protected LoggerInterface $logger;
 
     /**
      * @var string
@@ -51,9 +54,7 @@ class Captcha
             $clientProfile = new ClientProfile();
             $clientProfile->setHttpProfile($httpProfile);
             $client = new CaptchaClient($cred, "", $clientProfile);
-
-            $req = new DescribeCaptchaResultRequest();
-
+            $req    = new DescribeCaptchaResultRequest();
             $params = [
                 'CaptchaType'  => 9,
                 'Ticket'       => $ticket,
@@ -67,7 +68,7 @@ class Captcha
 
             return 1 === $resp->getCaptchaCode();
         } catch (TencentCloudSDKException $e) {
-            Logger::debug('验证码请求失败: ' . $e->getMessage(), $e->getTrace());
+            $this->logger->debug('验证码请求失败: ' . $e->getMessage(), $e->getTrace());
             return false;
         }
     }

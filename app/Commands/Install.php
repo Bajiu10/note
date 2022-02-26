@@ -1,16 +1,26 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Commands;
 
-use Max\Console\Command;
-use Max\Foundation\Facades\DB;
+use Exception;
+use Max\Console\Commands\Command;
+use Max\Console\Contracts\InputInterface;
+use Max\Console\Contracts\OutputInterface;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
 /**
  * Class Install
+ *
  * @package App\Console\Commands
  */
 class Install extends Command
 {
+    #[Inject]
+    protected Query $query;
+
+    protected string $name = 'install';
+
     /**
      * @var string
      */
@@ -19,16 +29,20 @@ class Install extends Command
     /**
      * @var string[]
      */
-    protected $userInfo = [
+    protected array $userInfo = [
         'username' => '',
         'password' => '',
         'email'    => '',
     ];
 
     /**
-     * @throws \Exception
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     * @throws Exception
      */
-    public function handle()
+    public function run(InputInterface $input, OutputInterface $output): int
     {
         if (file_exists($this->lock)) {
             echo '已经安装过，请先删除install.lock: ', $this->lock, "\n";
@@ -42,7 +56,7 @@ class Install extends Command
         $this->userInfo['password'] = md5($this->userInfo['password']);
         echo "输入邮箱: ";
         $this->getString($this->userInfo['email']);
-        DB::table('users')->insert($this->userInfo);
+        $this->query->table('users')->insert($this->userInfo);
         touch($this->lock);
         echo "安装成功！输入php max serve 快速体验！ \n";
     }
@@ -60,11 +74,12 @@ class Install extends Command
      */
     public function drop($table)
     {
-        DB::exec("DROP TABLE IF EXISTS {$table}");
+        $this->query->exec("DROP TABLE IF EXISTS {$table}");
     }
 
     /**
      * @param $str
+     *
      * @return string
      */
     protected function quote($str)
@@ -84,7 +99,7 @@ class Install extends Command
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function createTable()
     {
@@ -109,9 +124,9 @@ CREATE TABLE `notes` (
 TABLE;
         try {
             $this->drop('notes');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建笔记表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建笔记表失败!' . $e->getMessage());
         }
         $table = <<<TABLE
 CREATE TABLE IF NOT EXISTS `comments` (
@@ -128,9 +143,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
 TABLE;
         try {
             $this->drop('comments');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建评论表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建评论表失败!' . $e->getMessage());
         }
         $table = <<<TABLE
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -142,9 +157,9 @@ CREATE TABLE IF NOT EXISTS `categories` (
 TABLE;
         try {
             $this->drop('categories');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建评论表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建评论表失败!' . $e->getMessage());
         }
         $table = <<<TABLE
  CREATE TABLE IF NOT EXISTS `hearts` (
@@ -154,9 +169,9 @@ TABLE;
 TABLE;
         try {
             $this->drop('hearts');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建喜欢表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建喜欢表失败!' . $e->getMessage());
         }
         $table = <<<TABLE
 CREATE TABLE IF NOT EXISTS `users` (
@@ -175,9 +190,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 TABLE;
         try {
             $this->drop('users');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建用户表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建用户表失败!' . $e->getMessage());
         }
         $table = <<<TABLE
 CREATE TABLE `links` (
@@ -191,9 +206,9 @@ CREATE TABLE `links` (
 TABLE;
         try {
             $this->drop('links');
-            DB::exec($table);
-        } catch (\Exception $e) {
-            throw new \Exception('创建链接表失败!' . $e->getMessage());
+            $this->query->exec($table);
+        } catch (Exception $e) {
+            throw new Exception('创建链接表失败!' . $e->getMessage());
         }
     }
 

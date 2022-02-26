@@ -1,22 +1,26 @@
 <?php
 
-namespace App\Http\Middleware;
 
-use Max\Foundation\Facades\Session;
+namespace App\Http\Middlewares;
+
+use Max\Di\Annotations\Inject;
+use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class Login implements MiddlewareInterface
+class Logined implements MiddlewareInterface
 {
+    #[Inject]
+    protected Session $session;
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $userId = Session::get('user.id');
+        $userId = $this->session->get('user.id');
         if (!is_null($userId)) {
-            return $handler->handle($request);
+            throw new \Exception('你已经登录了！😊😊😊');
         }
-        throw new \Exception('你还没有登录哦！😢😢😢');
+        return $handler->handle($request);
     }
-
 }

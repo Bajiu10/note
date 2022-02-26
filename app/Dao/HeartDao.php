@@ -3,15 +3,14 @@
 namespace App\Dao;
 
 use Max\Database\Collection;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
-/**
- * Class HeartDao
- *
- * @package App\Dao
- */
 class HeartDao
 {
+    #[Inject]
+    protected Query $query;
+
     /**
      * @param $ip
      *
@@ -19,7 +18,7 @@ class HeartDao
      */
     public function getIdsByIp($ip): Collection
     {
-        return DB::table('hearts')->where('user_id', $ip)->column('comment_id');
+        return $this->query->table('hearts')->where('user_id', $ip)->column('comment_id');
     }
 
     /**
@@ -30,7 +29,7 @@ class HeartDao
      */
     public function hasOneByCommentId($commentId, $userId = null): bool
     {
-        $heart = DB::table('hearts')
+        $heart = $this->query->table('hearts')
                    ->where('comment_id', $commentId);
         if ($userId) {
             $heart->where('user_id', $userId);
@@ -47,7 +46,7 @@ class HeartDao
      */
     public function deleteOneByCommentId($commentId, $userId = null): int
     {
-        $heart = DB::table('hearts')->where('comment_id', $commentId);
+        $heart = $this->query->table('hearts')->where('comment_id', $commentId);
         if ($userId) {
             $heart->where('user_id', $userId);
         }
@@ -61,6 +60,6 @@ class HeartDao
      */
     public function createOne($data): bool|string
     {
-        return DB::table('hearts')->insert($data);
+        return $this->query->table('hearts')->insert($data);
     }
 }

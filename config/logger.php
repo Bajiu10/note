@@ -4,9 +4,12 @@ return [
     'default' => 'app',
     'logger'  => [
         'app' => [
-            'handler' => \Monolog\Handler\StreamHandler::class,
-            'path'    => env('storage_path') . 'logs/' . date('Ym') . '/' . date('d') . '.log',
-            'level'   => \Monolog\Logger::DEBUG,
+            'handler' => 'Monolog\Handler\RotatingFileHandler',
+            'options' => [
+                'filename' => base_path('storage/logs.app.log'),
+                'maxFiles' => 180,
+                'level'    => \Monolog\Logger::WARNING,
+            ],
         ],
     ],
 ];

@@ -4,39 +4,40 @@ namespace App\Http\Controllers\Api;
 
 use App\Dao\NoteDao;
 use App\Http\Controllers\ApiController;
+use Exception;
 use Max\Http\Message\UploadedFile;
+use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class Note
  *
  * @package App\Http\Controllers\Api
  */
-#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middlewares: ['api'])]
+#[Controller(prefix: 'api/notes')]
 class Note extends ApiController
 {
     /**
      * @param NoteDao $noteDao
      *
-     * @return array
+     * @return ResponseInterface
      */
     #[GetMapping(path: '', allowCrossDomain: ['*'])]
-    public function index(NoteDao $noteDao): array
+    public function index(NoteDao $noteDao): ResponseInterface
     {
-        $page = $this->request->get('p', 1);
-
-        return $noteDao->getSome($page)->toArray();
+        return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
     /**
      * 上传缩略图
      *
-     * @return array
-     * @throws \Exception
+     * @return ResponseInterface
+     * @throws Exception
      */
     #[PostMapping(path: '/upload-thumb')]
-    public function uploadImage(): array
+    public function uploadImage(): ResponseInterface
     {
         /* @var UploadedFile $thumb */
         $thumb = $this->request->file('thumb');
@@ -44,7 +45,7 @@ class Note extends ApiController
         $name  = md5(microtime(true)) . '.' . $type;
         $path  = '/upload/thumb/' . date('Ymd/') . $name;
         if ($thumb instanceof UploadedFile) {
-            $thumb->moveTo(public_path(ltrim($path, '/')));
+            $thumb->moveTo(base_path('public/' . ltrim($path, '/')));
             return $this->success([
                 'path' => $path,
             ]);
@@ -57,7 +58,7 @@ class Note extends ApiController
      * 新增或者编辑界面上传图片
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     #[PostMapping(path: '/uploadImage')]
     public function uploadImages(): array
@@ -67,7 +68,7 @@ class Note extends ApiController
         $name  = md5(microtime(true)) . '.' . $type;
         $path  = '/upload/images/' . date('Ymd/') . $name;
         if ($image instanceof UploadedFile) {
-            $image->moveTo(public_path(ltrim($path, '/')));
+            $image->moveTo(base_path('public/' . ltrim($path, '/')));
             return [
                 'success' => 1,
                 'message' => '图片上传成功！',

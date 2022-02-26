@@ -3,17 +3,15 @@
 namespace App\Dao;
 
 use Max\Database\Collection;
-use Max\Foundation\Facades\DB;
-use Max\Foundation\Http\Request;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * Class CommentDao
- *
- * @package App\Dao
- */
 class CommentDao
 {
+    #[Inject]
+    protected Query $query;
+
     /**
      * @param $id
      *
@@ -21,7 +19,7 @@ class CommentDao
      */
     public function amountOfOneNote($id): int
     {
-        return DB::table('comments')->where('note_id', $id)->count($id);
+        return $this->query->table('comments')->where('note_id', $id)->count($id);
     }
 
     /**
@@ -33,7 +31,7 @@ class CommentDao
      */
     public function getSome(int $limit = 5, string $order = 'create_time', string $seq = 'DESC'): Collection
     {
-        return DB::table('comments')->order($order, $seq)->limit($limit)->get();
+        return $this->query->table('comments')->order($order, $seq)->limit($limit)->get();
     }
 
     /**
@@ -43,7 +41,7 @@ class CommentDao
      */
     public function createOne($data): bool|string
     {
-        return DB::table('comments')->insert($data);
+        return $this->query->table('comments')->insert($data);
     }
 
     /**
@@ -66,27 +64,27 @@ class CommentDao
             'parent_id',
             'count(f.user_id) hearts'
         ];
-        $hearts   = (new HeartDao())->getIdsByIp($request->ip())->toArray();
-        $comments = DB::table('comments', 'c')
-                      ->leftJoin('hearts', 'f')->on('c.id', 'f.comment_id')
-                      ->where('note_id', $id)
-                      ->whereNull('parent_id')
-                      ->group('c.id')
-                      ->order(...$orders)
-                      ->limit($pageSize)
-                      ->offset(($page - 1) * $pageSize)
-                      ->get($fields);
-        $children = DB::table('comments', 'c')
-                      ->leftJoin('hearts', 'f')
-                      ->on('c.id', 'f.comment_id')
-                      ->whereIn('parent_id', $comments->pluck('id')->toArray())
-                      ->group('c.id')
-                      ->order('hearts', 'DESC')
-                      ->get($fields)
-                      ->map(function($item) use ($hearts) {
-                          $item['hearted'] = in_array($item['id'], $hearts);
-                          return $item;
-                      });
+        $hearts   = make(HeartDao::class)->getIdsByIp($request->ip())->toArray();
+        $comments = $this->query->table('comments', 'c')
+                                ->leftJoin('hearts', 'f')->on('c.id', 'f.comment_id')
+                                ->where('note_id', $id)
+                                ->whereNull('parent_id')
+                                ->group('c.id')
+                                ->order(...$orders)
+                                ->limit($pageSize)
+                                ->offset(($page - 1) * $pageSize)
+                                ->get($fields);
+        $children = $this->query->table('comments', 'c')
+                                ->leftJoin('hearts', 'f')
+                                ->on('c.id', 'f.comment_id')
+                                ->whereIn('parent_id', $comments->pluck('id')->toArray())
+                                ->group('c.id')
+                                ->order('hearts', 'DESC')
+                                ->get($fields)
+                                ->map(function($item) use ($hearts) {
+                                    $item['hearted'] = in_array($item['id'], $hearts);
+                                    return $item;
+                                });
         return $comments->map(function($item) use ($children, $hearts) {
             $item['hearted']  = in_array($item['id'], $hearts);
             $item['children'] = $children->where('parent_id', $item['id'])->toArray();

@@ -1,13 +1,22 @@
 <?php
+declare(strict_types=1);
 
 return [
-    'exception_handler' => \App\Exceptions\Handler::class,
-    'cookie'            => [
+    'cookie'      => [
         'expires'  => 0,
         'path'     => '/',
         'domain'   => '',
         'secure'   => false,
         'httponly' => false,
-        'samesite' => '',
+        'sameSite' => '',
     ],
+    'middlewares' => [
+        'App\Exceptions\Handler',
+        'App\Http\Middlewares\Statistic'
+    ],
+    'route'       => [
+        'scanDir' => [
+            __DIR__ . '/../app/Http/Controllers'
+        ]
+    ]
 ];

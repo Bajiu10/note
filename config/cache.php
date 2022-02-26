@@ -1,18 +1,18 @@
 <?php
 
 return [
-    'default' => 'redis',
+    'default' => 'file',
     'stores'  => [
         //文件缓存
         'file'      => [
-            'handler' => \Max\Cache\Handlers\File::class,
+            'handler' => 'Max\Cache\Handlers\File',
             'options' => [
-                'path' => env('cache_path') . 'app',
+                'path' => base_path('storage/cache/app'),
             ],
         ],
         // redis缓存
         'redis'     => [
-            'handler' => \Max\Cache\Handlers\Redis::class,
+            'handler' => 'Max\Cache\Handlers\Redis',
             'options' => [
                 //所有Redis的host[不区分主从]
                 'host'   => [
@@ -36,7 +36,7 @@ return [
         ],
         //memcached缓存
         'memcached' => [
-            'handler' => \Max\Cache\Handlers\Memcached::class,
+            'handler' => 'Max\Cache\Handlers\Memcached',
             'options' => [
                 'host' => '127.0.0.1', //主机
                 'port' => 11211        //端口

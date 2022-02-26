@@ -53,25 +53,6 @@ if (false === function_exists('format_size')) {
     }
 }
 
-if (false === function_exists('api_success')) {
-    /**
-     * @param     $data
-     * @param     $message
-     * @param int $code
-     *
-     * @return \Psr\Http\Message\ResponseInterface
-     * @throws Throwable
-     */
-    function api_success($data, string $message, int $code = 0): \Psr\Http\Message\ResponseInterface
-    {
-        return \Max\Foundation\Http\Response::json([
-            'data'    => $data,
-            'message' => $message,
-            'code'    => $code
-        ]);
-    }
-}
-
 if (false === function_exists('get_url')) {
     /**
      * @param bool $full

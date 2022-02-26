@@ -186,13 +186,13 @@
                                 class="fa fa-book"></i> 文档</a>
                 </li>
                 <li class="d-bg"><a href="/about">关于</a></li>
-                @if(!is_null(\Max\Foundation\Facades\Session::get('user.id')))
+                @if(!is_null(session('user.id')))
                     <li class="d-bg"><a title="发布" href="/notes/add"><i class="fa fa-pencil"></i></a></li>
                 @endif
                 <li class="d-sm dropdown-btn">
                     <a href="javascript:void(0)" id="dropdown"><i class="fa fa-bars"></i></a>
                 </li>
-                @if(!is_null(\Max\Foundation\Facades\Session::get('user.id')))
+                @if(!is_null(session('user.id')))
                     <li class="d-bg" style="min-width:2.5em">
                         <a href="/logout?from={{get_url()}}" title="退出"><i
                                     class="fa fa-sign-out"></i></a>
@@ -208,7 +208,7 @@
         <form action="/search">
             <ul id="phone-nav" style="display: none">
                 <li><a href="/about">关于</a></li>
-                @if(!is_null(\Max\Foundation\Facades\Session::get('user.id')))
+                @if(!is_null(session('user.id')))
                     <li><a href="/notes/add">发布</a></li>
                     <li><a href="/logout?from={{get_url()}}">退出</a></li>
                 @else

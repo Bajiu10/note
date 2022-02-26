@@ -3,14 +3,14 @@
 namespace App\Dao;
 
 use Max\Database\Collection;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
-/**
- * Class CategoryDao
- * @package App\Dao
- */
 class CategoryDao
 {
+    #[Inject]
+    protected Query $query;
+
     /**
      * @param string $order
      *
@@ -18,6 +18,6 @@ class CategoryDao
      */
     public function all(string $order = 'id'): Collection
     {
-        return DB::table('categories')->order($order)->get();
+        return $this->query->table('categories')->order($order)->get();
     }
 }

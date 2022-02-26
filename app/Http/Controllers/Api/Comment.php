@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Dao\CommentDao;
 use App\Dao\HeartDao;
 use App\Http\Controllers\ApiController;
-use App\Http\Requests\CommentRequest;
 use App\Services\TencentCloud\Captcha;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
+use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use Max\Validator\Validator;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -17,18 +20,20 @@ use Psr\Http\Message\ServerRequestInterface;
  *
  * @package App\Http\Controllers\Api
  */
-#[\Max\Routing\Annotations\Controller(prefix: 'api/notes', middlewares: ['api'])]
+#[Controller(prefix: 'api/notes')]
 class Comment extends ApiController
 {
+    #[Inject]
+    protected Validator $validator;
+
     /**
      * @param            $id
      * @param CommentDao $commentDao
-     * @param HeartDao   $heartDao
      *
-     * @return array
+     * @return ResponseInterface
      */
     #[GetMapping(path: '/<id>/comments')]
-    public function index($id, CommentDao $commentDao, HeartDao $heartDao): array
+    public function index($id, CommentDao $commentDao): ResponseInterface
     {
         return $this->success([
             'total' => $commentDao->amountOfOneNote($id),
@@ -37,17 +42,17 @@ class Comment extends ApiController
     }
 
     /**
-     * @param CommentRequest $request
-     * @param CommentDao     $commentDao
-     * @param Captcha        $captcha
+     * @param ServerRequestInterface $request
+     * @param CommentDao             $commentDao
+     * @param Captcha                $captcha
      *
-     * @return array
+     * @return ResponseInterface
      */
     #[PostMapping(path: '/comment')]
-    public function store(ServerRequestInterface $request, CommentDao $commentDao, Captcha $captcha): array
+    public function store(ServerRequestInterface $request, CommentDao $commentDao, Captcha $captcha): ResponseInterface
     {
         $data      = $request->post(['comment', 'email', 'note_id', 'name', 'ticket', 'randstr'], ['name' => '匿名用户']);
-        $validator = \Max\Foundation\Facades\Validator::make($data, [
+        $validator = $this->validator->make($data, [
             'comment' => 'required|max:255',
             'ticket'  => 'required',
             'randstr' => 'required',
@@ -71,13 +76,14 @@ class Comment extends ApiController
     /**
      * @param          $id
      * @param HeartDao $heartDao
+     * @param Query    $query
      *
-     * @return array
+     * @return ResponseInterface
      */
     #[GetMapping(path: '/heart/<id>')]
-    public function heart($id, HeartDao $heartDao): array
+    public function heart($id, HeartDao $heartDao, Query $query): ResponseInterface
     {
-        if (!DB::table('comments')->where('id', $id)->exists()) {
+        if (!$query->table('comments')->where('id', $id)->exists()) {
             return $this->error('评论不存在');
         }
         $userId = $this->request->ip();

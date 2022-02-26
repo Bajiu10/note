@@ -3,15 +3,14 @@
 namespace App\Dao;
 
 use Max\Database\Collection;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
-/**
- * Class NoteDao
- *
- * @package App\Dao
- */
 class NoteDao
 {
+    #[Inject]
+    protected Query $query;
+    
     /**
      * @param      $id
      * @param null $userId
@@ -20,7 +19,7 @@ class NoteDao
      */
     public function findOne($id, $userId = null): mixed
     {
-        $note = DB::table('notes')
+        $note = $this->query->table('notes')
                   ->leftJoin('categories')
                   ->on('categories.id', 'notes.cid')
                   ->where('notes.id', $id)
@@ -52,7 +51,7 @@ class NoteDao
      */
     public function incrHits($id, $old)
     {
-        DB::table('notes')->where('id', $id)
+        $this->query->table('notes')->where('id', $id)
           ->update(['hits' => $old + 1]);
     }
 
@@ -70,7 +69,7 @@ class NoteDao
         }
         $data['user_id']     = $userId;
         $data['update_time'] = date('Y-m-d H:i:s');
-        return DB::table('notes')->insert($data);
+        return $this->query->table('notes')->insert($data);
     }
 
     /**
@@ -86,7 +85,7 @@ class NoteDao
         if (empty($data['abstract'])) {
             $data['abstract'] = substr($data['text'], 0, 300);
         }
-        return DB::table('notes')->where('id', $id)->update($data);
+        return $this->query->table('notes')->where('id', $id)->update($data);
     }
 
     /**
@@ -97,7 +96,7 @@ class NoteDao
      */
     public function deleteOne($id, $userId): int
     {
-        return DB::table('notes')
+        return $this->query->table('notes')
                  ->where('id', $id)
                  ->where('user_id', $userId)
                  ->update(['delete_time' => date('Y-m-d H:i:s')]);
@@ -111,7 +110,7 @@ class NoteDao
      */
     public function getSome($page, int $limit = 8): Collection
     {
-        return DB::table('notes', 'n')
+        return $this->query->table('notes', 'n')
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
                  ->whereNull('delete_time')
                  ->order('sort', 'DESC')
@@ -131,7 +130,7 @@ class NoteDao
      */
     public function recommend(int $limit = 8): array
     {
-        return DB::table('notes')
+        return $this->query->table('notes')
                  ->order('hits', 'DESC')
                  ->order('update_time', 'DESC')
                  ->order('create_time', 'DESC')
@@ -150,7 +149,7 @@ class NoteDao
      */
     public function getRecommended($cid, $id): array
     {
-        return DB::table('notes', 'n')
+        return $this->query->table('notes', 'n')
                  ->leftJoin('categories', 'c')
                  ->on('n.cid', 'c.id')
                  ->whereNull('delete_time')
@@ -171,7 +170,7 @@ class NoteDao
      */
     public function getAmount(): int
     {
-        return DB::table('notes')->count();
+        return $this->query->table('notes')->count();
     }
 
     /**
@@ -183,7 +182,7 @@ class NoteDao
      */
     public function search($kw, int $limit = 8, int $offset = 0): Collection
     {
-        return DB::table('notes', 'n')
+        return $this->query->table('notes', 'n')
                  ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
                  ->whereNull('n.delete_time')
                  ->whereRaw('(`n`.`title` like ? OR MATCH(`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
@@ -204,7 +203,7 @@ class NoteDao
      */
     public function countSearch($kw): int
     {
-        return DB::table('notes')
+        return $this->query->table('notes')
                  ->whereNull('delete_time')
                  ->whereRaw('(`title` like ? OR MATCH(`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])
                  ->count(1);
@@ -217,7 +216,7 @@ class NoteDao
      */
     public function hots(int $limit = 8): array
     {
-        return DB::table('notes')
+        return $this->query->table('notes')
                  ->order('hits', 'DESC')
                  ->order('update_time', 'DESC')
                  ->order('create_time', 'DESC')

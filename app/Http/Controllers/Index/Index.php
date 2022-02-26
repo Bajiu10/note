@@ -6,22 +6,17 @@ use App\Dao\CommentDao;
 use App\Dao\LinkDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
+use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use Exception;
 use Max\Cache\Cache;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Exceptions\HttpException;
 use Max\Routing\Annotations\GetMapping;
-use Max\Routing\RouteCollector;
+use Max\Server\Exceptions\HttpException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-/**
- * Class Index
- *
- * @package App\Http\Controllers\Index
- */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
 class Index extends Controller
 {
     use Paginate;
@@ -41,7 +36,7 @@ class Index extends Controller
      * @throws Throwable
      */
     #[GetMapping(path: '/')]
-    public function index(LinkDao $linkDao, CommentDao $commentDao):ResponseInterface
+    public function index(LinkDao $linkDao, CommentDao $commentDao): ResponseInterface
     {
         $page     = (int)$this->request->get('p', 1);
         $paginate = $this->paginate($page, ceil($this->noteDao->getAmount() / 8), 8);

@@ -1,9 +1,7 @@
 <?php
 
 namespace Psr\Http\Message {
-
     use Max\Foundation\Http\{Request, Response};
-
     /**
      * @mixin Request
      */
@@ -27,11 +25,11 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name             别名
-         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param array             $patterns         变量规则
+         * @param string            $ext
+         * @param array             $where
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [])
         {
         }
     }
@@ -41,11 +39,11 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name             别名
-         * @param array             $middlewares
-         * @param array             $patterns
          * @param array|string|null $allowCrossDomain 跨域列表
+         * @param string            $ext
+         * @param array             $where
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array $patterns = [], array|string|null $allowCrossDomain = null)
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [])
         {
         }
     }
@@ -55,11 +53,11 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name             别名
-         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param array             $patterns
+         * @param string            $ext
+         * @param array             $where
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [])
         {
         }
     }
@@ -69,11 +67,11 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name             别名
-         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain 跨域列表
-         * @param array             $patterns
+         * @param string            $ext
+         * @param array             $where
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [])
         {
         }
     }
@@ -83,11 +81,11 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name
-         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain
-         * @param array             $patterns
+         * @param string            $ext
+         * @param array             $where
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [])
         {
         }
     }
@@ -97,12 +95,12 @@ namespace Max\Routing\Annotations {
         /**
          * @param string            $path
          * @param string|null       $name
-         * @param array             $middlewares
          * @param array|string|null $allowCrossDomain
-         * @param array             $patterns
+         * @param string            $ext
+         * @param array             $where
          * @param array             $methods
          */
-        public function __construct(string $path, ?string $name = null, array $middlewares = [], array|string|null $allowCrossDomain = null, array $patterns = [], array $methods = ['GET', 'POST', 'HEAD'])
+        public function __construct(string $path, ?string $name = null, array|string|null $allowCrossDomain = null, string $ext = '', array $where = [], array $methods = ['GET', 'POST', 'HEAD'])
         {
         }
     }
@@ -171,7 +169,7 @@ namespace Psr\Container {
 
 namespace Psr\SimpleCache {
 
-    use Max\Foundation\Cache;
+    use Max\Cache\Cache;
 
     /**
      * @mixin Cache

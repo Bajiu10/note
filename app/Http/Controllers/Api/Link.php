@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
+use Psr\Http\Message\ResponseInterface;
 
-#[Controller(prefix: '/', middlewares: ['api'])]
+#[Controller(prefix: '/')]
 class Link extends ApiController
 {
     #[GetMapping(path: 'api/link')]
-    public function index()
+    public function index(Query $query): ResponseInterface
     {
-        $links = DB::table('links')->get()->toArray();
+        $links = $query->table('links')->get()->toArray();
 
         return $this->success($links);
     }

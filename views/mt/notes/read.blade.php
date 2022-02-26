@@ -26,7 +26,7 @@
                             class="fa fa-folder"></i>&nbsp;{{$note['category']}}&nbsp;&nbsp;<i
                             class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<i
                             class="fa fa-comment"></i>&nbsp;{{$commentsCount}}
-                    @if(\Max\Foundation\Facades\Session::get('user.id') == $note['user_id'])
+                    @if(session('user.id') == $note['user_id'])
                         <a href="/notes/edit/{{$note['id']}}">&nbsp;&nbsp;<i style="color: white"
                                                                              class="fa fa-edit"></i></a>
                         <a id="delete" href="javascript:void(0)">&nbsp;&nbsp;<i style="color: red"

@@ -2,15 +2,14 @@
 
 namespace App\Dao;
 
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
-/**
- * Class UserDao
- *
- * @package App\Dao
- */
 class UserDao
 {
+    #[Inject]
+    protected Query $query;
+
     /**
      * @param array $credentials
      *
@@ -18,9 +17,9 @@ class UserDao
      */
     public function findOneByCredentials(array $credentials)
     {
-        return DB::table('users')
-                 ->where('username', $credentials['username'])
-                 ->where('password', md5($credentials['password']))
-                 ->first();
+        return $this->query->table('users')
+                           ->where('username', $credentials['username'])
+                           ->where('password', md5($credentials['password']))
+                           ->first();
     }
 }

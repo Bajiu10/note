@@ -6,15 +6,18 @@ use App\Dao\CategoryDao;
 use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
-use App\Http\Middleware\Login;
+use App\Http\Middlewares\Login;
+use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use Exception;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Di\Annotations\Middleware;
-use Max\Foundation\Facades\Session;
+use Max\Di\Exceptions\NotFoundException;
+use Max\Server\Http\Annotations\Middleware;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
+use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Throwable;
 
 /**
@@ -22,14 +25,14 @@ use Throwable;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: ['web'])]
+#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
 class Note extends Controller
 {
     use Paginate;
 
-    /**
-     * @var NoteDao
-     */
+    #[Inject]
+    protected Session $session;
+
     #[Inject]
     protected NoteDao $noteDao;
 
@@ -44,7 +47,7 @@ class Note extends Controller
     public function show($id, CommentDao $commentDao): ResponseInterface
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
-            if (1 == $note['permission'] && Session::get('user.id') != $note['user_id']) {
+            if (1 == $note['permission'] && $this->session->get('user.id') != $note['user_id']) {
                 throw new Exception('你没有权限查看~');
             }
             $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
@@ -77,7 +80,7 @@ class Note extends Controller
         }
         try {
             $insertedId = $this->noteDao->createOne(
-                Session::get('user.id'),
+                $this->session->get('user.id'),
                 $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
             );
         } catch (Exception $e) {
@@ -99,7 +102,7 @@ class Note extends Controller
     ]
     public function edit($id, CategoryDao $categoryDao): ResponseInterface
     {
-        $note = $this->noteDao->findOne($id, Session::get('user.id'));
+        $note = $this->noteDao->findOne($id, $this->session->get('user.id'));
 
         if ($this->request->isMethod('get')) {
             $categories = $categoryDao->all();
@@ -113,19 +116,19 @@ class Note extends Controller
         }
     }
 
+
     /**
-     * @param $id
-     *
-     * @return mixed
+     * @throws ReflectionException
+     * @throws NotFoundException
      * @throws Exception
      */
     #[
         RequestMapping(path: 'notes/delete/<id>'),
         Middleware(Login::class)
     ]
-    public function destroy($id)
+    public function destroy($id): ResponseInterface
     {
-        if ($this->noteDao->deleteOne($id, Session::get('user.id'))) {
+        if ($this->noteDao->deleteOne($id, $this->session->get('user.id'))) {
             return redirect('/');
         }
         throw new Exception('删除失败了！');

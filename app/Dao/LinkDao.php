@@ -3,20 +3,19 @@
 namespace App\Dao;
 
 use Max\Database\Collection;
-use Max\Foundation\Facades\DB;
+use Max\Database\Query;
+use Max\Di\Annotations\Inject;
 
-/**
- * Class LinkDao
- *
- * @package App\Dao
- */
 class LinkDao
 {
+    #[Inject]
+    protected Query $query;
+
     /**
      * @return Collection
      */
     public function all(): Collection
     {
-        return DB::table('links')->get();
+        return $this->query->table('links')->get();
     }
 }

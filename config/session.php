@@ -1,13 +1,11 @@
 <?php
 
 return [
-    'name'          => 'MAXPHP_SESSION_ID',
-    'handler'       => [
-        'class'   => '\Max\Session\Handlers\File',
-        'options' => [
-            'path' => env('storage_path') . 'session',
-            'ttl'  => 3600,
-        ]
+    'handler' => 'Max\Session\Handlers\File',
+    'options' => [
+        'path'          => base_path('storage/session'),
+        'gcDivisor'     => 100,
+        'gcProbability' => 1,
+        'gcMaxLifetime' => 1440,
     ],
-    'cookie_expire' => time() + 3600,
 ];
