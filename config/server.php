@@ -13,7 +13,7 @@ return [
             'sockType'  => SWOOLE_SOCK_TCP,
             'settings'  => [
                 Constant::OPTION_OPEN_WEBSOCKET_PROTOCOL => true,
-                Constant::OPTION_WORKER_NUM              => 1,
+                Constant::OPTION_WORKER_NUM              => 8,
             ],
             'callbacks' => [
                 'open'    => [\Max\Server\WebSocket\Server::class, 'open'],
@@ -33,7 +33,7 @@ return [
                 Constant::OPTION_MAX_REQUEST           => 10000,
                 Constant::OPTION_ENABLE_STATIC_HANDLER => true,
                 Constant::OPTION_OPEN_HTTP_PROTOCOL    => true,
-                Constant::OPTION_WORKER_NUM            => 1,
+                Constant::OPTION_WORKER_NUM            => 8,
             ],
             'callbacks' => [
                 'request' => [Server::class, 'request'],

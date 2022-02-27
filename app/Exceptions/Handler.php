@@ -42,7 +42,6 @@ class Handler extends HttpErrorHandler
      */
     protected function renderException(Throwable $throwable, ServerRequestInterface $request): ResponseInterface
     {
-        echo $throwable->getMessage() . PHP_EOL;
-        return parent::renderException($throwable, $request);
+        return view('mt.error', ['code' => $this->getCode($throwable), 'message' => $throwable->getMessage()]);
     }
 }
