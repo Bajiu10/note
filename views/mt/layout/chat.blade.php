@@ -4,6 +4,7 @@
         text-align: center;
         margin-right: .2em;
         width: 1.5em;
+        height: 2em;
         font-size: 1.3em;
         line-height: 2em;
         cursor: pointer
@@ -74,7 +75,7 @@
     }
 
     #chat {
-        display: block;
+        display: none;
         position: fixed;
         bottom: .5em;
         right: .5em;
@@ -146,7 +147,7 @@
 <div id="chat">
     <div class="room-header">
         <span>聊天</span>
-        <span>在线<t id="online">0</t></span>
+        {{--        <span>在线<t id="online">0</t></span>--}}
         <span id="close" class="close-btn">×</span>
     </div>
     <div id="room-content">
@@ -171,78 +172,82 @@
         $('#chat').fadeIn(200)
     })
 
-    var ws = new WebSocket('wss://www.chengyao.xyz:8080/ws/chat');
+    function appendMsg(data) {
+        const chatRoom = $('#chat-room');
+        // const online = $('#online');
+        // if (data.data.length > 1) {
+        //     chatRoom.html('')
+        //     online.text(data.online)
+        // }
+        chatRoom.prepend(`<div class="chat-item"><div class="chat-avatar">㊙</div><div class="chat-content-box"><div><b>游客${data.uid}</b></div><div class="chat-content"><i>${data.data}</i></div><div class="chat-time"></div></div></p>`)
+    }
+
+    var ws = new WebSocket('wss://ws.1kmb.com/?id=' + Math.random() * 10);
     ws.onopen = function (evt) {
-        ws.send('init')
+        ws.onclose = function (evt) {
+            console.log("Disconnected");
+        };
+
+        ws.onmessage = function (evt) {
+            if (evt.data === 'pong') {
+                return
+            }
+            let data = JSON.parse(evt.data)
+            if (data.code === 101) {
+                for (let i in data.data) {
+                    appendMsg(data.data[i])
+                }
+            } else {
+                appendMsg(data.data)
+            }
+        };
+
+        ws.onerror = function (evt, e) {
+            console.log('Error occured: ' + evt.data);
+        };
+
+        $('#send').on('click', function (e) {
+            input = $('#content-box')
+            content = input.val()
+            if ('' === content) {
+                return
+            }
+            ws.send(content);
+            input.val('')
+        })
+
+        $('#upload-image').on('click', function () {
+            $('input[name=chat-image]').click()
+        })
+
+        $('input[name=chat-image]').on('change', function () {
+            var form = new FormData;
+            form.append('chat-image', $(this)[0].files[0])
+            $.ajax({
+                url: '/api/chat/upload',
+                type: 'post',
+                contentType: false,
+                processData: false,
+                data: form,
+                success: function (e) {
+                    ws.send('img:' + e.url)
+                    $('input[name=chat-image]').val('')
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        })
+
+        $(document).on('keyup', function (e) {
+            if (13 === e.keyCode) {
+                $('#send').click()
+            }
+        })
+
+        setInterval(function () {
+            ws.send('ping')
+        }, 5000)
         console.log("Connected to ws server.");
     };
-
-    ws.onclose = function (evt) {
-        console.log("Disconnected");
-    };
-
-    ws.onmessage = function (evt) {
-        console.log('Retrieved data from server: ' + evt.data);
-        data = JSON.parse(evt.data)
-        chatRoom = $('#chat-room')
-        online = $('#online')
-        if (data.data.length > 1) {
-            chatRoom.html('')
-            online.text(data.online)
-        }
-        for (var i = data.data.length - 1; i >= 0; i--) {
-            content = data.data[i].data
-            if (content.substr(0, 4) === 'img:') {
-                data.data[i].data = `<img style="width: 100%" src="${content.substr(4)}">`
-            }
-            chatRoom.prepend(`<div class="chat-item"><div class="chat-avatar">㊙</div><div class="chat-content-box"><div><b>游客${data.data[i].id}</b></div><div class="chat-content"><i>${data.data[i].data}</i></div><div class="chat-time">${time_convert(data.data[i].time)}</div></div></p>`)
-        }
-    };
-
-    ws.onerror = function (evt, e) {
-        console.log('Error occured: ' + evt.data);
-    };
-
-    $('#send').on('click', function (e) {
-        input = $('#content-box')
-        content = input.val()
-        if ('' === content) {
-            return
-        }
-        ws.send(content);
-        input.val('')
-    })
-
-    $('#upload-image').on('click', function () {
-        $('input[name=chat-image]').click()
-    })
-
-    $('input[name=chat-image]').on('change', function () {
-        var form = new FormData;
-        form.append('chat-image', $(this)[0].files[0])
-        $.ajax({
-            url: '/api/chat/upload',
-            type: 'post',
-            contentType: false,
-            processData: false,
-            data: form,
-            success: function (e) {
-                ws.send('img:' + e.url)
-                $('input[name=chat-image]').val('')
-            },
-            error: function (e) {
-                console.log(e)
-            }
-        });
-    })
-
-    $(document).on('keyup', function (e) {
-        if (13 === e.keyCode) {
-            $('#send').click()
-        }
-    })
-
-    setInterval(function () {
-        ws.send('init')
-    }, 10000)
 </script>

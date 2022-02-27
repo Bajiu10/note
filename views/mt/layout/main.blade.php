@@ -280,7 +280,7 @@
         })();
     });
 </script>
-{{--@include('mt/layout/chat')--}}
+@include('mt/layout/chat')
 </body>
 @yield('js')
 </html>
