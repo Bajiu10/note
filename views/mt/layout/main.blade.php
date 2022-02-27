@@ -238,7 +238,7 @@
             </div>
             <div style="height: 80%">
                 <h2>关于</h2>
-                <p><a href="//github.com/topyao/max">使用MaxPHP框架开发</a></p>
+                <p><a href="//github.com/topyao/max">使用Max/Swoole框架开发</a></p>
                 <p>感谢 <a href="//www.jetbrains.com/?from=topyao">Phpstorm</a></p>
                 <p><a href="//beian.miit.gov.cn" target="_blank" class="text">陕ICP备20000693号-2</a></p>
             </div>
