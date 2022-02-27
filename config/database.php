@@ -23,7 +23,7 @@ return [
             // 数据表前缀
             'prefix'   => '',
             // 连接池内最大连接数量
-            'poolSize' => 64,
+            'poolSize' => 200,
         ],
     ],
     'redis'       => [

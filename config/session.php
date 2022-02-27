@@ -1,11 +1,12 @@
 <?php
 
 return [
-    'handler' => 'Max\Session\Handlers\File',
+    'handler' => 'Max\Session\Handlers\Cache',
     'options' => [
-        'path'          => base_path('storage/session'),
-        'gcDivisor'     => 100,
-        'gcProbability' => 1,
-        'gcMaxLifetime' => 1440,
+        'ttl' => 3600,
+        //        'path'          => base_path('storage/session'),
+        //        'gcDivisor'     => 100,
+        //        'gcProbability' => 1,
+        //        'gcMaxLifetime' => 1440,
     ],
 ];
