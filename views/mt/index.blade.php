@@ -240,8 +240,7 @@
                             $('.paginate').remove();
                         }
                         for (i in e.data) {
-                            time_convert(e.data[i]['create_time']);
-                            var lock = '0' === e.data[i]['permission'] ? '' : '<i class="fa fa-lock" aria-hidden="true"></i> ';
+                            var lock = 0 === e.data[i]['permission'] ? '' : '<i class="fa fa-lock" aria-hidden="true"></i> ';
                             var html = `<div class="list-item"><div><a target="_blank" href="/note/${e.data[i]['id']}.html"><img id="thumb" src="${e.data[i]['thumb']}" alt=""></a></div><div class="list-content"><div><div class="list-content-title"><a target="_blank" class="article-title" href="/note/${e.data[i]['id']}.html">${lock + e.data[i]['title']}</a></div><div class="description">${e.data[i]['abstract']}</div></div><div class="list-content-bottom"><span><i class="fa fa-calendar"></i>&nbsp;&nbsp;${time_convert(e.data[i]['create_time'])}&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-folder"></i>&nbsp;&nbsp;${e.data[i]['type']}</span><span> <i class="fa fa-eye"></i>&nbsp;${e.data[i]['hits']}&nbsp;&nbsp;<a target="_blank" style="margin-left: .5em;color: #309bee" href="/note/${e.data[i]['id']}.html"><i class="fa fa-book"></i>&nbsp;&nbsp;继续阅读</a></span></div></div></div>`;
                             $(html).appendTo('#content');
                         }

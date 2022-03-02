@@ -28,12 +28,14 @@ class HttpListener implements EventListenerInterface
         $triggerTime = gmdate('Y-m-d H:i:s');
 
         if ($event instanceof OnRequest) {
-            echo sprintf("%s [%s]: %s %s\n",
+            echo sprintf("%s [%s]: %s [%s] %s\n",
                 $triggerTime,
                 $eventName,
                 $event->request->getMethod(),
+                $event->response->getStatusCode(),
                 $event->request->getUri()->__toString()
-            );
+            ), PHP_EOL;
+            echo $event->response->getBody()->getSize(), PHP_EOL;
         }
     }
 }

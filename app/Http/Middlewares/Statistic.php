@@ -3,6 +3,8 @@
 
 namespace App\Http\Middlewares;
 
+use Exception;
+use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,12 +17,16 @@ class Statistic implements MiddlewareInterface
     #[Inject]
     protected CacheInterface $cache;
 
+    #[Inject]
+    protected Redis $redis;
+
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {
-            $stat = (int)$this->cache->get('stat');
-            $this->cache->set('stat', ++$stat);
-        } catch (\Exception $e) {
+            $this->redis->incr('stat');
+            //            $stat = (int)$this->cache->get('stat');
+            //            $this->cache->set('stat', ++$stat);
+        } catch (Exception) {
         }
         return $handler->handle($request);
     }

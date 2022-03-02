@@ -9,11 +9,13 @@ use App\Http\Controller;
 use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use Exception;
-use Max\Cache\Cache;
+use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
+use Max\Di\Exceptions\NotFoundException;
 use Max\Routing\Annotations\GetMapping;
 use Max\Server\Exceptions\HttpException;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Throwable;
 
 #[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
@@ -26,6 +28,9 @@ class Index extends Controller
      */
     #[Inject]
     protected NoteDao $noteDao;
+
+    #[Inject]
+    protected Redis $redis;
 
     /**
      * @param LinkDao    $linkDao
@@ -48,16 +53,15 @@ class Index extends Controller
     }
 
     /**
-     * @param Cache $cache
-     *
      * @return ResponseInterface
-     * @throws HttpException
      * @throws Throwable
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     #[GetMapping(path: '/about')]
-    public function about(Cache $cache): ResponseInterface
+    public function about(): ResponseInterface
     {
-        $stat = $cache->get('stat');
+        $stat = (float)$this->redis->get('stat');
         return view(config('app.theme') . '/about', compact(['stat']));
     }
 
