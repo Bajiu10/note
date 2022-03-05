@@ -8,6 +8,7 @@ use Max\Console\Contracts\InputInterface;
 use Max\Console\Contracts\OutputInterface;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Throwable;
 
 /**
  * Class Install
@@ -40,9 +41,10 @@ class Install extends Command
      * @param OutputInterface $output
      *
      * @return void
-     * @throws Exception
+     * @throws \Swoole\Exception
+     * @throws Throwable
      */
-    public function run(InputInterface $input, OutputInterface $output): int
+    public function run(InputInterface $input, OutputInterface $output)
     {
         if (file_exists($this->lock)) {
             echo '已经安装过，请先删除install.lock: ', $this->lock, "\n";

@@ -7,7 +7,7 @@
                 <div>
                     <p class="big-font">MAX</p>
                     <p class="small-font">组件化的轻量PHP框架！</p>
-                    <a id="recommend" href="https://docs.1kmb.com"><i
+                    <a id="recommend" href="https://www.1kmb.com/note/282.html"><i
                                 class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
                     <p class="links" style="flex-wrap: wrap">
                         <span id="version">Loading... </span>
