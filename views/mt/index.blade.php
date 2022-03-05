@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="card">
-                <div class="tips">最新发布</div>
+                <div class="tips">最新更新</div>
                 <div id="content">
                     @include('mt/layout/list')
                 </div>

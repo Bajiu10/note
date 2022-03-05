@@ -62,6 +62,7 @@
                         <div style="padding: .5em">
                             <label>
                                 <input type="checkbox" name="permission" checked>公开
+                                <input type="number" value="0" name="sort" placeholder="排序">
                             </label>
                         </div>
                     </div>

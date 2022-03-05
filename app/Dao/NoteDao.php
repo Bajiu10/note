@@ -5,44 +5,48 @@ namespace App\Dao;
 use Max\Database\Collection;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Swoole\Exception;
+use Throwable;
 
 class NoteDao
 {
     #[Inject]
     protected Query $query;
-    
+
     /**
      * @param      $id
      * @param null $userId
      *
      * @return mixed
+     * @throws Exception
+     * @throws Throwable
      */
     public function findOne($id, $userId = null): mixed
     {
-        $note = $this->query->table('notes')
-                  ->leftJoin('categories')
-                  ->on('categories.id', 'notes.cid')
-                  ->where('notes.id', $id)
-                  ->whereNull('notes.delete_time');
+        return $this->query->table('notes')
+                           ->leftJoin('categories')
+                           ->on('categories.id', 'notes.cid')
+                           ->where('notes.id', $id)
+                           ->whereNull('notes.delete_time')
+                           ->when($userId, function(Query\Builder $builder) use ($userId) {
+                               $builder->where('user_id', $userId);
+                           })
+                           ->first([
+                               'title',
+                               'notes.id',
+                               'categories.name category',
+                               'UNIX_TIMESTAMP(`update_time`) update_time',
+                               'text',
+                               'hits',
+                               'permission',
+                               'tags',
+                               'thumb',
+                               'abstract',
+                               'UNIX_TIMESTAMP(`create_time`) create_time',
+                               'user_id',
+                               'cid'
+                           ]);
 
-        if ($userId) {
-            $note->where('user_id', $userId);
-        }
-        return $note->first([
-            'title',
-            'notes.id',
-            'categories.name category',
-            'UNIX_TIMESTAMP(`update_time`) update_time',
-            'text',
-            'hits',
-            'permission',
-            'tags',
-            'thumb',
-            'abstract',
-            'UNIX_TIMESTAMP(`create_time`) create_time',
-            'user_id',
-            'cid'
-        ]);
     }
 
     /**
@@ -52,7 +56,7 @@ class NoteDao
     public function incrHits($id, $old)
     {
         $this->query->table('notes')->where('id', $id)
-          ->update(['hits' => $old + 1]);
+                    ->update(['hits' => $old + 1]);
     }
 
     /**
@@ -97,9 +101,9 @@ class NoteDao
     public function deleteOne($id, $userId): int
     {
         return $this->query->table('notes')
-                 ->where('id', $id)
-                 ->where('user_id', $userId)
-                 ->update(['delete_time' => date('Y-m-d H:i:s')]);
+                           ->where('id', $id)
+                           ->where('user_id', $userId)
+                           ->update(['delete_time' => date('Y-m-d H:i:s')]);
     }
 
     /**
@@ -111,16 +115,16 @@ class NoteDao
     public function getSome($page, int $limit = 8): Collection
     {
         return $this->query->table('notes', 'n')
-                 ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
-                 ->whereNull('delete_time')
-                 ->order('sort', 'DESC')
-                 ->order('update_time', 'DESC')
-                 ->limit($limit)->offset(($page - 1) * $limit)
-                 ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
-                 ->map(function($value) {
-                     $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
-                     return $value;
-                 });
+                           ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
+                           ->whereNull('delete_time')
+                           ->order('sort', 'DESC')
+                           ->order('update_time', 'DESC')
+                           ->limit($limit)->offset(($page - 1) * $limit)
+                           ->get(['n.id', 'n.thumb', 'n.title', 'n.abstract', 'n.permission', 'n.text', 'n.hits', 'UNIX_TIMESTAMP(`n`.`create_time`) create_time', 'c.name type'])
+                           ->map(function($value) {
+                               $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
+                               return $value;
+                           });
     }
 
     /**
@@ -131,13 +135,13 @@ class NoteDao
     public function recommend(int $limit = 8): array
     {
         return $this->query->table('notes')
-                 ->order('hits', 'DESC')
-                 ->order('update_time', 'DESC')
-                 ->order('create_time', 'DESC')
-                 ->whereNull('delete_time')
-                 ->limit($limit)
-                 ->get(['title', 'id'])
-                 ->toArray();
+                           ->order('hits', 'DESC')
+                           ->order('update_time', 'DESC')
+                           ->order('create_time', 'DESC')
+                           ->whereNull('delete_time')
+                           ->limit($limit)
+                           ->get(['title', 'id'])
+                           ->toArray();
     }
 
 
@@ -150,19 +154,19 @@ class NoteDao
     public function getRecommended($cid, $id): array
     {
         return $this->query->table('notes', 'n')
-                 ->leftJoin('categories', 'c')
-                 ->on('n.cid', 'c.id')
-                 ->whereNull('delete_time')
-                 ->where('n.cid', $cid)
-                 ->where('n.id', $id, '!=')
-                 ->order('rand()')
-                 ->limit(3)
-                 ->get(['n.id id', 'n.text text', 'n.title title', 'c.name type', 'n.thumb'])
-                 ->map(function($value) {
-                     $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
-                     return $value;
-                 })
-                 ->toArray();
+                           ->leftJoin('categories', 'c')
+                           ->on('n.cid', 'c.id')
+                           ->whereNull('delete_time')
+                           ->where('n.cid', $cid)
+                           ->where('n.id', $id, '!=')
+                           ->order('rand()')
+                           ->limit(3)
+                           ->get(['n.id id', 'n.text text', 'n.title title', 'c.name type', 'n.thumb'])
+                           ->map(function($value) {
+                               $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
+                               return $value;
+                           })
+                           ->toArray();
     }
 
     /**
@@ -183,17 +187,17 @@ class NoteDao
     public function search($kw, int $limit = 8, int $offset = 0): Collection
     {
         return $this->query->table('notes', 'n')
-                 ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
-                 ->whereNull('n.delete_time')
-                 ->whereRaw('(`n`.`title` like ? OR MATCH(`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
-                 ->order('update_time', 'DESC')
-                 ->limit($limit)
-                 ->offset($offset)
-                 ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
-                 ->map(function($value) {
-                     $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
-                     return $value;
-                 });
+                           ->leftJoin('categories', 'c')->on('n.cid', 'c.id')
+                           ->whereNull('n.delete_time')
+                           ->whereRaw('(`n`.`title` like ? OR MATCH(`n`.`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])->order('create_time', 'DESC')
+                           ->order('update_time', 'DESC')
+                           ->limit($limit)
+                           ->offset($offset)
+                           ->get(['n.title title, n.text text, n.permission, n.abstract abstract, n.hits hits, n.id id, n.thumb,UNIX_TIMESTAMP(`n`.`create_time`) create_time, c.name type'])
+                           ->map(function($value) {
+                               $value['thumb'] = $value['thumb'] ?: '/static/bg/bg' . rand(1, 33) . '.jpg';
+                               return $value;
+                           });
     }
 
     /**
@@ -204,9 +208,9 @@ class NoteDao
     public function countSearch($kw): int
     {
         return $this->query->table('notes')
-                 ->whereNull('delete_time')
-                 ->whereRaw('(`title` like ? OR MATCH(`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])
-                 ->count(1);
+                           ->whereNull('delete_time')
+                           ->whereRaw('(`title` like ? OR MATCH(`text`) AGAINST(?))', ["%{$kw}%", "{$kw}"])
+                           ->count(1);
     }
 
     /**
@@ -217,12 +221,12 @@ class NoteDao
     public function hots(int $limit = 8): array
     {
         return $this->query->table('notes')
-                 ->order('hits', 'DESC')
-                 ->order('update_time', 'DESC')
-                 ->order('create_time', 'DESC')
-                 ->whereNull('delete_time')
-                 ->limit($limit)
-                 ->get(['title', 'id'])
-                 ->toArray();
+                           ->order('hits', 'DESC')
+                           ->order('update_time', 'DESC')
+                           ->order('create_time', 'DESC')
+                           ->whereNull('delete_time')
+                           ->limit($limit)
+                           ->get(['title', 'id'])
+                           ->toArray();
     }
 }

@@ -74,6 +74,7 @@
                         <div style="padding: .5em">
                             <label>
                                 <input type="checkbox" name="permission" @if(0 == $note['permission']) checked @endif>公开
+                                <input type="number" value="{{$note['sort']}}" name="sort" placeholder="排序">
                             </label>
                         </div>
                     </div>

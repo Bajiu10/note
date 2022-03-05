@@ -4,6 +4,8 @@ namespace App\Dao;
 
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Swoole\Exception;
+use Throwable;
 
 class UserDao
 {
@@ -14,12 +16,15 @@ class UserDao
      * @param array $credentials
      *
      * @return mixed
+     * @throws Exception
+     * @throws Throwable
      */
-    public function findOneByCredentials(array $credentials)
+    public function findOneByCredentials(array $credentials): mixed
     {
-        return $this->query->table('users')
-                           ->where('username', $credentials['username'])
-                           ->where('password', md5($credentials['password']))
-                           ->first();
+        return $this->query
+            ->table('users')
+            ->where('username', $credentials['username'])
+            ->where('password', md5($credentials['password']))
+            ->first();
     }
 }

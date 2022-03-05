@@ -17,6 +17,7 @@ use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
 use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Throwable;
 
@@ -36,6 +37,9 @@ class Note extends Controller
     #[Inject]
     protected NoteDao $noteDao;
 
+    #[Inject]
+    protected LoggerInterface $logger;
+
     /**
      * @param            $id
      * @param CommentDao $commentDao
@@ -47,11 +51,11 @@ class Note extends Controller
     public function show($id, CommentDao $commentDao): ResponseInterface
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
+            $this->noteDao->incrHits($id, $note['hits']);
             if (1 == $note['permission'] && $this->session->get('user.id') != $note['user_id']) {
                 throw new Exception('你没有权限查看~');
             }
-            $note['tags'] = empty($note['tags']) ? [] : explode(',', $note['tags']);
-            $this->noteDao->incrHits($id, $note['hits']);
+            $note['tags']  = empty($note['tags']) ? [] : explode(',', $note['tags']);
             $commentsCount = $commentDao->amountOfOneNote($id);
             $hots          = $this->noteDao->hots();
             $recommended   = $this->noteDao->getRecommended($note['cid'], $id);
@@ -81,7 +85,7 @@ class Note extends Controller
         try {
             $insertedId = $this->noteDao->createOne(
                 $this->session->get('user.id'),
-                $this->request->post(['title', 'text', 'tags', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
+                $this->request->post(['title', 'text', 'tags', 'sort', 'abstract', 'cid', 'thumb', 'permission'], ['tags' => ''])
             );
         } catch (Exception $e) {
             throw new Exception('新增失败了: ' . $e->getMessage());
@@ -109,9 +113,13 @@ class Note extends Controller
             return view(config('app.theme') . '/notes/edit', compact(['note', 'categories']));
         }
         try {
-            $this->noteDao->updateOne($id, $this->request->post(['title', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'], ['tags' => '']));
+            $this->noteDao->updateOne($id, $this->request->post(
+                ['title', 'sort', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'],
+                ['tags' => '', 'sort' => 0]
+            ));
             return redirect('/note/' . $id . '.html');
         } catch (Exception $exception) {
+            $this->logger->error($exception->getMessage(), $exception->getTrace());
             throw new Exception('更新失败了！');
         }
     }

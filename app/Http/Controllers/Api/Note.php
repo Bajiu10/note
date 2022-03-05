@@ -24,7 +24,7 @@ class Note extends ApiController
      *
      * @return ResponseInterface
      */
-    #[GetMapping(path: '', allowCrossDomain: ['*'])]
+    #[GetMapping(path: '')]
     public function index(NoteDao $noteDao): ResponseInterface
     {
         return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
