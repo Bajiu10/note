@@ -12,6 +12,7 @@ return [
     ],
     'middlewares' => [
         'App\Exceptions\Handler',
+        'Max\Server\Http\Middlewares\RoutingMiddleware',
         'App\Http\Middlewares\Statistic'
     ],
     'route'       => [

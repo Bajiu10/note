@@ -175,8 +175,8 @@
                                 }
 
                                 .comment-list .comment-item .avatar img {
-                                    width: 32px;
-                                    height: 32px;
+                                    width: 45px;
+                                    height: 45px;
                                     border-radius: 8px;
                                 }
 
@@ -265,7 +265,7 @@
                                 }
                             </style>
                             <div class="comment-box-list" id="comments">
-                                <div class="comment-list">
+                                <div class="comment-list" id="comment-list">
 
                                 </div>
                             </div>
@@ -433,12 +433,11 @@
             function loadComments(page, sort, refresh) {
                 $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '&order=' + sort, function (data, status) {
                     data = data.data.data
-                    let commentList;
+                    let commentList = $('#comment-list');
                     if ('success' === status) {
                         if (data.length < 5) {
                             $('#comments-more').hide();
                         }
-                        commentList = $('.comment-list')
                         if (refresh) {
                             commentList.children().remove();
                         }

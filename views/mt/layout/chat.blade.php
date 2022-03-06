@@ -79,9 +79,9 @@
         position: fixed;
         bottom: .5em;
         right: .5em;
-        height: 28em;
+        height: 33em;
         border-radius: 5px;
-        width: 18em;
+        width: 21em;
         box-shadow: 0 0 4px 1px rgba(128, 128, 128, 0.31);
         z-index: 999999999
     }
@@ -102,7 +102,7 @@
 
     #room-content {
         box-sizing: border-box;
-        padding: .5em;
+        /*padding: .5em;*/
         background-color: white;
         width: 100%;
         display: flex;
@@ -136,6 +136,119 @@
         font-size: 1.3em;
         transition: background-color .3s;
     }
+    .comment-title {
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        padding: 0.5rem 0.5rem 0 0.5rem;
+    }
+
+    .comment-list .comment-item {
+        padding: .5rem;
+        margin-top: 1rem;
+    }
+
+    .comment-list .comment-item .body {
+        display: flex;
+    }
+
+    .comment-list {
+        padding: 0;
+    }
+
+    .comment-list .comment-item .avatar {
+        margin-right: 0.75rem;
+        position: relative;
+    }
+
+    .comment-list .comment-item .avatar img {
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+    }
+
+    .comment-list .comment-item .avatar .avatar-dd {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 50rem;
+        background-color: var(--theme-color);
+        top: 26px;
+        left: 26px;
+        border: 2px solid #fff;
+    }
+
+    .comment-list .comment-item .content .name a {
+        font-size: .9rem;
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .comment-list .comment-item .content .text {
+        font-size: .85rem;
+        padding: .8rem;
+        font-weight: 400;
+        background-color: #f5f5f5;
+        border-radius: 0 .8rem .8rem .8rem;
+        letter-spacing: .08rem;
+        line-height: 1.45rem;
+        color: var(--color-title);
+        text-align: justify;
+        margin-top: .25rem;
+    }
+
+    .comment-list .comment-item .content .text p {
+        margin: 0;
+        display: inline;
+        word-wrap: break-spaces;
+        word-break: break-word;
+    }
+
+    .comment-list .comment-item .content .info, .comment-list .comment-item .content .info a {
+        font-size: .75rem;
+        font-weight: 400;
+        color: #aab1ce;
+    }
+
+    .comment-list .comment-item .content .info a:hover {
+        border-bottom: 1px solid var(--color-text);
+        color: var(--color-text);
+    }
+
+    .comment-box-list > .comment-list > .children {
+        margin-left: 2.75rem;
+    }
+
+    .comment-list .children .comment-item .reply-name {
+        font-weight: 700;
+        padding-right: .25rem;
+    }
+
+    @media (max-width: 991.98px) {
+        .comment-list .comment-item .content .name {
+            font-size: .8rem;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .comment-list .comment-item .content .text {
+            font-size: .75rem;
+            padding: .8rem;
+            letter-spacing: .1rem;
+            line-height: 1.2rem;
+            margin-top: .25rem;
+        }
+
+        .comment-list .comment-item .content .info, .comment-list .comment-item .content .info a {
+            font-size: .65rem;
+            font-weight: 400;
+        }
+
+        .comment-box-list > .comment-list > .children {
+            padding-left: .75em;
+            margin-left: .5rem;
+            border-left: .125rem solid #f5f5f5;
+        }
+    }
 
     .close-btn:hover {
         background-color: #e0e0e0;
@@ -151,7 +264,7 @@
         <span id="close" class="close-btn">×</span>
     </div>
     <div id="room-content">
-        <div id="chat-room">
+        <div id="chat-room" class="comment-box-list">
         </div>
         <div id="message-send-box">
             <i class="fa fa-file-image-o icon" id="upload-image" title="选择图片并发送"></i>
@@ -179,7 +292,36 @@
         //     chatRoom.html('')
         //     online.text(data.online)
         // }
-        chatRoom.prepend(`<div class="chat-item"><div class="chat-avatar">㊙</div><div class="chat-content-box"><div><b>游客${data.uid}</b></div><div class="chat-content"><i>${data.data}</i></div><div class="chat-time"></div></div></p>`)
+        chatRoom.prepend(`
+  <div class="comment-list">
+    <div class="comment-item" id="comment-204">
+      <div class="body">
+        <div class="avatar">
+          <img
+            class="lazyload"
+            src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937"
+          />
+        </div>
+        <div class="content">
+          <div class="name"><a href="">游客${data.uid}</a></div>
+          <div class="info">
+            <span class="date">2022/1/15</span>
+<!--            <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;-->
+<!--            <a href="#respond-post-150" rel="nofollow">-->
+<!--              <i-->
+<!--                class="fa fa-heart-o like"-->
+<!--                data-id="204"-->
+<!--                style="cursor: pointer"-->
+<!--              ></i-->
+<!--              >&nbsp;<span>1</span>-->
+            </a>
+          </div>
+          <div class="text"><p>${data.data}</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`)
     }
 
     var ws = new WebSocket('wss://ws.1kmb.com/?id=' + Math.random() * 10);
