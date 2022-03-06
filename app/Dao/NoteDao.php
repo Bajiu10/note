@@ -34,6 +34,7 @@ class NoteDao
                            ->first([
                                'title',
                                'notes.id',
+                               'notes.sort',
                                'categories.name category',
                                'UNIX_TIMESTAMP(`update_time`) update_time',
                                'text',
