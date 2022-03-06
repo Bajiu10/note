@@ -1,20 +1,23 @@
 @extends('mt/layout/main')
 @section('title')
-    {!! $note['title'] !!} | MaxPHP - 组件化的轻量PHP框架
+    {!! $note->title !!} | MaxPHP - 组件化的轻量PHP框架
 @endsection
-
+@section('keywords'){{$note->tags ?? ''}}@endsection
 @section('head')
-    <meta name="description" content="{!! $note['abstract'] !!}">
+    <meta name="description" content="{!! $note->abstract !!}">
+    <link rel="canonical" href="{{request()->url()}}">
+    <meta property="og:title" content="{{$note->title}}"/>
+    <meta property="og:url" content="{{request()->url()}}"/>
     <link rel="stylesheet" href="/static/editor/css/editormd.preview.css"/>
     <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
 @endsection
 
 @section('body')
     <div style="height:20em;background: url(
-    @if(empty($note['thumb']))
+    @if(empty($note->thumb))
             '/static/bg/bg{{rand(1, 33)}}.jpg'
     @else
-            '{{$note['thumb']}}'
+            '{{$note->thumb}}'
     @endif
             ) no-repeat center center; background-size: cover">
         <div style="width: 100%; height: 100%; backdrop-filter: saturate(180%) blur(20px); display: flex;justify-content: center; align-items: center; ">
@@ -60,7 +63,7 @@
                         <div>
                             @if(!empty($note['tags']))
                                 <div style="height: 1.7em;">
-                                    @foreach($note['tags'] as $tag)
+                                    @foreach(explode(',', $note['tags']) as $tag)
                                         <a href="/search?kw={{$tag}}" class="tags">{{$tag}}</a>
                                     @endforeach
                                 </div>
@@ -129,14 +132,6 @@
                                 <div id="meme" style="margin-top: .5em; display: none">
                                 </div>
                             </form>
-                            <!--点击此元素会自动激活验证码, 此例使用的button元素, 也可以使用div、span等-->
-                            <!--id :            (不可变) 元素的 ID, 值必须是 "TencentCaptcha"-->
-                            <!--data-appid :    (必须) 验证码CaptchaAppId, 从腾讯云的验证码控制台中获取, 验证码控制台页面内【图形验证】>【验证列表】进行查看 。如果未新建验证，请根据业务需求选择适合的验证渠道、验证场景进行新建-->
-                            <!--data-cbfn :     (必须) 回调函数名, 函数名要与 data-cbfn 相同-->
-                            <!--data-biz-state :(可选) 业务自定义透传参数, 会在回调函数内获取到 （res.bizState）-->
-                            {{--                            <button id="TencentCaptcha" data-appid="2004706694" data-cbfn="callbackName"--}}
-                            {{--                                    data-biz-state="data-biz-state" type="button">验证--}}
-                            {{--                            </button>--}}
                             <style>
                                 p {
                                     margin-top: 0;

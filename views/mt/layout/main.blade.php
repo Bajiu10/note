@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MaxPHP - 组件化的轻量PHP框架！')</title>
-    <meta name="keywords" content="MaxPHP,PHP框架,MVC框架">
+    <meta name="keywords" content="@yield('keywords', 'MaxPHP,PHP框架,MVC框架')">
     <link rel="stylesheet" href="/static/css/css.css?20210767">
     <link rel="stylesheet" href="/static/css/loading.css">
     <link href="/static/css/font-awesome.css" rel="stylesheet">

@@ -2,6 +2,7 @@
 
 namespace App\Dao;
 
+use App\Model\Entities\Note;
 use Max\Database\Collection;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
@@ -23,36 +24,37 @@ class NoteDao
      */
     public function findOne($id, $userId = null): mixed
     {
-        return $this->query->table('notes')
-                           ->leftJoin('categories')
-                           ->on('categories.id', 'notes.cid')
-                           ->where('notes.id', $id)
-                           ->whereNull('notes.delete_time')
-                           ->when($userId, function(Query\Builder $builder) use ($userId) {
-                               $builder->where('user_id', $userId);
-                           })
-                           ->first([
-                               'title',
-                               'notes.id',
-                               'notes.sort',
-                               'categories.name category',
-                               'UNIX_TIMESTAMP(`update_time`) update_time',
-                               'text',
-                               'hits',
-                               'permission',
-                               'tags',
-                               'thumb',
-                               'abstract',
-                               'UNIX_TIMESTAMP(`create_time`) create_time',
-                               'user_id',
-                               'cid'
-                           ]);
-
+        return Note::query()->leftJoin('categories')
+                   ->on('categories.id', 'notes.cid')
+                   ->where('notes.id', $id)
+                   ->whereNull('notes.delete_time')
+                   ->when($userId, function(Query\Builder $builder) use ($userId) {
+                       $builder->where('user_id', $userId);
+                   })
+                   ->first([
+                       'title',
+                       'notes.id',
+                       'notes.sort',
+                       'categories.name category',
+                       'UNIX_TIMESTAMP(`update_time`) update_time',
+                       'text',
+                       'hits',
+                       'permission',
+                       'tags',
+                       'thumb',
+                       'abstract',
+                       'UNIX_TIMESTAMP(`create_time`) create_time',
+                       'user_id',
+                       'cid'
+                   ]);
     }
 
     /**
      * @param $id
      * @param $old
+     *
+     * @throws Exception
+     * @throws Throwable
      */
     public function incrHits($id, $old)
     {

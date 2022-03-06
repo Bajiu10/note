@@ -42,16 +42,15 @@ class Comment extends ApiController
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param CommentDao             $commentDao
-     * @param Captcha                $captcha
+     * @param CommentDao $commentDao
+     * @param Captcha    $captcha
      *
      * @return ResponseInterface
      */
     #[PostMapping(path: '/comment')]
-    public function store(ServerRequestInterface $request, CommentDao $commentDao, Captcha $captcha): ResponseInterface
+    public function store(CommentDao $commentDao, Captcha $captcha): ResponseInterface
     {
-        $data      = $request->post(['comment', 'email', 'note_id', 'name', 'ticket', 'randstr'], ['name' => '匿名用户']);
+        $data      = $this->request->post(['comment', 'email', 'note_id', 'name', 'ticket', 'randstr'], ['name' => '匿名用户']);
         $validator = $this->validator->make($data, [
             'comment' => 'required|max:255',
             'ticket'  => 'required',

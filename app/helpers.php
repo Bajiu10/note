@@ -6,6 +6,7 @@ use Max\Env\Env;
 use Max\Server\Http\Response;
 use Max\View\Renderer;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 if (false === function_exists('base_path')) {
     /**
@@ -160,10 +161,12 @@ if (false === function_exists('get_url')) {
      * @param bool $full
      *
      * @return string
+     * @throws NotFoundException
+     * @throws ReflectionException
      */
     function get_url(bool $full = false): string
     {
-        /** @var \Psr\Http\Message\UriInterface $uri */
+        /** @var UriInterface $uri */
         $uri = make(\Psr\Http\Message\ServerRequestInterface::class)->getUri();
         return $uri->__toString();
     }

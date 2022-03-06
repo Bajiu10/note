@@ -55,7 +55,6 @@ class Note extends Controller
             if (1 == $note['permission'] && $this->session->get('user.id') != $note['user_id']) {
                 throw new Exception('你没有权限查看~');
             }
-            $note['tags']  = empty($note['tags']) ? [] : explode(',', $note['tags']);
             $commentsCount = $commentDao->amountOfOneNote($id);
             $hots          = $this->noteDao->hots();
             $recommended   = $this->noteDao->getRecommended($note['cid'], $id);
