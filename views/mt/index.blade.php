@@ -22,34 +22,40 @@
             </div>
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back"
-                         style="background: white url('/static/img/packages/routing.png') no-repeat; background-size: cover">
+                    <div class="sm-back">
+                        <a href="https://github.com/topyao/max"><img
+                                    src="/upload/thumb/20220305/fa3897b26de9b5cc046ab9ec4a802d51.webp" alt=""
+                                    style="width: 100%; height: 100%"></a>
+                    </div>
+                    <div class="sm-title">
+                        <a href="https://www.1kmb.com/note/282.html">MaxFPM开发文档</a>
+                    </div>
+                </div>
+                <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
+                    <div class="sm-back">
+                        <a href="https://github.com/topyao/max-swoole"><img
+                                    src="/upload/thumb/20220305/52d591aed598e010c0902eed3af2628a.svg" alt=""
+                                    style="width: 100%; height: 100%"></a>
+                    </div>
+                    <div class="sm-title">
+                        <a href="https://www.1kmb.com/note/283.html">Max-Swoole开发文档</a>
+                    </div>
+                </div>
+                <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
+                    <div class="sm-back">
+                        <img src="/static/img/packages/routing.png" alt=""
+                             style="width: 100%; height: 100%">
                     </div>
                     <div class="sm-title">
                         <a href="https://github.com/topyao/max-routing">一款轻量的路由</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back"
-                         style="background: white url('/static/img/packages/blade.png') no-repeat; background-size: cover">
+                    <div class="sm-back">
+                        <img src="/static/img/packages/blade.png" alt="" style="width: 100%; height: 100%">
                     </div>
                     <div class="sm-title">
                         <a href="https://github.com/topyao/max-view">Blade视图引擎</a>
-                    </div>
-                </div>
-                <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back"
-                         style="background: white url('/static/img/packages/maxgo.png') no-repeat; background-size: cover">
-                    </div>
-                    <div class="sm-title">
-                        <a href="https://github.com/topyao/maxgo-skeleton">MaxGo</a>
-                    </div>
-                </div>
-                <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back" style="background: linear-gradient(28deg, #320bff, #e5690ba1);">
-                    </div>
-                    <div class="sm-title">
-                        分类
                     </div>
                 </div>
             </div>

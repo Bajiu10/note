@@ -165,11 +165,11 @@
 </div>
 <script>
     $('#close').on('click', function () {
-        $('#chat').fadeOut(200)
+        $('#chat').slideUp()
     })
 
     $('#open-room').on('click', function () {
-        $('#chat').fadeIn(200)
+        $('#chat').slideDown()
     })
 
     function appendMsg(data) {
