@@ -2,11 +2,9 @@
 
 namespace App\Listeners;
 
-use Max\Event\Annotations\Listen;
 use Max\Event\Contracts\EventListenerInterface;
 use Max\Server\Events\OnRequest;
 
-#[Listen]
 class HttpListener implements EventListenerInterface
 {
     /**
@@ -35,7 +33,6 @@ class HttpListener implements EventListenerInterface
                 $event->response->getStatusCode(),
                 $event->request->getUri()->__toString()
             ), PHP_EOL;
-            echo $event->response->getBody()->getSize(), PHP_EOL;
         }
     }
 }

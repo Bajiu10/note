@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Index;
 
 use App\Dao\CommentDao;
-use App\Dao\LinkDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
+use App\Model\Entities\Link;
 use Exception;
 use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
@@ -33,7 +33,6 @@ class Index extends Controller
     protected Redis $redis;
 
     /**
-     * @param LinkDao    $linkDao
      * @param CommentDao $commentDao
      *
      * @return ResponseInterface
@@ -41,15 +40,15 @@ class Index extends Controller
      * @throws Throwable
      */
     #[GetMapping(path: '/')]
-    public function index(LinkDao $linkDao, CommentDao $commentDao): ResponseInterface
+    public function index(CommentDao $commentDao): ResponseInterface
     {
         $page     = (int)$this->request->get('p', 1);
         $paginate = $this->paginate($page, ceil($this->noteDao->getAmount() / 8), 8);
         $hots     = $this->noteDao->recommend(10);
         $notes    = $this->noteDao->getSome($page);
-        $links    = $linkDao->all();
+        $links    = Link::all()->toArray();
         $comments = $commentDao->getSome();
-        return view(config('app.theme') . '/index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
+        return view('index', compact(['notes', 'paginate', 'links', 'hots', 'comments']));
     }
 
     /**
@@ -62,7 +61,7 @@ class Index extends Controller
     public function about(): ResponseInterface
     {
         $stat = (float)$this->redis->get('stat');
-        return view(config('app.theme') . '/about', compact(['stat']));
+        return view('about', compact(['stat']));
     }
 
     /**
@@ -81,6 +80,6 @@ class Index extends Controller
         $notes     = $this->noteDao->search($keyword, offset: ($page - 1) * 8);
         $paginate  = $this->paginate($page, $totalPage, 8);
 
-        return view(config('app.theme') . '/notes/search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
+        return view('notes.search', compact(['notes', 'keyword', 'paginate', 'totalPage']));
     }
 }

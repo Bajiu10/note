@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Index;
 
-use App\Dao\CategoryDao;
 use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Middlewares\Login;
 use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
+use App\Model\Entities\Category;
 use Exception;
 use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
-use Max\Server\Http\Annotations\Middleware;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
+use Max\Server\Http\Annotations\Middleware;
 use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -62,14 +62,12 @@ class Note extends Controller
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }
-            return view(config('app.theme') . '/notes/read', compact(['note', 'commentsCount', 'hots', 'recommended']));
+            return view('notes.read', compact(['note', 'commentsCount', 'hots', 'recommended']));
         }
         throw new Exception('笔记不存在！', 404);
     }
 
     /**
-     * @param CategoryDao $categoryDao
-     *
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
@@ -77,10 +75,10 @@ class Note extends Controller
         RequestMapping(path: 'notes/add'),
         Middleware(Login::class)
     ]
-    public function create(CategoryDao $categoryDao): ResponseInterface
+    public function create(): ResponseInterface
     {
         if ($this->request->isMethod('get')) {
-            return view(config('app.theme') . '/notes/add', ['categories' => $categoryDao->all()]);
+            return view('notes.add', ['categories' => Category::all()->toArray()]);
         }
         try {
             $insertedId = $this->noteDao->createOne(
@@ -95,7 +93,6 @@ class Note extends Controller
 
     /**
      * @param             $id
-     * @param CategoryDao $categoryDao
      *
      * @return ResponseInterface
      * @throws Exception|Throwable
@@ -104,13 +101,12 @@ class Note extends Controller
         RequestMapping(path: 'notes/edit/<id>', name: 'edit'),
         Middleware(Login::class)
     ]
-    public function edit($id, CategoryDao $categoryDao): ResponseInterface
+    public function edit($id): ResponseInterface
     {
         $note = $this->noteDao->findOne($id, $this->session->get('user.id'));
-
         if ($this->request->isMethod('get')) {
-            $categories = $categoryDao->all();
-            return view(config('app.theme') . '/notes/edit', compact(['note', 'categories']));
+            $categories = Category::all()->toArray();
+            return view('notes.edit', compact(['note', 'categories']));
         }
         try {
             $this->noteDao->updateOne($id, $this->request->post(

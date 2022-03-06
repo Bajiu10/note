@@ -46,10 +46,11 @@ if (false === function_exists('view')) {
      */
     function view(string $template, array $arguments = []): ResponseInterface
     {
+        $theme = config('app.theme');
         /** @var Renderer $renderer */
         $renderer = make(Renderer::class);
         ob_start();
-        echo $renderer->render($template, $arguments);
+        echo $renderer->render($theme . '.' . $template, $arguments);
         return (new Response())->html(ob_get_clean());
     }
 }

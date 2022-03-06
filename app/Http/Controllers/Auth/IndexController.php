@@ -8,6 +8,7 @@ use App\Http\Middlewares\Login;
 use App\Http\Middlewares\Logined;
 use App\Http\Middlewares\SessionMiddleware;
 use Exception;
+use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Routing\Annotations\GetMapping;
@@ -29,6 +30,9 @@ class IndexController extends Controller
     #[Inject]
     protected Session $session;
 
+    #[Config(key: 'app.theme')]
+    protected string $theme;
+
     /**
      * @param UserDao $userDao
      *
@@ -42,7 +46,7 @@ class IndexController extends Controller
     public function login(UserDao $userDao): ResponseInterface
     {
         if ($this->request->isMethod('GET')) {
-            return view(config('app.theme') . '/users/login');
+            return view('auth.login');
         }
         if ($user = $userDao->findOneByCredentials($this->request->post(['username', 'password']))) {
             $this->session->set('user', $user);
@@ -54,8 +58,16 @@ class IndexController extends Controller
 
     /**
      * @return ResponseInterface
-     * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws Throwable
+     */
+    #[GetMapping(path: 'reg')]
+    public function register(): ResponseInterface
+    {
+        return view('auth.reg');
+    }
+
+    /**
+     * @return ResponseInterface
      */
     #[
         GetMapping(path: 'logout'),

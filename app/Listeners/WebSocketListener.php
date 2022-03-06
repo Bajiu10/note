@@ -2,13 +2,11 @@
 
 namespace App\Listeners;
 
-use Max\Event\Annotations\Listen;
 use Max\Event\Contracts\EventListenerInterface;
 use Max\Server\Events\OnClose;
 use Max\Server\Events\OnMessage;
 use Max\Server\Events\OnOpen;
 
-#[Listen]
 class WebSocketListener implements EventListenerInterface
 {
     /**
