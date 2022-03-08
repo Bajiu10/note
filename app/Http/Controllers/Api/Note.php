@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Dao\NoteDao;
 use App\Http\Controllers\ApiController;
+use App\Services\Uploader;
 use Exception;
+use Max\Di\Annotations\Inject;
 use Max\Http\Message\UploadedFile;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
@@ -19,6 +21,9 @@ use Psr\Http\Message\ResponseInterface;
 #[Controller(prefix: 'api/notes')]
 class Note extends ApiController
 {
+    #[Inject]
+    protected Uploader $uploader;
+
     /**
      * @param NoteDao $noteDao
      *
@@ -41,43 +46,40 @@ class Note extends ApiController
     {
         /* @var UploadedFile $thumb */
         $thumb = $this->request->file('thumb');
-        $type  = pathinfo($thumb->getClientFilename(), PATHINFO_EXTENSION);
-        $name  = md5(microtime(true)) . '.' . $type;
-        $path  = '/upload/thumb/' . date('Ymd/') . $name;
-        if ($thumb instanceof UploadedFile) {
-            $thumb->moveTo(base_path('public/' . ltrim($path, '/')));
+
+        try {
+            $path = $this->uploader->images($thumb);
             return $this->success([
                 'path' => $path,
             ]);
+        } catch (Exception $e) {
+            return $this->error($e->getMessage());
         }
-
-        return $this->error();
     }
 
     /**
      * 新增或者编辑界面上传图片
      *
-     * @return array
+     * @return ResponseInterface
      * @throws Exception
      */
     #[PostMapping(path: '/uploadImage')]
-    public function uploadImages(): array
+    public function uploadImages(): ResponseInterface
     {
         $image = $this->request->file('editormd-image-file');
-        $type  = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
-        $name  = md5(microtime(true)) . '.' . $type;
-        $path  = '/upload/images/' . date('Ymd/') . $name;
-        if ($image instanceof UploadedFile) {
-            $image->moveTo(base_path('public/' . ltrim($path, '/')));
-            return [
+
+        try {
+            $path = $this->uploader->images($image);
+            return $this->response->json([
                 'success' => 1,
                 'message' => '图片上传成功！',
                 'url'     => $path
-            ];
+            ]);
+        } catch (Exception $e) {
+            return $this->response->json([
+                'success' => 0,
+                'message' => $e->getMessage(),
+            ]);
         }
-        return [
-            'success' => 0,
-            'message' => '上传失败',
-        ];
     }
 }
