@@ -65,7 +65,7 @@ class ChatRoomHandler implements WebSocketHandlerInterface
             $server->push($frame->fd, 'pong');
         } else {
             $uid  = $this->table->get($frame->fd, 'uid');
-            $data = ['uid' => $uid, 'data' => $frame->data];
+            $data = ['uid' => $uid, 'data' => $frame->data, 'time' => time()];
             $this->redis->rPush(self::KEY, json_encode($data));
             foreach ($server->connections as $fd) {
                 $server->push($fd, json_encode([

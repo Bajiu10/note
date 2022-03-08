@@ -79,9 +79,9 @@
         position: fixed;
         bottom: .5em;
         right: .5em;
-        height: 33em;
+        height: 31em;
         border-radius: 5px;
-        width: 21em;
+        width: 19em;
         box-shadow: 0 0 4px 1px rgba(128, 128, 128, 0.31);
         z-index: 999999999
     }
@@ -136,6 +136,7 @@
         font-size: 1.3em;
         transition: background-color .3s;
     }
+
     .comment-title {
         font-weight: 700;
         letter-spacing: -0.025em;
@@ -292,20 +293,20 @@
         //     chatRoom.html('')
         //     online.text(data.online)
         // }
+        let content = data.data.replace(/\[img\=(.*)\]/, '<img style="width: 100%" src="$1">')
         chatRoom.prepend(`
   <div class="comment-list">
-    <div class="comment-item" id="comment-204">
+    <div class="comment-item">
       <div class="body">
         <div class="avatar">
           <img
-            class="lazyload"
             src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937"
           />
         </div>
         <div class="content">
           <div class="name"><a href="">游客${data.uid}</a></div>
           <div class="info">
-            <span class="date">2022/1/15</span>
+            <span class="date">${time_convert(data.time)}</span>
 <!--            <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;-->
 <!--            <a href="#respond-post-150" rel="nofollow">-->
 <!--              <i-->
@@ -316,7 +317,7 @@
 <!--              >&nbsp;<span>1</span>-->
             </a>
           </div>
-          <div class="text"><p>${data.data}</p></div>
+          <div class="text"><p>${content}</p></div>
         </div>
       </div>
     </div>
@@ -372,7 +373,7 @@
                 processData: false,
                 data: form,
                 success: function (e) {
-                    ws.send('img:' + e.url)
+                    ws.send(`[img=${e.data.url}]`)
                     $('input[name=chat-image]').val('')
                 },
                 error: function (e) {
