@@ -1,25 +1,60 @@
 @extends('mt/layout/main')
+@section('head')
+    <link rel="stylesheet" href="/static/css/swiper.min.css">
+@endsection
 @section('body')
     <main class="container" style="margin-top: 3.8em">
         <div class="left" style="width: 75%; margin-right: 1%">
-            <div id="banner-content"
-                 style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
-                <div>
-                    <p class="big-font">MAX</p>
-                    <p class="small-font">组件化的轻量PHP框架！</p>
-                    <a id="recommend" href="https://www.1kmb.com/note/282.html"><i
-                                class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
-                    <p class="links" style="flex-wrap: wrap">
-                        <span id="version">Loading... </span>
-                        <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
-                        <a href="https://packagist.org/packages/max/max" target="_blank"
-                           rel="noopener"> Packagist</a>
-                    </p>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="banner-content"
+                             style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
+                            <div>
+                                <p class="big-font">Max/Swoole</p>
+                                <p class="small-font">组件化的轻量PHP框架！</p>
+                                <a id="recommend" href="https://www.1kmb.com/note/283.html"><i
+                                            class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
+                                <p class="links" style="flex-wrap: wrap">
+                                    <span id="swoole-version">Loading... </span>
+                                    <a href="https://github.com/topyao/max-swoole" target="_blank" rel="noopener">
+                                        Github </a>
+                                    <a href="https://packagist.org/packages/max/swoole" target="_blank"
+                                       rel="noopener"> Packagist</a>
+                                </p>
+                            </div>
+                            <div class="d-bg">
+                                <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;"
+                                   aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="banner-content"
+                             style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
+                            <div>
+                                <p class="big-font">Max/FPM</p>
+                                <p class="small-font">组件化的轻量PHP框架！</p>
+                                <a id="recommend" href="https://www.1kmb.com/note/282.html"><i
+                                            class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
+                                <p class="links" style="flex-wrap: wrap">
+                                    <span id="fpm-version">Loading... </span>
+                                    <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
+                                    <a href="https://packagist.org/packages/max/max" target="_blank"
+                                       rel="noopener"> Packagist</a>
+                                </p>
+                            </div>
+                            <div class="d-bg">
+                                <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;"
+                                   aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="d-bg">
-                    <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;" aria-hidden="true"></i>
-                </div>
+                <div class="swiper-pagination"></div>
             </div>
+
+
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
                     <div class="sm-back">
@@ -196,7 +231,17 @@
     </main>
 @endsection
 @section('js')
+    <script src="/static/js/swiper.min.js"></script>
     <script>
+
+        var mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            loop: true,
+            simulateTouch: true,
+            // 如果需要分页器
+            pagination: '.swiper-pagination',
+        })
+
         document.onscroll = function () {
             let catalog = document.getElementById('recommend-notes');
             if (document.documentElement.scrollTop > 400) {
@@ -216,7 +261,15 @@
             $.get('https://api.github.com/repos/topyao/max/tags', function (data, status) {
                 if ('success' === status) {
                     if (undefined !== data[0]) {
-                        $('span#version').text(data[0].name);
+                        $('span#fpm-version').text(data[0].name);
+                    }
+                }
+            })
+
+            $.get('https://api.github.com/repos/topyao/max-swoole/tags', function (data, status) {
+                if ('success' === status) {
+                    if (undefined !== data[0]) {
+                        $('span#swoole-version').text(data[0].name);
                     }
                 }
             })

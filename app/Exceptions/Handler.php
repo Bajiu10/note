@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Max\Di\Annotations\Inject;
+use Max\Server\Exceptions\HttpException;
 use Max\Server\Http\Middlewares\HttpErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,11 +20,13 @@ class Handler extends HttpErrorHandler
      * @param ServerRequestInterface $request
      *
      * @return void
+     * @throws HttpException
      */
     protected function reportException(Throwable $throwable, ServerRequestInterface $request)
     {
         $this->logger->error($throwable->getMessage(), [
             'method'  => $request->getMethod(),
+            'ip'      => $request->ip(),
             'uri'     => $request->getUri()->__toString(),
             'request' => $request->all(),
             'headers' => $request->getHeaders(),

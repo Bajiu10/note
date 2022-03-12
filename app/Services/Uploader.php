@@ -8,12 +8,17 @@ use Max\Http\Message\UploadedFile;
 class Uploader
 {
     /**
+     * 允许的后缀
+     */
+    protected const ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    /**
      * @throws Exception
      */
     public function images(UploadedFile $image): string
     {
         $type = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
-        if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
+        if (!in_array($type, self::ALLOWED_EXTENSIONS)) {
             throw new Exception('类型不支持');
         }
         $name = md5(microtime(true)) . '.' . $type;
