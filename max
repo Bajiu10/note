@@ -33,12 +33,11 @@ require './vendor/autoload.php';
         $configFile = base_path('storage/app/config.php');
         if (file_exists($configFile)) {
             $config   = require $configFile;
-            $bindings = array_merge($bindings, $config['bindings'] ?? []);
+            $bindings = array_merge($config['bindings'] ?? [], $bindings);
         }
         foreach ($bindings ?? [] as $id => $binding) {
             $container->alias($id, $binding);
         }
-
         $console = new Application();
         $scanDir = [
             __DIR__ . '/app/Commands',
