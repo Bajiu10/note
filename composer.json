@@ -39,6 +39,7 @@
         "max/server": "2.x-dev",
         "tencentcloud/tencentcloud-sdk-php": "^3.0",
         "tencentcloud/cvm": "^3.0",
+        "max/foundation": "2.x-dev",
         "swoole/ide-helper": "^4.8",
         "symfony/var-dumper": "^6.0"
     },

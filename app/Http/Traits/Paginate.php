@@ -8,7 +8,7 @@ trait Paginate
     protected function paginate($page, $totalPage, $numberOfPages): string
     {
         if ($page < 1 || $page > $totalPage) {
-            throw new \Exception('没有查找到内容🤔🤔🤔');
+            throw new \Exception('没有查找到内容🤔🤔🤔', 404);
         }
         if ($totalPage <= 1) {
             return '';

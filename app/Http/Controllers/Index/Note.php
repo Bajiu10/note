@@ -14,8 +14,8 @@ use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
-use Max\Server\Http\Annotations\Middleware;
-use Max\Session\Session;
+use Max\Foundation\Http\Annotations\Middleware;
+use Max\Foundation\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -47,7 +47,7 @@ class Note extends Controller
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
-    #[GetMapping(path: '/note/<id>.html', name: 'read')]
+    #[GetMapping(path: '/note/<id>.html')]
     public function show($id, CommentDao $commentDao): ResponseInterface
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
@@ -97,7 +97,7 @@ class Note extends Controller
      * @throws Exception|Throwable
      */
     #[
-        RequestMapping(path: 'notes/edit/<id>', name: 'edit'),
+        RequestMapping(path: 'notes/edit/<id>'),
         Middleware(Login::class)
     ]
     public function edit($id): ResponseInterface

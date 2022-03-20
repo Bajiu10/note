@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use Max\Di\Annotations\Inject;
 use Max\Server\Exceptions\HttpException;
-use Max\Server\Http\Middlewares\HttpErrorHandler;
+use Max\Foundation\Http\Middlewares\HttpErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;

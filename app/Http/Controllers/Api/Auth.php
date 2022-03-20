@@ -9,7 +9,7 @@ use App\Services\TencentCloud\Captcha;
 use Max\Di\Annotations\Inject;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\PostMapping;
-use Max\Session\Session;
+use Max\Foundation\Session;
 use Psr\Http\Message\ResponseInterface;
 use Swoole\Exception;
 use Throwable;

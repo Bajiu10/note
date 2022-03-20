@@ -4,7 +4,7 @@
 namespace App\Http\Middlewares;
 
 use Max\Di\Annotations\Inject;
-use Max\Session\Session;
+use Max\Foundation\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

@@ -2,7 +2,7 @@
 
 namespace App\Lib;
 
-class ServerRequest extends \Max\Server\Http\ServerRequest
+class ServerRequest extends \Max\Foundation\Http\ServerRequest
 {
     /**
      * 可以获取客户端真实ip

@@ -16,11 +16,14 @@ class BookController extends Controller
         return view('book.index', compact('books'));
     }
 
-    #[GetMapping(path: '/<id>.html')]
-    public function show($id)
+    #[GetMapping(path: '/<link_name>.html')]
+    public function show($linkName)
     {
-        $book  = Book::findOrFail($id);
-        $notes = \App\Model\Entities\Note::where('book_id', $id)->get(['id', 'title']);
+        $book  = Book::where('link_name', $linkName)->firstOrFail();
+        $notes = \App\Model\Entities\Note::where('book_id', $book->id)
+                                         ->order('chapter')
+                                         ->order('section')
+                                         ->get(['id', 'title']);
 
         return view('book.show', compact('book', 'notes'));
     }

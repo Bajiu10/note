@@ -10,13 +10,11 @@ use App\Http\Middlewares\SessionMiddleware;
 use Exception;
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
-use Max\Di\Exceptions\NotFoundException;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\RequestMapping;
-use Max\Server\Http\Annotations\Middleware;
-use Max\Session\Session;
+use Max\Foundation\Http\Annotations\Middleware;
+use Max\Foundation\Session;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
 use Throwable;
 
 /**
