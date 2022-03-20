@@ -11,9 +11,12 @@ use Max\Di\Annotations\Inject;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use Max\Server\Exceptions\HttpException;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Swoole\Exception;
+use Throwable;
 
 /**
  * Class Comment
@@ -46,6 +49,7 @@ class Comment extends ApiController
      * @param Captcha    $captcha
      *
      * @return ResponseInterface
+     * @throws HttpException
      */
     #[PostMapping(path: '/comment')]
     public function store(CommentDao $commentDao, Captcha $captcha): ResponseInterface
@@ -78,6 +82,8 @@ class Comment extends ApiController
      * @param Query    $query
      *
      * @return ResponseInterface
+     * @throws Exception
+     * @throws Throwable
      */
     #[GetMapping(path: '/heart/<id>')]
     public function heart($id, HeartDao $heartDao, Query $query): ResponseInterface

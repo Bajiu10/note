@@ -35,6 +35,12 @@ class Note extends ApiController
         return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
+    #[GetMapping(path: '/<id>')]
+    public function show($id)
+    {
+        return $this->success(\App\Model\Entities\Note::findOrFail($id)->toArray());
+    }
+
     /**
      * 上传缩略图
      *

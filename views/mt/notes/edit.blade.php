@@ -66,7 +66,7 @@
                                                                                          style="color: black"></i></a>
                             </div>
                             <input type="file" id="thumb" style="display: none">
-                            <input type="hidden" name="thumb" value="{{$note['thumb']}}">
+                            <input type="text" name="thumb" value="{{$note['thumb']}}">
                         </div>
                     </div>
                     <div class="card">

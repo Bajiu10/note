@@ -55,7 +55,7 @@
                             </div>
                         </div>
                         <input type="file" id="thumb" style="display: none">
-                        <input type="hidden" name="thumb">
+                        <input type="text" name="thumb">
                     </div>
                     <div class="card">
                         <div class="tips">其他</div>

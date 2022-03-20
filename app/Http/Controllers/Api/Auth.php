@@ -10,6 +10,7 @@ use Max\Di\Annotations\Inject;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\PostMapping;
 use Max\Session\Session;
+use Psr\Http\Message\ResponseInterface;
 use Swoole\Exception;
 use Throwable;
 
@@ -27,7 +28,7 @@ class Auth extends ApiController
      * @throws Exception
      */
     #[PostMapping(path: '/login')]
-    public function login(UserDao $userDao)
+    public function login(UserDao $userDao): ResponseInterface
     {
         $data = $this->request->post(['username', 'password', 'ticket', 'randstr']);
         if ($this->captcha->valid($data['ticket'], $data['randstr'])) {
