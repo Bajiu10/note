@@ -431,7 +431,7 @@
             })
 
             function loadComments(page, sort, refresh) {
-                $.get('/api/notes/{{$note['id']}}/comments/?page=' + page + '&order=' + sort, function (data, status) {
+                $.get('/api/notes/{{$note['id']}}/comments?page=' + page + '&order=' + sort, function (data, status) {
                     data = data.data.data
                     let commentList = $('#comment-list');
                     if ('success' === status) {
