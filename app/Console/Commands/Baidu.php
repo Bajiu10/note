@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
 use Max\Config\Annotations\Config;
 use Max\Console\Commands\Command;
@@ -27,10 +27,10 @@ class Baidu extends Command
     #[Config(key: 'baidu.key', default: '')]
     protected string $baiduKey;
 
-    public function run(InputInterface $input, OutputInterface $output)
+    public function run()
     {
         Runtime::enableCoroutine(true);
-        Coroutine::create(function() use ($output) {
+        Coroutine::create(function() {
             $ids  = $this->query->table('notes')->column('id');
             $urls = [];
             foreach ($ids as $id) {
@@ -51,7 +51,7 @@ class Baidu extends Command
             if (false == $result) {
                 exit(curl_error($ch));
             }
-            $output->info($result);
+            $this->output->info($result);
         });
     }
 }

@@ -27,12 +27,12 @@ class Captcha
     /**
      * @var string
      */
-    #[Config(key: 'qcloud.captcha.secret_key')]
+    #[Config(key: 'services.qcloud.captcha.secret_key')]
     protected string $secretKey;
     /**
      * @var string
      */
-    #[Config(key: 'qcloud.captcha.app_id')]
+    #[Config(key: 'services.qcloud.captcha.app_id')]
     protected string $appId;
 
     #[Inject]

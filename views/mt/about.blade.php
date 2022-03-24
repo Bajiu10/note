@@ -13,28 +13,31 @@
             <p id="down" style="width: 30%;text-align: center;font-weight: bolder;color: grey;font-size:1.5em">
                 Loading... </p>
         </div>
-        <p style="text-align: center;font-weight: bold;color:grey;margin: 0 0 1.5em"><i class="fa fa-link"></i> &nbsp;&nbsp;起步
+        <p style="text-align: center;font-weight: bold;color:grey;margin: 1em 0"><i class="fa fa-link"></i> &nbsp;&nbsp;特性
         </p>
         <div id="step1" style="display: flex;justify-content: space-between;">
             <div class="card advantages" style="width:100%;margin-right: .5em">
-                <div class="tips">特性</div>
                 <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
                     <code>
                         一、&nbsp;组件和框架核心分离<br>
                         二、&nbsp;基于 Psr7 的 HTTP-Message<br>
-                        三、&nbsp;基于 Psr11 的容器，支持接口注入[支持注解 PHP8.0]<br>
-                        四、&nbsp;方便的数据库操作方法，支持 MySQL、PostgreSQL 等[可扩展]<br>
-                        五、&nbsp;基于 Psr14 的事件[支持注解 PHP8.0]<br>
-                        六、&nbsp;基于 Psr15 的中间件[支持注解 PHP8.0]<br>
-                        七、&nbsp;基于 Psr16 的缓存组件,支持 File,Memcached,Redis,APC[可扩展]<br>
-                        八、&nbsp;支持路由功能[支持注解 PHP8.0]<br>
+                        三、&nbsp;基于 Psr11 的容器，支持接口注入[支持注解 swoole]<br>
+                        四、&nbsp;方便的数据库操作方法，支持 MySQL、Redis、PostgreSQL 等[可扩展、连接池 swoole]<br>
+                        五、&nbsp;基于 Psr14 的事件[支持注解 swoole]<br>
+                        六、&nbsp;基于 Psr15 的中间件[支持注解 swoole]<br>
+                        七、&nbsp;基于 Psr16 的缓存组件,支持 File、Memcached、Redis、APC[可扩展]<br>
+                        八、&nbsp;支持路由功能[支持注解 swoole]<br>
                         九、&nbsp;支持 Blade 的可扩展的视图功能<br>
-                        十、&nbsp;门面，命令行，验证器，trace<br>
+                        十、&nbsp;门面、命令行、验证器<br>
                     </code>
                 </div>
             </div>
-            <div style="width:100%" class="card">
-                <div class="tips">安装要求</div>
+        </div>
+        <p style="text-align: center;font-weight: bold;color:grey;margin: 1em 0"><i class="fa fa-link"></i> &nbsp;&nbsp;安装
+        </p>
+        <div id="step1" style="display: flex;justify-content: space-between;">
+            <div style="width:100%; margin-right: .5em" class="card">
+                <div class="tips">FPM版本安装要求</div>
                 <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
                     <code>PHP >= 7.4 √</code>
                 </div>
@@ -49,7 +52,26 @@
                     <code>php max serve</code><br>
                 </div>
             </div>
+            <div style="width:100%" class="card">
+                <div class="tips">swoole版本安装要求</div>
+                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
+                    <code>PHP >= 8.0 √</code>
+                    <br>
+                    <code>swoole >= 4.6 √</code>
+                </div>
+                <div class="tips">使用Composer安装</div>
+                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
+                    <code>composer create-project --prefer-dist max/swoole:dev-master .</code>
+                </div>
+                <div class="tips">
+                    运行框架
+                </div>
+                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
+                    <code>php max server</code><br>
+                </div>
+            </div>
         </div>
+
         <p style="text-align: center;font-weight: bold;color:grey;margin: 1.5em 0;"><i
                     class="fa fa-link"></i> &nbsp;&nbsp;开发团队</p>
         <div class="team">

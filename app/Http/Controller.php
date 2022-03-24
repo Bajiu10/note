@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class Controller
+abstract class Controller
 {
     #[Inject]
     protected ContainerInterface $container;

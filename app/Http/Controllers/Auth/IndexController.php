@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Auth;
 
 use App\Dao\UserDao;
 use App\Http\Controller;
-use App\Http\Middlewares\Login;
-use App\Http\Middlewares\Logined;
+use App\Http\Middlewares\Authentication;
 use App\Http\Middlewares\SessionMiddleware;
 use Exception;
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
-use Max\Routing\Annotations\GetMapping;
-use Max\Routing\Annotations\RequestMapping;
 use Max\Foundation\Http\Annotations\Middleware;
 use Max\Foundation\Session;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -37,12 +36,13 @@ class IndexController extends Controller
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
-    #[
-        RequestMapping(path: 'login'),
-        Middleware(Logined::class)
-    ]
+    #[RequestMapping(path: 'login')]
     public function login(UserDao $userDao): ResponseInterface
     {
+        $userId = $this->session->get('user.id');
+        if (!is_null($userId)) {
+            throw new Exception('你已经登录了！😊😊😊');
+        }
         if ($this->request->isMethod('GET')) {
             return view('auth.login');
         }
@@ -69,7 +69,7 @@ class IndexController extends Controller
      */
     #[
         GetMapping(path: 'logout'),
-        Middleware(Login::class)
+        Middleware(Authentication::class)
     ]
     public function logout(): ResponseInterface
     {

@@ -1,55 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-namespace Max;
+use App\Console\Kernel;
+use Max\Foundation\Application;
 
-use Max\Config\Repository;
-use Max\Console\Application;
-use Max\Di\Container;
-use Max\Di\Context;
-use Max\Di\ReflectionManager;
-use Max\Di\Scanner;
-use Max\Env\Env;
-use Max\Env\Loader\IniFileLoader;
-use Max\Event\Annotations\Listen;
-use Max\Event\Contracts\ListenerProviderInterface;
-use Throwable;
-
-define('BASE_BATH', __DIR__ . '/');
+const BASE_BATH = __DIR__ . '/';
 
 require './vendor/autoload.php';
 
-(function() {
-    try {
-        /** @var Container $container */
-        $container = Context::getContainer();
-        /** @var Env $env */
-        $env = $container->make(Env::class);
-        $env->load(new IniFileLoader('./.env'));
-        /** @var Repository $repository */
-        $repository = $container->make(Repository::class);
-        $repository->load(glob(base_path('config/*.php')));
-        $bindings   = $repository->get('app.di.bindings', []);
-        $configFile = base_path('storage/app/config.php');
-        if (file_exists($configFile)) {
-            $config   = require $configFile;
-            $bindings = array_merge($config['bindings'] ?? [], $bindings);
-        }
-        foreach ($bindings ?? [] as $id => $binding) {
-            $container->alias($id, $binding);
-        }
-        $console = new Application();
-        $scanDir = [
-            __DIR__ . '/app/Commands',
-        ];
-        foreach ($scanDir as $dir) {
-            foreach (Scanner::scanDir($dir) as $class) {
-                $console->add(make($class));
-            }
-        }
-        $console->run();
-    } catch (Throwable $throwable) {
-        exit('System crashed: ' . $throwable->getMessage());
-    }
-})();
+(new Application())->run(function() {
+    (new Kernel())->run();
+});
 

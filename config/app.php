@@ -4,7 +4,8 @@ return [
     'di'    => [
         // 依赖绑定
         'bindings' => [
-            \Psr\Http\Message\ServerRequestInterface::class => \App\Lib\ServerRequest::class,
+            'Psr\Http\Server\RequestHandlerInterface' => 'App\Http\Kernel',
+            'Psr\Http\Message\ServerRequestInterface' => 'App\Lib\ServerRequest',
         ],
     ],
     'event' => [

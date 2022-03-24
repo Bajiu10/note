@@ -2,6 +2,7 @@
 
 namespace App\Http\Middlewares;
 
+use Max\Http\Exceptions\HttpException;
 use Max\Foundation\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,11 +11,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SessionMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var Session
-     */
-    protected Session $session;
-
     /**
      * @var string|array|mixed|null
      */
@@ -43,9 +39,8 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * @param Session $session
      */
-    public function __construct(Session $session)
+    public function __construct(protected Session $session)
     {
-        $this->session = $session;
     }
 
     /**
@@ -53,14 +48,14 @@ class SessionMiddleware implements MiddlewareInterface
      * @param RequestHandlerInterface $handler
      *
      * @return ResponseInterface
+     * @throws HttpException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $id = $request->getCookieParams()[$this->name] ?? $this->session->refreshId();
-        $this->session->initialize($id);
+        $this->session->start($id);
         $response = $handler->handle($request);
         $this->session->save();
-        // TODO这个cookie过期时间有问题
         $expires = time() + $this->cookieExpires;
         return $response->withAddedHeader('Set-Cookie', "$this->name=$id; expires=$expires");
     }

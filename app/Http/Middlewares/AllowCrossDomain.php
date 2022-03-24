@@ -2,11 +2,16 @@
 
 namespace App\Http\Middlewares;
 
+use Exception;
+use Max\Http\Message\Stream\StringStream;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * 跨域中间件，如果有预检请求，则需要给路由添加OPTIONS请求方式
+ */
 class AllowCrossDomain implements MiddlewareInterface
 {
     /**
@@ -28,6 +33,7 @@ class AllowCrossDomain implements MiddlewareInterface
      * @param RequestHandlerInterface $handler
      *
      * @return ResponseInterface
+     * @throws Exception
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -35,15 +41,14 @@ class AllowCrossDomain implements MiddlewareInterface
         if ($this->global) {
             $response = $response->withHeader('Access-Control-Allow-Origin', '*');
         } else {
-            $origin = \array_merge($request->route()->getAllowCrossDomain(), $this->allowOrigin);
-            if (in_array('*', $origin)) {
+            if (in_array('*', $this->allowOrigin)) {
                 $response = $response->withHeader('Access-Control-Allow-Origin', '*');
-            } else if (in_array($allow = $request->getHeaderLine('Origin'), $origin)) {
+            } else if (in_array($allow = $request->getHeaderLine('Origin'), $this->allowOrigin)) {
                 $response = $response->withHeader('Access-Control-Allow-Origin', $allow);
             }
-            if ($request->isMethod('OPTIONS')) {
-                $response = $response->withStatus('204');
-            }
+        }
+        if ($request->isMethod('OPTIONS')) {
+            $response = $response->withBody(new StringStream(''))->withStatus('204');
         }
         return $response;
     }

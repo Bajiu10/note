@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controller;
 use Psr\Http\Message\ResponseInterface;
 
-class ApiController extends Controller
+abstract class ApiController extends Controller
 {
     /**
      * @param array  $data
@@ -31,7 +31,7 @@ class ApiController extends Controller
      *
      * @return ResponseInterface
      */
-    protected function error(string $message = '操作失败', array $data = [], int $code = 400):ResponseInterface
+    protected function error(string $message = '操作失败', array $data = [], int $code = 400): ResponseInterface
     {
         return $this->response->json([
             'status'  => false,

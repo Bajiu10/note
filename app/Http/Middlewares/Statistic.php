@@ -24,8 +24,6 @@ class Statistic implements MiddlewareInterface
     {
         try {
             $this->redis->incr('stat');
-            //            $stat = (int)$this->cache->get('stat');
-            //            $this->cache->set('stat', ++$stat);
         } catch (Exception) {
         }
         return $handler->handle($request);

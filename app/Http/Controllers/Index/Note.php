@@ -5,17 +5,17 @@ namespace App\Http\Controllers\Index;
 use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
-use App\Http\Middlewares\Login;
+use App\Http\Middlewares\Authentication;
 use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use App\Model\Entities\Category;
 use Exception;
 use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
-use Max\Routing\Annotations\GetMapping;
-use Max\Routing\Annotations\RequestMapping;
 use Max\Foundation\Http\Annotations\Middleware;
 use Max\Foundation\Session;
+use Max\Routing\Annotations\GetMapping;
+use Max\Routing\Annotations\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -72,7 +72,7 @@ class Note extends Controller
      */
     #[
         RequestMapping(path: 'notes/add'),
-        Middleware(Login::class)
+        Middleware(Authentication::class)
     ]
     public function create(): ResponseInterface
     {
@@ -98,7 +98,7 @@ class Note extends Controller
      */
     #[
         RequestMapping(path: 'notes/edit/<id>'),
-        Middleware(Login::class)
+        Middleware(Authentication::class)
     ]
     public function edit($id): ResponseInterface
     {
@@ -127,7 +127,7 @@ class Note extends Controller
      */
     #[
         RequestMapping(path: 'notes/delete/<id>'),
-        Middleware(Login::class)
+        Middleware(Authentication::class)
     ]
     public function destroy($id): ResponseInterface
     {

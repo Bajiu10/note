@@ -41,7 +41,8 @@
         "tencentcloud/cvm": "^3.0",
         "max/foundation": "2.x-dev",
         "swoole/ide-helper": "^4.8",
-        "symfony/var-dumper": "^6.0"
+        "symfony/var-dumper": "^6.0",
+        "zircote/swagger-php": "^4.2"
     },
     "scripts": {
         "post-autoload-dump": [

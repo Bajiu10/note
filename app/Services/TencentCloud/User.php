@@ -9,12 +9,12 @@ class User
     /**
      * @var string
      */
-    #[Config(key: 'qcloud.user.secret_key')]
+    #[Config(key: 'services.qcloud.user.secret_key')]
     protected string $secretKey;
     /**
      * @var string
      */
-    #[Config(key: 'qcloud.user.secret_id')]
+    #[Config(key: 'services.qcloud.user.secret_id')]
     protected string $secretId;
 
     /**

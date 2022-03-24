@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
 use Exception;
 use Max\Console\Commands\Command;
@@ -37,14 +37,11 @@ class Install extends Command
     ];
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
      * @return void
-     * @throws \Swoole\Exception
      * @throws Throwable
+     * @throws \Swoole\Exception
      */
-    public function run(InputInterface $input, OutputInterface $output)
+    public function run()
     {
         if (file_exists($this->lock)) {
             echo '已经安装过，请先删除install.lock: ', $this->lock, "\n";

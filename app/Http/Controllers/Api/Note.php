@@ -11,6 +11,9 @@ use Max\Http\Message\UploadedFile;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
+use OpenApi\Annotations\Parameter;
+use OpenApi\Attributes\Get;
+use OpenApi\Attributes\Schema;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -24,18 +27,18 @@ class Note extends ApiController
     #[Inject]
     protected Uploader $uploader;
 
-    /**
-     * @param NoteDao $noteDao
-     *
-     * @return ResponseInterface
-     */
     #[GetMapping(path: '')]
     public function index(NoteDao $noteDao): ResponseInterface
     {
         return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
-    #[GetMapping(path: '/<id>')]
+    #[
+        GetMapping(path: '/<id>'),
+        Get(path: '/api/notes/<id>', description: '描述', parameters: [
+            new \OpenApi\Attributes\Parameter(name: 'id', description: '查询的ID', schema: new Schema(type: 'int')),
+        ])
+    ]
     public function show($id)
     {
         return $this->success(\App\Model\Entities\Note::findOrFail($id)->toArray());

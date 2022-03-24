@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Commands;
+namespace App\Console\Commands;
 
+use Exception;
 use Max\Console\Commands\Command;
-use Max\Console\Contracts\InputInterface;
-use Max\Console\Contracts\OutputInterface;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Throwable;
 
 class Sitemap extends Command
 {
@@ -23,9 +23,9 @@ class Sitemap extends Command
     protected string $description = '生成sitemap';
 
     /**
-     * @throws \Exception
+     * @throws Exception|Throwable
      */
-    public function run(InputInterface $input, OutputInterface $output): int
+    public function run()
     {
         $notes   = $this->query->table('notes')->get(['create_time', 'id']);
         $sitemap = "<urlset>";
@@ -43,7 +43,7 @@ TOR;
         }
         $sitemap .= "\n</urlset>";
         if (false !== file_put_contents(env('public_path') . 'sitemap.xml', $sitemap)) {
-            return $output->info('Sitemap生成成功，共' . $notes->count() . '条！');
+            $this->output->info('Sitemap生成成功，共' . $notes->count() . '条！');
         }
     }
 
