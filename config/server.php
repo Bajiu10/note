@@ -4,10 +4,11 @@ use Swoole\Constant;
 use Max\Server\Http\Server;
 
 return [
+    'mode'      => SWOOLE_PROCESS,
     'servers'   => [
         [
             'name'      => 'websocket',
-            'server'    => \Max\Server\Server::SERVER_WEBSOCKET,
+            'type'      => \Max\Server\Server::SERVER_WEBSOCKET,
             'host'      => '0.0.0.0',
             'port'      => 8787,
             'sockType'  => SWOOLE_SOCK_TCP,
@@ -23,7 +24,7 @@ return [
         ],
         [
             'name'      => 'http',
-            'server'    => \Max\Server\Server::SERVER_HTTP,
+            'type'      => \Max\Server\Server::SERVER_HTTP,
             'host'      => '0.0.0.0',
             'port'      => 9999,
             'sockType'  => SWOOLE_SOCK_TCP,
