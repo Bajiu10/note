@@ -11,7 +11,14 @@ class Kernel extends Application
      *
      * @var array|string[]
      */
-    protected array $scanDir = [
+    protected array $commandsScanDir = [
         __DIR__ . '/Commands',
+    ];
+
+    /**
+     * @var array
+     */
+    protected array $listenerScanDir = [
+        __DIR__ . '/../Listeners',
     ];
 }

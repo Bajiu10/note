@@ -33,12 +33,7 @@ class Note extends ApiController
         return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
-    #[
-        GetMapping(path: '/<id>'),
-        Get(path: '/api/notes/<id>', description: '描述', parameters: [
-            new \OpenApi\Attributes\Parameter(name: 'id', description: '查询的ID', schema: new Schema(type: 'int')),
-        ])
-    ]
+    #[GetMapping(path: '/<id>')]
     public function show($id)
     {
         return $this->success(\App\Model\Entities\Note::findOrFail($id)->toArray());

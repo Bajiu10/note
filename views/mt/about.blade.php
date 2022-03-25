@@ -57,7 +57,7 @@
                 <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
                     <code>PHP >= 8.0 √</code>
                     <br>
-                    <code>swoole >= 4.6 √</code>
+                    <code>swoole >= 4.8 √</code>
                 </div>
                 <div class="tips">使用Composer安装</div>
                 <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">

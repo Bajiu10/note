@@ -8,11 +8,5 @@ return [
             'Psr\Http\Message\ServerRequestInterface' => 'App\Lib\ServerRequest',
         ],
     ],
-    'event' => [
-        // 注解扫描路径
-        'scanDir' => [
-            __DIR__ . '/../app/Listeners',
-        ]
-    ],
     'theme' => 'mt'
 ];

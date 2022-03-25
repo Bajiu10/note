@@ -4,12 +4,12 @@ use Swoole\Constant;
 use Max\Server\Http\Server;
 
 return [
-    'servers'  => [
+    'servers'   => [
         [
             'name'      => 'websocket',
             'server'    => \Max\Server\Server::SERVER_WEBSOCKET,
             'host'      => '0.0.0.0',
-            'port'      => 9501,
+            'port'      => 8787,
             'sockType'  => SWOOLE_SOCK_TCP,
             'settings'  => [
                 Constant::OPTION_OPEN_WEBSOCKET_PROTOCOL => true,
@@ -25,7 +25,7 @@ return [
             'name'      => 'http',
             'server'    => \Max\Server\Server::SERVER_HTTP,
             'host'      => '0.0.0.0',
-            'port'      => 8080,
+            'port'      => 9999,
             'sockType'  => SWOOLE_SOCK_TCP,
             'settings'  => [
                 Constant::OPTION_MAX_REQUEST           => 10000,
@@ -37,9 +37,16 @@ return [
             ],
         ],
     ],
-    'settings' => [
+    'settings'  => [
         Constant::OPTION_ENABLE_COROUTINE => true,
         Constant::OPTION_WORKER_NUM       => 4,
-        //        Constant::OPTION_DAEMONIZE        => true,
+        Constant::OPTION_DAEMONIZE        => true,
+    ],
+    'callbacks' => [
+        'start'        => [\Max\Server\Callbacks::class, 'start'],
+        'workerStart'  => [\Max\Server\Callbacks::class, 'workerStart'],
+        'task'         => [\Max\Server\Callbacks::class, 'task'],
+        'finish'       => [\Max\Server\Callbacks::class, 'finish'],
+        'managerStart' => [\Max\Server\Callbacks::class, 'managerStart'],
     ],
 ];
