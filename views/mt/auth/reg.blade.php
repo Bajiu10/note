@@ -17,6 +17,7 @@
                         <label for="password-confirm"><i class="fa fa-key"></i>&nbsp;&nbsp;确认密码</label>
                         <input id="password-confirm" type="password" class="login-input" name="password-confirm"
                                required>
+                        <a href="/login">登录</a>
                         <input type="button" class="btn-submit" value="注册">
                     </form>
                 </div>
@@ -34,7 +35,7 @@
                 dataType: 'json',
                 success: function (e) {
                     if (e.status) {
-                        window.location.href = "{{request()->get('from')}}";
+                        window.location.href = "/login?from=https://www.1kmb.com";
                     } else {
                         alert(e.message);
                     }

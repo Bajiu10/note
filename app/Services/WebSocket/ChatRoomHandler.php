@@ -68,13 +68,12 @@ class ChatRoomHandler implements WebSocketHandlerInterface
     public function message(Server $server, Frame $frame)
     {
         if ($frame->data === 'ping') {
-            $server->push($frame->fd, 'pong');
+            $server->push($frame->fd, json_encode(['code' => 0, 'online' => $this->table->count()]));
         } else {
             if ($uid = $this->table->get($frame->fd, 'uid')) {
                 $user = User::find($uid);
             } else {
-                $user = (new User);
-                $user->fill(['id' => 0, 'username' => '匿名用户']);
+                $user = new User(['id' => 0, 'username' => '匿名用户']);
             }
             $data = ['uid' => $uid, 'username' => $user->username, 'data' => $frame->data, 'time' => time()];
             $this->redis->rPush(self::KEY, json_encode($data));

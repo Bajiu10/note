@@ -261,7 +261,7 @@
 <div id="chat">
     <div class="room-header">
         <span>聊天</span>
-        {{--        <span>在线<t id="online">0</t></span>--}}
+        <span>在线<t id="online">0</t></span>
         <span id="close" class="close-btn">×</span>
     </div>
     <div id="room-content">
@@ -288,11 +288,6 @@
 
     function appendMsg(data) {
         const chatRoom = $('#chat-room');
-        // const online = $('#online');
-        // if (data.data.length > 1) {
-        //     chatRoom.html('')
-        //     online.text(data.online)
-        // }
         let content = data.data.replace(/\[img\=(.*)\]/, '<img style="width: 100%" src="$1">')
         chatRoom.prepend(`
   <div class="comment-list">
@@ -336,15 +331,18 @@
             }
             var ws = new WebSocket('wss://ws.1kmb.com/?token=' + token);
             ws.onopen = function (evt) {
+                ws.send('ping')
                 ws.onclose = function (evt) {
                     console.log("Disconnected");
                 };
 
                 ws.onmessage = function (evt) {
-                    if (evt.data === 'pong') {
+                    let data = JSON.parse(evt.data)
+                    if (data.code === 0) {
+                        $('#online').text(data.online)
                         return
                     }
-                    let data = JSON.parse(evt.data)
+
                     if (data.code === 101) {
                         for (let i in data.data) {
                             appendMsg(data.data[i])

@@ -48,8 +48,16 @@ class ExceptionHandlerMiddleware extends CoreExceptionHandlerMiddleware
      */
     protected function renderException(Throwable $throwable, ServerRequestInterface $request): ResponseInterface
     {
-        $this->output->error($throwable::class . ':' . $throwable->getMessage() . ' at ' . $throwable->getFile() . '+' . $throwable->getLine());
-        $this->output->warning($throwable->getTraceAsString());
+        if ($request->isAjax()) {
+            return $this->response->json([
+                'status'  => false,
+                'message' => $throwable->getMessage(),
+                'data'    => $throwable->getTrace(),
+                'code'    => 500,
+            ]);
+        }
+        //        $this->output->error($throwable::class . ':' . $throwable->getMessage() . ' at ' . $throwable->getFile() . '+' . $throwable->getLine());
+        //        $this->output->warning($throwable->getTraceAsString());
         return view('error', ['code' => $this->getCode($throwable), 'message' => $throwable->getMessage()]);
     }
 }

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Dao\UserDao;
 use App\Http\Controllers\ApiController;
 use App\Lib\Jwt;
 use App\Model\Entities\User;
 use App\Services\TencentCloud\Captcha;
 use Max\Di\Annotations\Inject;
-use Max\Di\Exceptions\NotFoundException;
 use Max\Foundation\Session;
 use Max\Http\Exceptions\HttpException;
 use Max\Routing\Annotations\Controller;
@@ -16,8 +14,6 @@ use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Swoole\Exception;
 use Throwable;
 
 #[Controller(prefix: 'api/auth')]
@@ -34,16 +30,15 @@ class Auth extends ApiController
 
     /**
      * @throws Throwable
-     * @throws Exception
      */
     #[PostMapping(path: '/login')]
-    public function login(UserDao $userDao): ResponseInterface
+    public function login(): ResponseInterface
     {
         $data = $this->request->post(['email', 'password', 'ticket', 'randstr']);
         if ($this->captcha->valid($data['ticket'], $data['randstr'])) {
             unset($data['ticket'], $data['randstr']);
-            if ($user = $userDao->findOneByCredentials($data)) {
-                $this->session->set('user', $user);
+            if ($user = User::where('email', $data['email'])->where('password', md5($data['password']))->first()) {
+                $this->session->set('user', $user->toArray());
                 return $this->success([], '登录成功');
             }
             return $this->error('用户名或者密码错误');
@@ -53,10 +48,7 @@ class Auth extends ApiController
     }
 
     /**
-     * @throws NotFoundException
      * @throws Throwable
-     * @throws Exception
-     * @throws ReflectionException
      * @throws HttpException
      */
     #[PostMapping(path: '/reg')]
@@ -72,9 +64,13 @@ class Auth extends ApiController
             return $this->error($validator->errors()->first());
         }
         $data['password'] = md5($data['password']);
-        $user             = User::create($data);
-        $this->session->set('user', $user->toArray());
-        return $this->success([]);
+        try {
+            $user = User::create($data);
+            $this->session->set('user', $user->toArray());
+            return $this->success([]);
+        } catch (Throwable) {
+            return $this->error('邮箱已经被使用');
+        }
     }
 
     #[GetMapping(path: '/token')]

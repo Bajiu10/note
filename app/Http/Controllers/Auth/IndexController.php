@@ -42,15 +42,7 @@ class IndexController extends Controller
         if (!is_null($userId)) {
             throw new Exception('你已经登录了！😊😊😊');
         }
-        if ($this->request->isMethod('GET')) {
-            return view('auth.login');
-        }
-        if ($user = $userDao->findOneByCredentials($this->request->post(['email', 'password']))) {
-            $this->session->set('user', $user);
-            return redirect($this->request->get('from', '/'));
-        } else {
-            throw new Exception('用户名或者密码错误！😢😢😢');
-        }
+        return view('auth.login');
     }
 
     /**
@@ -61,7 +53,7 @@ class IndexController extends Controller
     public function register(): ResponseInterface
     {
         if ($this->session->get('user.id')) {
-            throw new Exception('您已经登录了');
+            return redirect('/');
         }
         return view('auth.reg');
     }
