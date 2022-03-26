@@ -48,7 +48,9 @@ class ChatRoomHandler implements WebSocketHandlerInterface
     {
         if (isset($request->get['token']) && $request->get['token']) {
             $user = $this->jwt->decode($request->get['token']);
-            $this->table->set($request->fd, ['uid' => $user->id]);
+            $this->table->set($request->fd, ['uid' => $user?->id]);
+        } else {
+            $this->table->set($request->fd, ['uid' => 0]);
         }
         $len  = $this->redis->lLen(self::KEY);
         $data = $this->redis->lRange(self::KEY, max(0, $len - 10), $len);

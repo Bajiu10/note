@@ -58,6 +58,7 @@ class ExceptionHandlerMiddleware extends CoreExceptionHandlerMiddleware
         }
         //        $this->output->error($throwable::class . ':' . $throwable->getMessage() . ' at ' . $throwable->getFile() . '+' . $throwable->getLine());
         //        $this->output->warning($throwable->getTraceAsString());
-        return view('error', ['code' => $this->getCode($throwable), 'message' => $throwable->getMessage()]);
+        $code = $this->getCode($throwable);
+        return view('error', ['code' => $code, 'message' => $throwable->getMessage()])->withStatus($code);
     }
 }

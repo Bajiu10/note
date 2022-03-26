@@ -18,6 +18,7 @@ class User extends Model
      * @var array|string[]
      */
     protected array $cast = [
+        'id'  => 'int',
         'age' => 'int'
     ];
 

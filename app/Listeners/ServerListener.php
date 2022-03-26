@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use Max\Console\Output\ConsoleOutput;
+use Max\Console\Output\Formatter;
 use Max\Di\Annotations\Inject;
 use Max\Event\Annotations\Listen;
 use Max\Event\Contracts\EventListenerInterface;
@@ -50,22 +51,21 @@ class ServerListener implements EventListenerInterface
                 echo 'OnOpen: ' . $event->request->server['request_uri'], PHP_EOL;
                 break;
             case $event instanceof OnMessage:
-                echo 'OnMessage: ' . $event->frame->data . PHP_EOL;
+                echo $triggerTime . '[' . $event::class . ']' . (new Formatter())->setForeground('blue')->apply($event->frame->data) . PHP_EOL;
                 break;
             case $event instanceof OnClose:
                 echo 'OnClose: ' . $event->fd . PHP_EOL;
                 break;
             case $event instanceof OnRequest:
-                $this->output->debug(sprintf("%s [%s]: %s [%s] %s",
-                    $triggerTime,
-                    $event::class,
-                    $event->request->getMethod(),
-                    $event->response->getStatusCode(),
-                    $event->request->getUri()->__toString()
-                ));
+                $response = $event->response;
+                $request  = $event->request;
+                $code     = $response->getStatusCode();
+                $method   = $request->getMethod();
+                $uri      = $request->getUri()->__toString();
+                echo $triggerTime . '[' . $event::class . ']' . (new Formatter())->setForeground($code == 200 ? 'green' : 'red')->apply(str_pad($code, 10, ' ', STR_PAD_BOTH)) . '|' . (new Formatter())->setForeground('blue')->apply(str_pad($method, 10, ' ', STR_PAD_BOTH)) . ' ' . (new Formatter())->setForeground('cyan')->apply(str_pad(round($event->duration * 1000, 4) . 'ms', 10, ' ', STR_PAD_RIGHT)) . $uri . PHP_EOL;
                 break;
             case $event instanceof OnTask:
-                $this->output->info('[DEBUG]');
+                $this->output->debug('[DEBUG]');
                 break;
         }
     }

@@ -42,6 +42,7 @@ return [
         Constant::OPTION_ENABLE_COROUTINE => true,
         Constant::OPTION_WORKER_NUM       => 4,
         Constant::OPTION_DAEMONIZE        => true,
+        Constant::OPTION_LOG_FILE         => __DIR__ . '/../storage/logs/std.log',
     ],
     'callbacks' => [
         'start'        => [\Max\Server\Callbacks::class, 'start'],

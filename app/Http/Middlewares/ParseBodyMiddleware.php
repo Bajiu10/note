@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Middlewares;
 
 use Max\Http\Exceptions\HttpException;
-use Max\Utils\Context;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
