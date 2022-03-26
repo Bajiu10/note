@@ -2,13 +2,15 @@
 <?php
 
 use App\Console\Kernel;
-use Max\Foundation\Application;
+use Max\Console\Input\ArgvInput;
+use Max\Console\Output\ConsoleOutput;
 
 const BASE_BATH = __DIR__ . '/';
 
 require './vendor/autoload.php';
 
-(new Application())->run(function() {
-    (new Kernel())->run();
-});
+(new Kernel())->run(
+    new ArgvInput(),
+    new ConsoleOutput(),
+);
 
