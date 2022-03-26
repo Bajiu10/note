@@ -14,10 +14,10 @@ class Kernel extends RequestHandler
      */
     protected array $middlewares = [
         'App\Http\Middlewares\ExceptionHandlerMiddleware',
+        'Max\Foundation\Http\Middlewares\RoutingMiddleware',
         'App\Http\Middlewares\AllowCrossDomain',
         'App\Http\Middlewares\ParseBodyMiddleware',
         'App\Http\Middlewares\SessionMiddleware',
-        'Max\Foundation\Http\Middlewares\RoutingMiddleware',
         'App\Http\Middlewares\Statistic'
     ];
 

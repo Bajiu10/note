@@ -6,7 +6,6 @@ use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
 use App\Http\Middlewares\Authentication;
-use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use App\Model\Entities\Category;
 use Exception;
@@ -26,7 +25,7 @@ use Throwable;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
+#[\Max\Routing\Annotations\Controller(prefix: '/')]
 class Note extends Controller
 {
     use Paginate;

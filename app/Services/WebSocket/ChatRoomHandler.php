@@ -2,6 +2,8 @@
 
 namespace App\Services\WebSocket;
 
+use App\Lib\Jwt;
+use App\Model\Entities\User;
 use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
 use Max\Server\Contracts\WebSocketHandlerInterface;
@@ -22,6 +24,9 @@ class ChatRoomHandler implements WebSocketHandlerInterface
     #[Inject]
     protected Redis $redis;
 
+    #[Inject]
+    protected Jwt $jwt;
+
     protected const OPCODE_USER_MESSAGE     = 100;
     protected const OPCODE_HISTORY_MESSAGES = 101;
 
@@ -41,8 +46,9 @@ class ChatRoomHandler implements WebSocketHandlerInterface
      */
     public function open(Server $server, Request $request)
     {
-        if (isset($request->get['id'])) {
-            $this->table->set($request->fd, ['uid' => $request->get['id']]);
+        if (isset($request->get['token']) && $request->get['token']) {
+            $user = $this->jwt->decode($request->get['token']);
+            $this->table->set($request->fd, ['uid' => $user->id]);
         }
         $len  = $this->redis->lLen(self::KEY);
         $data = $this->redis->lRange(self::KEY, max(0, $len - 10), $len);
@@ -64,8 +70,13 @@ class ChatRoomHandler implements WebSocketHandlerInterface
         if ($frame->data === 'ping') {
             $server->push($frame->fd, 'pong');
         } else {
-            $uid  = $this->table->get($frame->fd, 'uid');
-            $data = ['uid' => $uid, 'data' => $frame->data, 'time' => time()];
+            if ($uid = $this->table->get($frame->fd, 'uid')) {
+                $user = User::find($uid);
+            } else {
+                $user = (new User);
+                $user->fill(['id' => 0, 'username' => '匿名用户']);
+            }
+            $data = ['uid' => $uid, 'username' => $user->username, 'data' => $frame->data, 'time' => time()];
             $this->redis->rPush(self::KEY, json_encode($data));
             foreach ($server->connections as $fd) {
                 $server->push($fd, json_encode([

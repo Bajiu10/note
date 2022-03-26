@@ -304,7 +304,7 @@
           />
         </div>
         <div class="content">
-          <div class="name"><a href="">游客${data.uid}</a></div>
+          <div class="name"><a href="">${data.username}</a></div>
           <div class="info">
             <span class="date">${time_convert(data.time)}</span>
 <!--            <a href="#respond-post-150" rel="nofollow">回复</a>&nbsp;-->
@@ -325,72 +325,84 @@
 `)
     }
 
-    var ws = new WebSocket('wss://ws.1kmb.com/?id=' + Math.random() * 10);
-    ws.onopen = function (evt) {
-        ws.onclose = function (evt) {
-            console.log("Disconnected");
-        };
-
-        ws.onmessage = function (evt) {
-            if (evt.data === 'pong') {
-                return
+    $.ajax({
+        url: '/api/auth/token',
+        type: 'GET',
+        dataType: 'JSON',
+        success(e) {
+            let token = ''
+            if (undefined !== e.data.token) {
+                token = e.data.token
             }
-            let data = JSON.parse(evt.data)
-            if (data.code === 101) {
-                for (let i in data.data) {
-                    appendMsg(data.data[i])
-                }
-            } else {
-                appendMsg(data.data)
-            }
-        };
+            var ws = new WebSocket('wss://ws.1kmb.com/?token=' + token);
+            ws.onopen = function (evt) {
+                ws.onclose = function (evt) {
+                    console.log("Disconnected");
+                };
 
-        ws.onerror = function (evt, e) {
-            console.log('Error occured: ' + evt.data);
-        };
+                ws.onmessage = function (evt) {
+                    if (evt.data === 'pong') {
+                        return
+                    }
+                    let data = JSON.parse(evt.data)
+                    if (data.code === 101) {
+                        for (let i in data.data) {
+                            appendMsg(data.data[i])
+                        }
+                    } else {
+                        appendMsg(data.data)
+                    }
+                };
 
-        $('#send').on('click', function (e) {
-            input = $('#content-box')
-            content = input.val()
-            if ('' === content) {
-                return
-            }
-            ws.send(content);
-            input.val('')
-        })
+                ws.onerror = function (evt, e) {
+                    console.log('Error occured: ' + evt.data);
+                };
 
-        $('#upload-image').on('click', function () {
-            $('input[name=chat-image]').click()
-        })
+                $('#send').on('click', function (e) {
+                    input = $('#content-box')
+                    content = input.val()
+                    if ('' === content) {
+                        return
+                    }
+                    ws.send(content);
+                    input.val('')
+                })
 
-        $('input[name=chat-image]').on('change', function () {
-            var form = new FormData;
-            form.append('chat-image', $(this)[0].files[0])
-            $.ajax({
-                url: '/api/chat/upload',
-                type: 'post',
-                contentType: false,
-                processData: false,
-                data: form,
-                success: function (e) {
-                    ws.send(`[img=${e.data.url}]`)
-                    $('input[name=chat-image]').val('')
-                },
-                error: function (e) {
-                    console.log(e)
-                }
-            });
-        })
+                $('#upload-image').on('click', function () {
+                    $('input[name=chat-image]').click()
+                })
 
-        $(document).on('keyup', function (e) {
-            if (13 === e.keyCode) {
-                $('#send').click()
-            }
-        })
+                $('input[name=chat-image]').on('change', function () {
+                    var form = new FormData;
+                    form.append('chat-image', $(this)[0].files[0])
+                    $.ajax({
+                        url: '/api/chat/upload',
+                        type: 'post',
+                        contentType: false,
+                        processData: false,
+                        data: form,
+                        success: function (e) {
+                            ws.send(`[img=${e.data.url}]`)
+                            $('input[name=chat-image]').val('')
+                        },
+                        error: function (e) {
+                            console.log(e)
+                        }
+                    });
+                })
 
-        setInterval(function () {
-            ws.send('ping')
-        }, 5000)
-        console.log("Connected to ws server.");
-    };
+                $(document).on('keyup', function (e) {
+                    if (13 === e.keyCode) {
+                        $('#send').click()
+                    }
+                })
+
+                setInterval(function () {
+                    ws.send('ping')
+                }, 5000)
+                console.log("Connected to ws server.");
+            };
+        },
+    })
+
 </script>

@@ -23,7 +23,7 @@ class UserDao
     {
         return $this->query
             ->table('users')
-            ->where('username', $credentials['username'])
+            ->where('email', $credentials['email'])
             ->where('password', md5($credentials['password']))
             ->first();
     }

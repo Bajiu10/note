@@ -11,8 +11,8 @@
             <section style="padding:1em;">
                 <div style="margin:2% auto">
                     <form name="form">
-                        <label for="username"><i class="fa fa-user"></i>&nbsp;&nbsp;用户名</label>
-                        <input id="username" type="text" class="login-input" name="username" required>
+                        <label for="email"><i class="fa fa-user"></i>&nbsp;&nbsp;邮箱</label>
+                        <input id="email" type="email" class="login-input" name="email" required>
                         <label for="password"><i class="fa fa-key"></i>&nbsp;&nbsp;密码</label>
                         <input id="password" type="password" class="login-input" name="password" required>
                         <input type="button" id="TencentCaptcha" data-appid="2004706694"

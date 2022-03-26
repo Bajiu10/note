@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Dao\UserDao;
 use App\Http\Controller;
 use App\Http\Middlewares\Authentication;
-use App\Http\Middlewares\SessionMiddleware;
 use Exception;
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
@@ -21,7 +20,7 @@ use Throwable;
  *
  * @package App\Http\Controllers\Auth
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
+#[\Max\Routing\Annotations\Controller(prefix: '/')]
 class IndexController extends Controller
 {
     #[Inject]
@@ -46,7 +45,7 @@ class IndexController extends Controller
         if ($this->request->isMethod('GET')) {
             return view('auth.login');
         }
-        if ($user = $userDao->findOneByCredentials($this->request->post(['username', 'password']))) {
+        if ($user = $userDao->findOneByCredentials($this->request->post(['email', 'password']))) {
             $this->session->set('user', $user);
             return redirect($this->request->get('from', '/'));
         } else {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Index;
 use App\Dao\CommentDao;
 use App\Dao\NoteDao;
 use App\Http\Controller;
-use App\Http\Middlewares\SessionMiddleware;
 use App\Http\Traits\Paginate;
 use App\Model\Entities\Link;
 use Exception;
@@ -18,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Throwable;
 
-#[\Max\Routing\Annotations\Controller(prefix: '/', middlewares: [SessionMiddleware::class])]
+#[\Max\Routing\Annotations\Controller(prefix: '/')]
 class Index extends Controller
 {
     use Paginate;
