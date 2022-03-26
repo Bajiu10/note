@@ -8,12 +8,15 @@ use App\Lib\Jwt;
 use App\Model\Entities\User;
 use App\Services\TencentCloud\Captcha;
 use Max\Di\Annotations\Inject;
+use Max\Di\Exceptions\NotFoundException;
 use Max\Foundation\Session;
+use Max\Http\Exceptions\HttpException;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionException;
 use Swoole\Exception;
 use Throwable;
 
@@ -36,7 +39,7 @@ class Auth extends ApiController
     #[PostMapping(path: '/login')]
     public function login(UserDao $userDao): ResponseInterface
     {
-        $data = $this->request->post(['username', 'password', 'ticket', 'randstr']);
+        $data = $this->request->post(['email', 'password', 'ticket', 'randstr']);
         if ($this->captcha->valid($data['ticket'], $data['randstr'])) {
             unset($data['ticket'], $data['randstr']);
             if ($user = $userDao->findOneByCredentials($data)) {
@@ -49,18 +52,27 @@ class Auth extends ApiController
         return $this->error('验证失败');
     }
 
+    /**
+     * @throws NotFoundException
+     * @throws Throwable
+     * @throws Exception
+     * @throws ReflectionException
+     * @throws HttpException
+     */
     #[PostMapping(path: '/reg')]
-    public function register()
+    public function register(): ResponseInterface
     {
-        $validator = (new Validator())->make($this->request->all(), [
+        $data      = $this->request->all();
+        $validator = (new Validator())->make($data, [
             'username' => 'required',
-            'email'    => 'email',
+            'email'    => 'email|required',
             'password' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors()->first());
         }
-        $user = User::create($this->request->all());
+        $data['password'] = md5($data['password']);
+        $user             = User::create($data);
         $this->session->set('user', $user->toArray());
         return $this->success([]);
     }

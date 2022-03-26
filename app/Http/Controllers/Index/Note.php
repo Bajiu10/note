@@ -101,21 +101,23 @@ class Note extends Controller
     ]
     public function edit($id): ResponseInterface
     {
-        $note = $this->noteDao->findOne($id, $this->session->get('user.id'));
-        if ($this->request->isMethod('get')) {
-            $categories = Category::all()->toArray();
-            return view('notes.edit', compact(['note', 'categories']));
+        if ($note = $this->noteDao->findOne($id, $this->session->get('user.id'))) {
+            if ($this->request->isMethod('get')) {
+                $categories = Category::all()->toArray();
+                return view('notes.edit', compact(['note', 'categories']));
+            }
+            try {
+                $this->noteDao->updateOne($id, $this->request->post(
+                    ['title', 'sort', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'],
+                    ['tags' => '', 'sort' => 0]
+                ));
+                return redirect('/note/' . $id . '.html');
+            } catch (Exception $exception) {
+                $this->logger->error($exception->getMessage(), $exception->getTrace());
+                throw new Exception('更新失败了！');
+            }
         }
-        try {
-            $this->noteDao->updateOne($id, $this->request->post(
-                ['title', 'sort', 'text', 'permission', 'tags', 'abstract', 'cid', 'thumb'],
-                ['tags' => '', 'sort' => 0]
-            ));
-            return redirect('/note/' . $id . '.html');
-        } catch (Exception $exception) {
-            $this->logger->error($exception->getMessage(), $exception->getTrace());
-            throw new Exception('更新失败了！');
-        }
+        throw new Exception('笔记不存在');
     }
 
 

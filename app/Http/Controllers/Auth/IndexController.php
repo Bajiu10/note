@@ -60,6 +60,9 @@ class IndexController extends Controller
     #[GetMapping(path: 'reg')]
     public function register(): ResponseInterface
     {
+        if ($this->session->get('user.id')) {
+            throw new Exception('您已经登录了');
+        }
         return view('auth.reg');
     }
 

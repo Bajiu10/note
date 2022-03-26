@@ -8,13 +8,12 @@ use App\Http\Controllers\ApiController;
 use App\Services\TencentCloud\Captcha;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Max\Http\Exceptions\HttpException;
 use Max\Routing\Annotations\Controller;
 use Max\Routing\Annotations\GetMapping;
 use Max\Routing\Annotations\PostMapping;
-use Max\Server\Exceptions\HttpException;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Exception;
 use Throwable;
 

@@ -33,8 +33,13 @@ class Note extends ApiController
         return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Max\Di\Exceptions\NotFoundException
+     * @throws \Throwable
+     */
     #[GetMapping(path: '/<id>')]
-    public function show($id)
+    public function show($id): ResponseInterface
     {
         return $this->success(\App\Model\Entities\Note::findOrFail($id)->toArray());
     }
