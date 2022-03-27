@@ -281,7 +281,7 @@
         })();
     });
 </script>
-@include('mt/layout/chat')
+@yield('chat')
 </body>
 @yield('js')
 </html>

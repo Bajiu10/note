@@ -561,3 +561,6 @@
         });
     </script>
 @endsection
+@section('chat')
+    @include('mt/layout/chat')
+@endsection

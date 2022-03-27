@@ -7,7 +7,7 @@
         <div class="main login-area">
             <section style="padding:1em;">
                 <div style="margin:2% auto">
-                    <form name="reg-form">
+                    <form name="form">
                         <label for="username"><i class="fa fa-user"></i>&nbsp;&nbsp;用户名</label>
                         <input id="username" type="text" class="login-input" name="username" required>
                         <label for="email"><i class="fa fa-email"></i>&nbsp;&nbsp;邮箱</label>
@@ -76,7 +76,7 @@
                 // document.execCommand("Copy");
                 // document.body.removeChild(ipt);
                 // alert("1. 返回结果（randstr、ticket）已复制到剪切板，ctrl+v 查看。2. 打开浏览器控制台，查看完整返回结果。");
-                let data = $('reg-form').serialize();
+                let data = $('form').serialize();
                 let avatar = $('#avatar').attr('src')
                 data += `&ticket=${res.ticket}&randstr=${res.randstr}&avatar=${avatar}`
                 $.ajax({

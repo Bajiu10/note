@@ -109,4 +109,6 @@
         })
     </script>
 @endsection
-{!!adsds !!}
+@section('chat')
+    @include('mt/layout/chat')
+@endsection
