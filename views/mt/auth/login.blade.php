@@ -1,7 +1,4 @@
 @extends('mt/layout/main')
-@section('head')
-    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-@endsection
 @section('body')
     <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
         <h1 style="color: white; font-weight: bold">Login</h1>
@@ -20,7 +17,7 @@
                                    data-cbfn="callbackName"
                                    data-biz-state="data-biz-state" class="btn-submit" value="登录">
                             <input type="button" class="btn-submit" value="注册"
-                                   onclick="javascript: window.location='/reg'">
+                                   onclick="javascript: window.location='/reg?from={{request()->get('from', '/')}}'">
                         </div>
                     </form>
                 </div>

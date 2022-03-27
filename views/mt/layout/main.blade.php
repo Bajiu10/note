@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/css/css.css?20210768">
     <link rel="stylesheet" href="/static/css/loading.css">
     <link href="/static/css/font-awesome.css" rel="stylesheet">
+    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
     @yield('head')
 </head>
 <body>

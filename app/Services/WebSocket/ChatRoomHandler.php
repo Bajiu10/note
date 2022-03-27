@@ -76,7 +76,13 @@ class ChatRoomHandler implements WebSocketHandlerInterface
             $user = $this->jwt->decode($request->get['token']);
             $this->table->set($request->fd, ['uid' => $user?->id]);
         } else {
-            $this->table->set($request->fd, ['uid' => 0]);
+            $server->push($request->fd, json_encode([
+                'code' => 1,
+                'data' => '认证失败',
+                'time' => time(),
+            ]));
+            $server->disconnect($request->fd);
+            return;
         }
         $len = $this->redis->lLen(self::KEY);
         $data = $this->redis->lRange(self::KEY, max(0, $len - $this->length), $len);
@@ -111,10 +117,7 @@ class ChatRoomHandler implements WebSocketHandlerInterface
     {
         if ($frame->data === 'ping') {
             $server->push($frame->fd, json_encode(['code' => 0, 'online' => $this->table->count()]));
-        } else {
-            if (($uid = $this->table->get($frame->fd, 'uid')) || !($user = User::find($uid))) {
-                $user = new User(['id' => 0, 'username' => '匿名用户', 'avatar' => 'https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937']);
-            }
+        } else if (($uid = $this->table->get($frame->fd, 'uid')) && $user = User::find($uid)) {
             $data = ['uid' => $uid, 'username' => $user->username, 'avatar' => $user->avatar, 'data' => $frame->data, 'time' => time()];
             $this->redis->rPush(self::KEY, json_encode($data));
             $data['data'] = htmlspecialchars($data['data']);

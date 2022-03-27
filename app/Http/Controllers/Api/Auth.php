@@ -59,6 +59,7 @@ class Auth extends ApiController
             'username' => 'required',
             'email' => 'email|required',
             'password' => 'required',
+            'avatar' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors()->first());
