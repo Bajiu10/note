@@ -54,23 +54,26 @@ class Auth extends ApiController
     #[PostMapping(path: '/reg')]
     public function register(): ResponseInterface
     {
-        $data      = $this->request->all();
+        $data = $this->request->all();
         $validator = (new Validator())->make($data, [
             'username' => 'required',
-            'email'    => 'email|required',
+            'email' => 'email|required',
             'password' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors()->first());
         }
-        $data['password'] = md5($data['password']);
-        try {
-            $user = User::create($data);
-            $this->session->set('user', $user->toArray());
-            return $this->success([]);
-        } catch (Throwable) {
-            return $this->error('邮箱已经被使用');
+        if ($this->captcha->valid($data['ticket'], $data['randstr'])) {
+            $data['password'] = md5($data['password']);
+            try {
+                $user = User::create($data);
+                $this->session->set('user', $user->toArray());
+                return $this->success([]);
+            } catch (Throwable) {
+                return $this->error('邮箱已经被使用');
+            }
         }
+        return $this->error('验证失败');
     }
 
     #[GetMapping(path: '/token')]
@@ -79,7 +82,7 @@ class Auth extends ApiController
         if ($user = $this->session->get('user')) {
             return $this->success([
                 'token' => $this->jwt->encode(['id' => $user['id']]),
-                'user'  => $user,
+                'user' => $user,
             ]);
         }
         return $this->error('认证失败');

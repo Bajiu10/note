@@ -51,12 +51,12 @@ class Note extends Controller
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
             $this->noteDao->incrHits($id, $note['hits']);
-            if (1 == $note['permission'] && $this->session->get('user.id') != $note['user_id']) {
-                throw new Exception('你没有权限查看~');
+            if (1 == $note['permission'] && !$this->session->get('user.id')) {
+                throw new Exception('登录后可查看~');
             }
             $commentsCount = $commentDao->amountOfOneNote($id);
-            $hots          = $this->noteDao->hots();
-            $recommended   = $this->noteDao->getRecommended($note['cid'], $id);
+            $hots = $this->noteDao->hots();
+            $recommended = $this->noteDao->getRecommended($note['cid'], $id);
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }

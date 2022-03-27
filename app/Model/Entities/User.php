@@ -6,6 +6,7 @@ use Max\Database\Eloquent\Model;
 
 /**
  * @property string $username
+ * @property string $avatar
  */
 class User extends Model
 {
@@ -18,7 +19,7 @@ class User extends Model
      * @var array|string[]
      */
     protected array $cast = [
-        'id'  => 'int',
+        'id' => 'int',
         'age' => 'int'
     ];
 
@@ -28,6 +29,7 @@ class User extends Model
     protected array $fillable = [
         'username',
         'email',
+        'avatar',
         'password'
     ];
 

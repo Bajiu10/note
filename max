@@ -5,6 +5,11 @@ use App\Console\Kernel;
 use Max\Console\Input\ArgvInput;
 use Max\Console\Output\ConsoleOutput;
 
+ini_set('display_errors', 'on');
+ini_set('display_startup_errors', 'on');
+ini_set('memory_limit', '1G');
+error_reporting(E_ALL);
+date_default_timezone_set('PRC');  // 修改默认时区
 const BASE_BATH = __DIR__ . '/';
 
 require './vendor/autoload.php';
