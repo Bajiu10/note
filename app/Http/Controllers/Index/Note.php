@@ -13,8 +13,8 @@ use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Foundation\Http\Annotations\Middleware;
 use Max\Foundation\Session;
-use Max\Routing\Annotations\GetMapping;
-use Max\Routing\Annotations\RequestMapping;
+use Max\Foundation\Http\Annotations\GetMapping;
+use Max\Foundation\Http\Annotations\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -25,7 +25,7 @@ use Throwable;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/')]
+#[\Max\Foundation\Http\Annotations\Controller(prefix: '/')]
 class Note extends Controller
 {
     use Paginate;

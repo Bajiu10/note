@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\ApiController;
 use App\Services\Uploader;
-use Max\Routing\Annotations\Controller;
-use Max\Routing\Annotations\PostMapping;
+use Max\Foundation\Http\Annotations\Controller;
+use Max\Foundation\Http\Annotations\PostMapping;
 use Psr\Http\Message\ResponseInterface;
 
 #[Controller(prefix: 'api/chat')]
