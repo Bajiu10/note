@@ -75,7 +75,7 @@
     }
 
     #chat {
-        display: none;
+        display: block;
         position: fixed;
         bottom: .5em;
         right: .5em;
@@ -270,7 +270,7 @@
         <div id="message-send-box">
             <i class="fa fa-file-image-o icon" id="upload-image" title="选择图片并发送"></i>
             <input type="file" style="display: none" name="chat-image">
-            <input type="text" id="content-box" placeholder="最多200字符" maxlength="200">
+            <input type="text" id="content-box" placeholder="请文明发言" maxlength="200">
             <a href="/chat/record" style="color: black;"><i class="fa fa-history icon" aria-hidden="true"
                                                             title="历史记录"></i></a>
             <i class="fa fa-paper-plane-o icon" aria-hidden="true" id="send" title="发送"></i>
@@ -289,13 +289,13 @@
     function appendMsg(data) {
         const chatRoom = $('#chat-room');
         let content = data.data.replace(/\[img\=(.*)\]/, '<img style="width: 100%" src="$1">')
-        chatRoom.prepend(`
+        chatRoom.append(`
   <div class="comment-list">
     <div class="comment-item">
       <div class="body">
         <div class="avatar">
           <img
-            src="https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937"
+            src="${data.avatar}"
           />
         </div>
         <div class="content">
@@ -318,89 +318,93 @@
     </div>
   </div>
 `)
+        chatRoom[0].scrollTop = 10000
     }
 
-    $.ajax({
-        url: '/api/auth/token',
-        type: 'GET',
-        dataType: 'JSON',
-        success(e) {
-            let token = ''
-            if (undefined !== e.data.token) {
-                token = e.data.token
-            }
-            var ws = new WebSocket('wss://ws.1kmb.com/?token=' + token);
-            ws.onopen = function (evt) {
-                ws.send('ping')
-                ws.onclose = function (evt) {
-                    console.log("Disconnected");
-                };
-
-                ws.onmessage = function (evt) {
-                    let data = JSON.parse(evt.data)
-                    if (data.code === 0) {
-                        $('#online').text(data.online)
-                        return
-                    }
-
-                    if (data.code === 101) {
-                        for (let i in data.data) {
-                            appendMsg(data.data[i])
-                        }
-                    } else {
-                        appendMsg(data.data)
-                    }
-                };
-
-                ws.onerror = function (evt, e) {
-                    console.log('Error occured: ' + evt.data);
-                };
-
-                $('#send').on('click', function (e) {
-                    input = $('#content-box')
-                    content = input.val()
-                    if ('' === content) {
-                        return
-                    }
-                    ws.send(content);
-                    input.val('')
-                })
-
-                $('#upload-image').on('click', function () {
-                    $('input[name=chat-image]').click()
-                })
-
-                $('input[name=chat-image]').on('change', function () {
-                    var form = new FormData;
-                    form.append('chat-image', $(this)[0].files[0])
-                    $.ajax({
-                        url: '/api/chat/upload',
-                        type: 'post',
-                        contentType: false,
-                        processData: false,
-                        data: form,
-                        success: function (e) {
-                            ws.send(`[img=${e.data.url}]`)
-                            $('input[name=chat-image]').val('')
-                        },
-                        error: function (e) {
-                            console.log(e)
-                        }
-                    });
-                })
-
-                $(document).on('keyup', function (e) {
-                    if (13 === e.keyCode) {
-                        $('#send').click()
-                    }
-                })
-
-                setInterval(function () {
+    $(function () {
+        $.ajax({
+            url: '/api/auth/token',
+            type: 'GET',
+            dataType: 'JSON',
+            success(e) {
+                let token = ''
+                if (undefined !== e.data.token) {
+                    token = e.data.token
+                }
+                var ws = new WebSocket('wss://ws.1kmb.com/?token=' + token);
+                ws.onopen = function (evt) {
                     ws.send('ping')
-                }, 5000)
-                console.log("Connected to ws server.");
-            };
-        },
+                    ws.onclose = function (evt) {
+                        console.log("Disconnected");
+                    };
+
+                    ws.onmessage = function (evt) {
+                        let data = JSON.parse(evt.data)
+                        if (data.code === 0) {
+                            $('#online').text(data.online)
+                            return
+                        }
+
+                        if (data.code === 101) {
+                            for (let i in data.data) {
+                                appendMsg(data.data[i])
+                            }
+                        } else {
+                            appendMsg(data.data)
+                        }
+                    };
+
+                    ws.onerror = function (evt, e) {
+                        console.log('Error occured: ' + evt.data);
+                    };
+
+                    $('#send').on('click', function (e) {
+                        input = $('#content-box')
+                        content = input.val()
+                        if ('' === content) {
+                            return
+                        }
+                        ws.send(content);
+                        input.val('')
+                    })
+
+                    $('#upload-image').on('click', function () {
+                        $('input[name=chat-image]').click()
+                    })
+
+                    $('input[name=chat-image]').on('change', function () {
+                        var form = new FormData;
+                        form.append('chat-image', $(this)[0].files[0])
+                        $.ajax({
+                            url: '/api/chat/upload',
+                            type: 'post',
+                            contentType: false,
+                            processData: false,
+                            data: form,
+                            success: function (e) {
+                                ws.send(`[img=${e.data.url}]`)
+                                $('input[name=chat-image]').val('')
+                            },
+                            error: function (e) {
+                                console.log(e)
+                            }
+                        });
+                    })
+
+                    $(document).on('keyup', function (e) {
+                        if (13 === e.keyCode) {
+                            $('#send').click()
+                        }
+                    })
+
+                    setInterval(function () {
+                        ws.send('ping')
+                    }, 5000)
+                    console.log("Connected to ws server.");
+                };
+            },
+        })
     })
+
 
 </script>

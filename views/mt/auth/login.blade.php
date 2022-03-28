@@ -15,10 +15,13 @@
                         <input id="email" type="email" class="login-input" name="email" required>
                         <label for="password"><i class="fa fa-key"></i>&nbsp;&nbsp;密码</label>
                         <input id="password" type="password" class="login-input" name="password" required>
-                        <a href="/reg">注册</a>
-                        <input type="button" id="TencentCaptcha" data-appid="2004706694"
-                               data-cbfn="callbackName"
-                               data-biz-state="data-biz-state" class="btn-submit" value="登录">
+                        <div style="display: flex;justify-content: space-between">
+                            <input type="button" id="TencentCaptcha" data-appid="2004706694"
+                                   data-cbfn="callbackName"
+                                   data-biz-state="data-biz-state" class="btn-submit" value="登录">
+                            <input type="button" class="btn-submit" value="注册"
+                                   onclick="javascript: window.location='/reg'">
+                        </div>
                     </form>
                 </div>
             </section>
