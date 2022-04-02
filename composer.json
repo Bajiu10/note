@@ -53,6 +53,9 @@
             "@php -r \"file_exists('.env') || copy('.example.env', '.env');\""
         ]
     },
+    "config": {
+        "optimize-autoloader": true
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }

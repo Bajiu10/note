@@ -11,8 +11,7 @@ use App\Model\Entities\Category;
 use Exception;
 use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
-use Max\Foundation\Http\Annotations\Middleware;
-use Max\Foundation\Session;
+use Max\Foundation\Http\Session;
 use Max\Foundation\Http\Annotations\GetMapping;
 use Max\Foundation\Http\Annotations\RequestMapping;
 use Psr\Http\Message\ResponseInterface;
@@ -55,8 +54,8 @@ class Note extends Controller
                 throw new Exception('登录后可查看~');
             }
             $commentsCount = $commentDao->amountOfOneNote($id);
-            $hots = $this->noteDao->hots();
-            $recommended = $this->noteDao->getRecommended($note['cid'], $id);
+            $hots          = $this->noteDao->hots();
+            $recommended   = $this->noteDao->getRecommended($note['cid'], $id);
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }
@@ -69,10 +68,7 @@ class Note extends Controller
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
-    #[
-        RequestMapping(path: 'notes/add'),
-        Middleware(Authentication::class)
-    ]
+    #[RequestMapping(path: 'notes/add', middlewares: [Authentication::class])]
     public function create(): ResponseInterface
     {
         if ($this->request->isMethod('get')) {
@@ -95,10 +91,7 @@ class Note extends Controller
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
-    #[
-        RequestMapping(path: 'notes/edit/<id>'),
-        Middleware(Authentication::class)
-    ]
+    #[RequestMapping(path: 'notes/edit/<id>', middlewares: [Authentication::class])]
     public function edit($id): ResponseInterface
     {
         if ($note = $this->noteDao->findOne($id, $this->session->get('user.id'))) {
@@ -126,10 +119,7 @@ class Note extends Controller
      * @throws NotFoundException
      * @throws Exception
      */
-    #[
-        RequestMapping(path: 'notes/delete/<id>'),
-        Middleware(Authentication::class)
-    ]
+    #[RequestMapping(path: 'notes/delete/<id>', middlewares: [Authentication::class])]
     public function destroy($id): ResponseInterface
     {
         if ($this->noteDao->deleteOne($id, $this->session->get('user.id'))) {

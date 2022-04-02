@@ -46,24 +46,24 @@ class ChatRoomHandler implements WebSocketHandlerInterface
         $table->column('uid', Table::TYPE_INT);
         $table->create();
         $this->table = $table;
-        Timer::tick(1000, function () {
-            $count = 1;
-            while ($count < $this->length && $this->redis->lLen(self::KEY) > $this->length) {
-                $count++;
-                $message = $this->redis->lPop(self::KEY);
-                try {
-                    $data = json_decode($message, true);
-                    \App\Model\Entities\Message::create([
-                        'user_id' => $data['uid'],
-                        'text' => $data['data'],
-                        'created_at' => date('Y-m-d H:i:s', $data['time'])
-                    ]);
-                } catch (\Exception $exception) {
-                    $this->loggerFactory->get()->error($exception->getMessage());
-                    $this->redis->lPush($message);
-                }
-            }
-        });
+//        Timer::tick(10000, function() {
+//            $count = 1;
+//            while ($count < $this->length && $this->redis->lLen(self::KEY) > $this->length) {
+//                $count++;
+//                $message = $this->redis->lPop(self::KEY);
+//                try {
+//                    $data = json_decode($message, true);
+//                    \App\Model\Entities\Message::create([
+//                        'user_id'    => $data['uid'],
+//                        'text'       => $data['data'],
+//                        'created_at' => date('Y-m-d H:i:s', $data['time'])
+//                    ]);
+//                } catch (\Exception $exception) {
+//                    $this->loggerFactory->get()->error($exception->getMessage());
+//                    $this->redis->lPush($message);
+//                }
+//            }
+//        });
     }
 
     /**

@@ -18,7 +18,7 @@ use ReflectionException;
 use Throwable;
 
 #[\Max\Foundation\Http\Annotations\Controller(prefix: '/')]
-class Index extends Controller
+class IndexController extends Controller
 {
     use Paginate;
 

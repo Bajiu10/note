@@ -7,8 +7,7 @@ use App\Http\Middlewares\Authentication;
 use Exception;
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Http\Annotations\Middleware;
-use Max\Foundation\Session;
+use Max\Foundation\Http\Session;
 use Max\Foundation\Http\Annotations\GetMapping;
 use Max\Foundation\Http\Annotations\RequestMapping;
 use Max\Http\Exceptions\HttpException;
@@ -60,10 +59,7 @@ class IndexController extends Controller
      * @return ResponseInterface
      * @throws HttpException
      */
-    #[
-        GetMapping(path: 'logout'),
-        Middleware(Authentication::class)
-    ]
+    #[GetMapping(path: 'logout', middlewares: [Authentication::class])]
     public function logout(): ResponseInterface
     {
         $this->session->destroy();

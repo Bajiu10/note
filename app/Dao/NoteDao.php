@@ -6,6 +6,7 @@ use App\Model\Entities\Note;
 use Max\Database\Collection;
 use Max\Database\Query;
 use Max\Di\Annotations\Inject;
+use Max\Foundation\Aspects\Cacheable;
 use Swoole\Exception;
 use Throwable;
 
@@ -115,6 +116,7 @@ class NoteDao
      *
      * @return Collection
      */
+    #[Cacheable(ttl: 6000)]
     public function getSome($page, int $limit = 8): Collection
     {
         return $this->query->table('notes', 'n')

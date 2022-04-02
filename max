@@ -13,85 +13,15 @@ declare(strict_types=1);
  */
 
 use App\Console\Kernel;
-use Composer\Autoload\ClassLoader;
-use Max\Console\Input\ArgvInput;
-use Max\Console\Output\ConsoleOutput;
+use Max\Di\Context;
 
 ini_set('display_errors', 'on');
 ini_set('display_startup_errors', 'on');
 ini_set('memory_limit', '1G');
 error_reporting(E_ALL);
-date_default_timezone_set('PRC');  // 修改默认时区
-const BASE_BATH = __DIR__ . '/';
+date_default_timezone_set('PRC');
+const BASE_PATH = __DIR__ . '/';
 
-/** @var ClassLoader $autoload */
-$classLoader = require './vendor/autoload.php';
+require './vendor/autoload.php';
 
-function unlinkDir(string $dir)
-{
-    foreach (new FilesystemIterator($dir) as $item) {
-        if ($item->isFile()) {
-            unlink($item->getRealPath());
-        } else {
-            $realPath = $item->getRealPath();
-            unlinkDir($realPath);
-            rmdir($realPath);
-        }
-    }
-}
-
-$classMap  = [];
-$proxyPath = './runtime/proxy/';
-file_exists($proxyPath) || mkdir($proxyPath, 0755, true);
-unlinkDir($proxyPath);
-
-function isProxy(string $class): bool
-{
-    $classMap = [
-        'App\\Http\\Controllers',
-    ];
-    $isProxy  = false;
-    foreach ($classMap as $item) {
-        if (str_starts_with($class, $item)) {
-            $isProxy = true;
-            break;
-        }
-    }
-    return $isProxy;
-}
-
-foreach ($classLoader->getClassMap() as $class => $realPath) {
-    if (isProxy($class)) {
-        $code           = file_get_contents($realPath);
-        $pattern        = preg_quote(class_basename($class), '/') . '\s+extends';
-        $hasConstructor = false;
-        $code           = preg_replace_callback('/public\s+function\s+([\w_]*)\((.*)?\)([\s\S]*?)\{([\s\S]*?)\}/', function($matches) use (&$hasConstructor) {
-            if (!in_array($matches[1], ['__construct', '__destruct', '__call', '__callStatic', '__get', '__set', '__isset', '__unset', '__sleep', '__wakeup', '__serialize', '__unserialize', '__toString', '__invoke', '__set_state', '__clone', '__debugInfo'])) {
-                return sprintf("protected function %s(%s)%s{%s}", $matches[1], $matches[2], $matches[3], $matches[4]);
-            } else if ($matches[1] === '__construct') {
-                $hasConstructor = true;
-                return sprintf('public function %s(%s)%s {%s}', $matches[1], $matches[2], $matches[3], "\n        \$this->handleProperties();\n" . $matches[4]);
-            }
-            return $matches[0];
-        }, $code);
-
-        $constructor      = $hasConstructor ? '' : "\n    public function __construct() {\n        \$this->handleProperties();\n    }\n";
-        $code             = preg_replace('/\{/', <<<EOR
-{
-    use \\Max\\Di\\Aop\\Traits\\ProxyHandler;
-    use \\Max\\Di\\Aop\\Traits\\PropertyHandler;
-    $constructor
-EOR
-            , $code, 1);
-        $filepath         = './runtime/proxy/' . str_replace('\\', '_', $class) . '_Proxy.php';
-        $classMap[$class] = $filepath;
-        file_put_contents($filepath, $code);
-    }
-}
-
-$classLoader->addClassMap($classMap);
-
-(new Kernel())->run(
-    new ArgvInput(),
-    new ConsoleOutput()
-);
+Context::getContainer()->make(Kernel::class)->run();

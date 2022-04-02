@@ -7,7 +7,7 @@ use App\Lib\Jwt;
 use App\Model\Entities\User;
 use App\Services\TencentCloud\Captcha;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Session;
+use Max\Foundation\Http\Session;
 use Max\Http\Exceptions\HttpException;
 use Max\Foundation\Http\Annotations\Controller;
 use Max\Foundation\Http\Annotations\GetMapping;
