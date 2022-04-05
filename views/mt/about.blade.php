@@ -36,22 +36,6 @@
         <p style="text-align: center;font-weight: bold;color:grey;margin: 1em 0"><i class="fa fa-link"></i> &nbsp;&nbsp;安装
         </p>
         <div id="step1" style="display: flex;justify-content: space-between;">
-            <div style="width:100%; margin-right: .5em" class="card">
-                <div class="tips">FPM版本安装要求</div>
-                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
-                    <code>PHP >= 7.4 √</code>
-                </div>
-                <div class="tips">使用Composer安装</div>
-                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
-                    <code>composer create-project --prefer-dist max/max .</code>
-                </div>
-                <div class="tips">
-                    运行框架
-                </div>
-                <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">
-                    <code>php max serve</code><br>
-                </div>
-            </div>
             <div style="width:100%" class="card">
                 <div class="tips">swoole版本安装要求</div>
                 <div style="margin:.5em;color:#2d2626;line-height: 1.1em;text-align: left;font-size: 1.1em;padding:.5em;font-weight: bold">

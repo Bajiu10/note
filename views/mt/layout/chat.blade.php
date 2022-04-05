@@ -75,7 +75,7 @@
     }
 
     #chat {
-        display: block;
+        display: none;
         position: fixed;
         bottom: .5em;
         right: .5em;

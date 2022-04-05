@@ -11,35 +11,14 @@
                         <div class="banner-content"
                              style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
                             <div>
-                                <p class="big-font">Max/Swoole</p>
+                                <p class="big-font">Max</p>
                                 <p class="small-font">组件化的轻量PHP框架！</p>
                                 <a id="recommend" href="https://www.1kmb.com/note/283.html"><i
                                             class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
                                 <p class="links" style="flex-wrap: wrap">
-                                    <span id="swoole-version">Loading... </span>
-                                    <a href="https://github.com/topyao/max-swoole" target="_blank" rel="noopener">
+                                    <span id="version">Loading... </span>
+                                    <a href="https://github.com/topyao/max" target="_blank" rel="noopener">
                                         Github </a>
-                                    <a href="https://packagist.org/packages/max/swoole" target="_blank"
-                                       rel="noopener"> Packagist</a>
-                                </p>
-                            </div>
-                            <div class="d-bg">
-                                <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;"
-                                   aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="banner-content"
-                             style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
-                            <div>
-                                <p class="big-font">Max/FPM</p>
-                                <p class="small-font">组件化的轻量PHP框架！</p>
-                                <a id="recommend" href="https://www.1kmb.com/note/282.html"><i
-                                            class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
-                                <p class="links" style="flex-wrap: wrap">
-                                    <span id="fpm-version">Loading... </span>
-                                    <a href="https://github.com/topyao/max" target="_blank" rel="noopener"> Github </a>
                                     <a href="https://packagist.org/packages/max/max" target="_blank"
                                        rel="noopener"> Packagist</a>
                                 </p>
@@ -59,21 +38,11 @@
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
                     <div class="sm-back">
                         <a href="https://github.com/topyao/max"><img
-                                    src="/upload/thumb/20220305/fa3897b26de9b5cc046ab9ec4a802d51.webp" alt=""
-                                    style="width: 100%; height: 100%"></a>
-                    </div>
-                    <div class="sm-title">
-                        <a href="https://www.1kmb.com/note/282.html">MaxFPM开发文档</a>
-                    </div>
-                </div>
-                <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
-                    <div class="sm-back">
-                        <a href="https://github.com/topyao/max-swoole"><img
                                     src="/upload/thumb/20220305/52d591aed598e010c0902eed3af2628a.svg" alt=""
                                     style="width: 100%; height: 100%"></a>
                     </div>
                     <div class="sm-title">
-                        <a href="https://www.1kmb.com/note/283.html">Max-Swoole开发文档</a>
+                        <a href="https://www.1kmb.com/note/283.html">MaxPHP开发文档</a>
                     </div>
                 </div>
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
@@ -261,15 +230,7 @@
             $.get('https://api.github.com/repos/topyao/max/tags', function (data, status) {
                 if ('success' === status) {
                     if (undefined !== data[0]) {
-                        $('span#fpm-version').text(data[0].name);
-                    }
-                }
-            })
-
-            $.get('https://api.github.com/repos/topyao/max-swoole/tags', function (data, status) {
-                if ('success' === status) {
-                    if (undefined !== data[0]) {
-                        $('span#swoole-version').text(data[0].name);
+                        $('span#version').text(data[0].name);
                     }
                 }
             })
