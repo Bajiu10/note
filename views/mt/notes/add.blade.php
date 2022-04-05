@@ -50,12 +50,15 @@
                         <div class="p-1" id="thumb-choose" style="cursor: pointer">
                             <div style="width:100%;min-height:5em;box-sizing: border-box;text-align: center"
                                  id="thumb-area">
-                                <i class="fa fa-upload"
-                                   style="color: black;display:block;width:100%;margin:3.5em auto"></i>
+                                @php
+                                $rand = rand(1, 33);
+                                @endphp
+                                <img src="/static/bg/bg{{$rand}}.jpg" style="width: 100%;height: 100%;" id="show-thumb"
+                                     alt="thumb">
                             </div>
                         </div>
                         <input type="file" id="thumb" style="display: none">
-                        <input type="text" name="thumb">
+                        <input type="text" name="thumb" value="/static/bg/bg{{$rand}}.jpg">
                     </div>
                     <div class="card">
                         <div class="tips">其他</div>
@@ -115,9 +118,8 @@
                     processData: false,
                     data: form,
                     success: function (e) {
-                        let img = `<img src="${e.data.path}" style="width: 100%;height: 100%;" id="show-thumb" alt="thumb">`;
+                        $('#show-thumb').attr('src', e.data.path)
                         $('[name=thumb]').val(e.data.path)
-                        $('#thumb-area').html(img);
                     },
                     error: function (e) {
                         console.log(e)

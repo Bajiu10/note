@@ -57,13 +57,8 @@
                         <div class="p-1">
                             <div style="width:100%;min-height:5em;box-sizing: border-box;text-align: center"
                                  id="thumb-area">
-                                @if(!empty($note['thumb']))
-                                    <img src="{{$note['thumb']}}" style="width: 100%;height: 100%;" id="show-thumb"
-                                         alt="thumb">
-                                @endif
-                                <a href="javascript:void(0)" id="thumb-choose"
-                                   style="display:block;width:100%;margin:3.5em auto"><i class="fa fa-upload"
-                                                                                         style="color: black"></i></a>
+                                <img src="{{$note['thumb']}}" style="width: 100%;height: 100%;" id="show-thumb"
+                                     alt="thumb">
                             </div>
                             <input type="file" id="thumb" style="display: none">
                             <input type="text" name="thumb" value="{{$note['thumb']}}">
@@ -109,7 +104,7 @@
                 placeholder: "请图文并茂地介绍下你的项目！",
             });
 
-            $('#thumb-choose').on('click', () => {
+            $('#show-thumb').on('click', () => {
                 $('#thumb').trigger('click');
             });
             $('#thumb').on('change', () => {
@@ -122,9 +117,8 @@
                     processData: false,
                     data: form,
                     success: function (e) {
-                        let img = `<img src="${e.data.path}" style="width: 100%;height: 100%;" id="show-thumb" alt="thumb">`;
+                        $('#show-thumb').attr('src', e.data.path)
                         $('[name=thumb]').val(e.data.path)
-                        $('#thumb-area').html(img);
                     },
                     error: function (e) {
                         console.log(e)
