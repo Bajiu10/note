@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Index;
 
 use App\Http\Controller;
 use App\Model\Entities\Book;
-use Max\Routing\Annotations\GetMapping;
+use Max\Foundation\Http\Annotations\GetMapping;
 
-#[\Max\Routing\Annotations\Controller(prefix: 'book')]
+#[\Max\Foundation\Http\Annotations\Controller(prefix: 'book')]
 class BookController extends Controller
 {
     #[GetMapping(path: '/')]

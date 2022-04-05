@@ -4,7 +4,7 @@ use Max\Config\Repository;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Env\Env;
 use Max\Foundation\Http\Response;
-use Max\Foundation\Renderer;
+use Max\Foundation\View\Renderer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -17,7 +17,7 @@ if (false === function_exists('base_path')) {
      */
     function base_path(string $path = ''): string
     {
-        return BASE_BATH . ltrim($path, '/');
+        return BASE_PATH . ltrim($path, '/');
     }
 }
 
@@ -80,8 +80,8 @@ if (false === function_exists('config')) {
 if (false === function_exists('session')) {
     function session(string $key, $value = null)
     {
-        /** @var \Max\Foundation\Session $session */
-        $session = make(\Max\Foundation\Session::class);
+        /** @var \Max\Foundation\Http\Session $session */
+        $session = make(\Max\Foundation\Http\Session::class);
         if (is_null($value)) {
             return $session->get($key);
         }

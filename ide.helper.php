@@ -2,8 +2,7 @@
 
 namespace Psr\Http\Message {
 
-    use Max\Server\Http\Response;
-    use App\Lib\ServerRequest;
+    use Max\Foundation\Http\{ServerRequest, Response};
 
     /**
      * @mixin ServerRequest
@@ -20,108 +19,16 @@ namespace Psr\Http\Message {
     }
 }
 
-namespace Max\Routing\Annotations {
-    class GetMapping
-    {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         */
-        public function __construct(string $path, array $middlewares = [])
-        {
-        }
-    }
+namespace Psr\Http\Server {
 
-    class PostMapping
-    {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         */
-        public function __construct(string $path, array $middlewares = [])
-        {
-        }
-    }
+    use Max\Http\Server\RequestHandler;
 
-    class PutMapping
+    /**
+     * @mixin RequestHandler
+     */
+    interface RequestHandlerInterface
     {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         */
-        public function __construct(string $path, array $middlewares = [])
-        {
-        }
-    }
 
-    class DeleteMapping
-    {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         */
-        public function __construct(string $path, array $middlewares = [])
-        {
-        }
-    }
-
-    class PatchMapping
-    {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         */
-        public function __construct(string $path, array $middlewares = [])
-        {
-        }
-    }
-
-    class RequestMapping
-    {
-        /**
-         * @param string $path
-         * @param array  $middlewares
-         * @param array  $methods
-         */
-        public function __construct(string $path, array $middlewares = [], array $methods = ['GET', 'POST', 'HEAD'])
-        {
-        }
-    }
-
-    class Controller
-    {
-        /**
-         * @param string $prefix
-         * @param array  $middlewares
-         */
-        public function __construct(string $prefix = '', array $middlewares = [])
-        {
-        }
-    }
-}
-
-namespace Max\Di\Annotations {
-    class Inject
-    {
-        /**
-         * @param string|null $id
-         */
-        public function __construct(?string $id = null)
-        {
-        }
-    }
-}
-
-namespace Max\Config\Annotations {
-    class Config
-    {
-        /**
-         * @param string $key
-         * @param null   $default
-         */
-        public function __construct(string $key, $default = null)
-        {
-        }
     }
 }
 
@@ -139,7 +46,7 @@ namespace Psr\Container {
 
 namespace Psr\SimpleCache {
 
-    use Max\Cache\Cache;
+    use Max\Foundation\Cache\Cache;
 
     /**
      * @mixin Cache

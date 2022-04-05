@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Dao\UserDao;
 use App\Http\Controller;
 use App\Http\Middlewares\Authentication;
 use Exception;
 use Max\Config\Annotations\Config;
 use Max\Di\Annotations\Inject;
-use Max\Foundation\Http\Annotations\Middleware;
-use Max\Foundation\Session;
-use Max\Routing\Annotations\GetMapping;
-use Max\Routing\Annotations\RequestMapping;
+use Max\Foundation\Http\Session;
+use Max\Foundation\Http\Annotations\GetMapping;
+use Max\Foundation\Http\Annotations\RequestMapping;
+use Max\Http\Exceptions\HttpException;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -20,7 +19,7 @@ use Throwable;
  *
  * @package App\Http\Controllers\Auth
  */
-#[\Max\Routing\Annotations\Controller(prefix: '/')]
+#[\Max\Foundation\Http\Annotations\Controller(prefix: '/')]
 class IndexController extends Controller
 {
     #[Inject]
@@ -30,13 +29,11 @@ class IndexController extends Controller
     protected string $theme;
 
     /**
-     * @param UserDao $userDao
-     *
      * @return ResponseInterface
      * @throws Exception|Throwable
      */
     #[RequestMapping(path: 'login')]
-    public function login(UserDao $userDao): ResponseInterface
+    public function login(): ResponseInterface
     {
         $userId = $this->session->get('user.id');
         if (!is_null($userId)) {
@@ -60,11 +57,9 @@ class IndexController extends Controller
 
     /**
      * @return ResponseInterface
+     * @throws HttpException
      */
-    #[
-        GetMapping(path: 'logout'),
-        Middleware(Authentication::class)
-    ]
+    #[GetMapping(path: 'logout', middlewares: [Authentication::class])]
     public function logout(): ResponseInterface
     {
         $this->session->destroy();

@@ -12,13 +12,13 @@ use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Exceptions\HttpException;
-use Max\Routing\Annotations\GetMapping;
+use Max\Foundation\Http\Annotations\GetMapping;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Throwable;
 
-#[\Max\Routing\Annotations\Controller(prefix: '/')]
-class Index extends Controller
+#[\Max\Foundation\Http\Annotations\Controller(prefix: '/')]
+class IndexController extends Controller
 {
     use Paginate;
 

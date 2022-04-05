@@ -3,7 +3,7 @@
 namespace App\Http\Middlewares;
 
 use Max\Http\Exceptions\HttpException;
-use Max\Foundation\Session;
+use Max\Foundation\Http\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
