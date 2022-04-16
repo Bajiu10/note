@@ -7,7 +7,6 @@
     <meta property="og:title" content="{{$note->title}}"/>
     <meta property="og:url" content="{{request()->url()}}"/>
     <link rel="stylesheet" href="/static/editor/css/editormd.preview.css"/>
-    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
 @endsection
 
 @section('body')
@@ -110,8 +109,6 @@
                                      id="comment-field"></div>
                                 <div style="display: flex;justify-content: space-between;box-sizing: border-box">
                                     <div style="width: 100%; display: flex; justify-content: space-between;">
-                                        <input type="text" placeholder="姓名" name="name" class="user-info">
-                                        <input type="text" placeholder="邮箱" name="email" class="user-info">
                                         <input type="text" placeholder="网站" name="website" class="user-info">
                                         <input type="hidden" name="note_id" value="{{$note['id']}}">
                                     </div>

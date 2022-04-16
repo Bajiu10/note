@@ -2,7 +2,7 @@
 
 namespace Psr\Http\Message {
 
-    use Max\Foundation\Http\{ServerRequest, Response};
+    use Max\Http\{ServerRequest, Response};
 
     /**
      * @mixin ServerRequest
@@ -46,7 +46,7 @@ namespace Psr\Container {
 
 namespace Psr\SimpleCache {
 
-    use Max\Foundation\Cache\Cache;
+    use Max\Cache\Cache;
 
     /**
      * @mixin Cache

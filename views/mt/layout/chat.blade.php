@@ -1,3 +1,4 @@
+<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
 <style>
 
     .icon {

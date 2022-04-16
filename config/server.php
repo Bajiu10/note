@@ -1,7 +1,7 @@
 <?php
 
 use Swoole\Constant;
-use Max\Server\Http\Server;
+use Max\Http\Server;
 
 return [
     'mode'      => SWOOLE_PROCESS,
@@ -16,10 +16,10 @@ return [
                 Constant::OPTION_OPEN_WEBSOCKET_PROTOCOL => true,
             ],
             'callbacks' => [
-                'open'    => [\Max\Server\WebSocket\Server::class, 'open'],
-                'message' => [\Max\Server\WebSocket\Server::class, 'message'],
-                'close'   => [\Max\Server\WebSocket\Server::class, 'close'],
-                'receive' => [\Max\Server\WebSocket\Server::class, 'receive']
+                'open'    => [\Max\WebSocket\Server::class, 'open'],
+                'message' => [\Max\WebSocket\Server::class, 'message'],
+                'close'   => [\Max\WebSocket\Server::class, 'close'],
+                'receive' => [\Max\WebSocket\Server::class, 'receive']
             ],
         ],
         [
@@ -41,8 +41,8 @@ return [
     'settings'  => [
         Constant::OPTION_ENABLE_COROUTINE => true,
         Constant::OPTION_WORKER_NUM       => 4,
-        Constant::OPTION_DAEMONIZE        => true,
-        Constant::OPTION_LOG_FILE         => __DIR__ . '/../storage/logs/std.log',
+//        Constant::OPTION_DAEMONIZE        => true,
+        Constant::OPTION_LOG_FILE         => __DIR__ . '/../runtime/logs/std.log',
     ],
     'callbacks' => [
         'start'        => [\Max\Server\Callbacks::class, 'start'],

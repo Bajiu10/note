@@ -2,8 +2,8 @@
 
 namespace App\Services\WebSocket;
 
-use App\Lib\Jwt;
 use App\Model\Entities\User;
+use App\Services\Jwt;
 use Max\Database\Redis;
 use Max\Di\Annotations\Inject;
 use Max\Log\LoggerFactory;
@@ -12,7 +12,6 @@ use Max\Server\WebSocket\Annotations\WebSocketHandler;
 use Max\Utils\Collection;
 use Swoole\Http\Request;
 use Swoole\Table;
-use Swoole\Timer;
 use Swoole\WebSocket\Frame;
 use Swoole\WebSocket\Server;
 

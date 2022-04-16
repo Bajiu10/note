@@ -3,8 +3,10 @@
 use Max\Config\Repository;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Env\Env;
-use Max\Foundation\Http\Response;
-use Max\Foundation\View\Renderer;
+use Max\Http\Response;
+use Max\Http\Session;
+use Max\View\Renderer;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 
@@ -52,7 +54,10 @@ if (false === function_exists('view')) {
         $renderer = make(Renderer::class);
         ob_start();
         echo $renderer->render($theme . '.' . $template, $arguments);
-        return (new Response())->html(ob_get_clean());
+        $response = make(ResponseInterface::class);
+        $response->setPsr7((new Response())->html(ob_get_clean()));
+
+        return $response;
     }
 }
 
@@ -65,7 +70,7 @@ if (false === function_exists('config')) {
      *
      * @return mixed
      * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws ReflectionException|ContainerExceptionInterface
      */
     function config(string $key = null, $default = null): mixed
     {
@@ -78,10 +83,15 @@ if (false === function_exists('config')) {
 
 
 if (false === function_exists('session')) {
+    /**
+     * @throws ReflectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundException
+     */
     function session(string $key, $value = null)
     {
-        /** @var \Max\Foundation\Http\Session $session */
-        $session = make(\Max\Foundation\Http\Session::class);
+        /** @var Session $session */
+        $session = make(Session::class);
         if (is_null($value)) {
             return $session->get($key);
         }
@@ -90,6 +100,11 @@ if (false === function_exists('session')) {
 }
 
 if (false === function_exists('request')) {
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws ReflectionException
+     * @throws NotFoundException
+     */
     function request()
     {
         return make(\Psr\Http\Message\ServerRequestInterface::class);
@@ -97,7 +112,12 @@ if (false === function_exists('request')) {
 }
 
 if (false === function_exists('redirect')) {
-    function redirect(string $url, int $code = 302)
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws ReflectionException
+     * @throws NotFoundException
+     */
+    function redirect(string $url, int $code = 302): ResponseInterface
     {
         /** @var ResponseInterface $response */
         $response = make(ResponseInterface::class);
@@ -162,7 +182,7 @@ if (false === function_exists('get_url')) {
      *
      * @return string
      * @throws NotFoundException
-     * @throws ReflectionException
+     * @throws ReflectionException|ContainerExceptionInterface
      */
     function get_url(bool $full = false): string
     {

@@ -1,13 +1,13 @@
 <?php
 
 return [
-    'default' => 'file',
+    'default' => 'redis',
     'stores'  => [
         //文件缓存
         'file'      => [
             'handler' => 'Max\Cache\Handlers\File',
             'options' => [
-                'path' => base_path('storage/cache/app'),
+                'path' => base_path('runtime/cache/app'),
             ],
         ],
         // redis缓存

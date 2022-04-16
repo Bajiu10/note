@@ -1,5 +1,6 @@
 @extends('mt/layout/main')
 @section('body')
+    <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
     <div style="height:20em;background: url('/static/bg/bg{{rand(1, 33)}}.jpg') no-repeat center center;display: flex; justify-content: center; align-items: center">
         <h1 style="color: white; font-weight: bold">注册</h1>
     </div>

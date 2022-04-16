@@ -1,39 +1,27 @@
 @extends('mt/layout/main')
-@section('head')
-    <link rel="stylesheet" href="/static/css/swiper.min.css">
-@endsection
 @section('body')
     <main class="container" style="margin-top: 3.8em">
         <div class="left" style="width: 75%; margin-right: 1%">
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="banner-content"
-                             style="background: url('/static/bg/bg{{rand(1,31)}}.jpg'); ">
-                            <div>
-                                <p class="big-font">Max</p>
-                                <p class="small-font">组件化的轻量PHP框架！</p>
-                                <a id="recommend" href="https://www.1kmb.com/note/283.html"><i
-                                            class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
-                                <p class="links" style="flex-wrap: wrap">
-                                    <span id="version">Loading... </span>
-                                    <a href="https://github.com/topyao/max" target="_blank" rel="noopener">
-                                        Github </a>
-                                    <a href="https://packagist.org/packages/max/max" target="_blank"
-                                       rel="noopener"> Packagist</a>
-                                </p>
-                            </div>
-                            <div class="d-bg">
-                                <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;"
-                                   aria-hidden="true"></i>
-                            </div>
-                        </div>
-                    </div>
+            <div class="banner-content"
+                 style="background-color: #439679">
+                <div>
+                    <p class="big-font">Max</p>
+                    <p class="small-font">组件化的轻量PHP框架！</p>
+                    <a id="recommend" href="https://www.1kmb.com/note/283.html"><i
+                                class="fa fa-book"></i>&nbsp;&nbsp;快速入门</a>
+                    <p class="links" style="flex-wrap: wrap">
+                        <span id="version">Loading... </span>
+                        <a href="https://github.com/topyao/max" target="_blank" rel="noopener">
+                            Github </a>
+                        <a href="https://packagist.org/packages/max/max" target="_blank"
+                           rel="noopener"> Packagist</a>
+                    </p>
                 </div>
-                <div class="swiper-pagination"></div>
+                <div class="d-bg">
+                    <i class="fa fa-thumbs-o-up" style="font-size: 10em; color: white;"
+                       aria-hidden="true"></i>
+                </div>
             </div>
-
-
             <div class="par-card" style="margin-bottom: .5em">
                 <div class="card-sm card-sm-4" style="height: 10em; width: 25%">
                     <div class="sm-back">

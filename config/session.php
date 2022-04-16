@@ -15,7 +15,7 @@ return [
         'file'  => [
             'handler' => 'Max\Session\Handlers\File',
             'options' => [
-                'path'          => __DIR__ . '/../storage/session',
+                'path'          => __DIR__ . '/../runtime/session',
                 'gcDivisor'     => 100,
                 'gcProbability' => 1,
                 'gcMaxLifetime' => 1440,

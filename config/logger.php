@@ -19,7 +19,7 @@ return [
         'app' => [
             'handler' => 'Monolog\Handler\RotatingFileHandler',
             'options' => [
-                'filename' => __DIR__ . '/../storage/logs/app.log',
+                'filename' => __DIR__ . '/../runtime/logs/app.log',
                 'maxFiles' => 180,
                 'level'    => Logger::DEBUG,
             ],
@@ -27,7 +27,7 @@ return [
         'sql' => [
             'handler' => 'Monolog\Handler\RotatingFileHandler',
             'options' => [
-                'filename' => __DIR__ . '/../storage/logs/database/sql.log',
+                'filename' => __DIR__ . '/../runtime/logs/database/sql.log',
                 'maxFiles' => 180,
                 'level'    => Logger::DEBUG,
             ],
