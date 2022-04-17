@@ -182,7 +182,7 @@
                     </form>
                 </li>
                 <li>
-                    <a href="https://www.1kmb.com/note/282.html"><i
+                    <a href="https://www.1kmb.com/note/283.html"><i
                                 class="fa fa-book"></i> 文档</a>
                 </li>
                 <li class="d-bg"><a href="/about">关于</a></li>

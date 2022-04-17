@@ -22,9 +22,8 @@
                                  alt="">
                             <input style="display: none" type="file" id="upload-avatar">
                         </div>
-                        <input type="button" class="btn-submit" id="TencentCaptcha" data-appid="2004706694"
-                               data-cbfn="callbackName"
-                               data-biz-state="data-biz-state" value="注册">
+                        <input type="button" id="TencentCaptcha"
+                               class="btn-submit" value="注册">
                         <input type="button" class="btn-submit" value="登录"
                                onclick="javascript: window.location='{{request()->get('from', '/')}}'">
                     </form>
@@ -35,48 +34,18 @@
 @endsection
 @section('js')
     <script>
-        $('#avatar').on('click', function () {
-            $('#upload-avatar').click()
-        })
-        $('#upload-avatar').on('change', function () {
-            let formData = new FormData
-            formData.append('chat-image', $(this)[0].files[0])
-            $.ajax({
-                url: '/api/chat/upload',
-                type: 'post',
-                contentType: false,
-                processData: false,
-                data: formData,
-                success: function (e) {
-                    $('#avatar').attr('src', e.data.url)
-                },
-                error: function (e) {
-                    console.log(e)
-                }
-            });
-        })
-        // 回调函数需要放在全局对象window下
-        window.callbackName = function (res) {
-            // $(this).prop('disabled', true);
+        var tcaptchaCallback = function (res) {
             // 返回结果
             // ret         Int       验证结果，0：验证成功。2：用户主动关闭验证码。
             // ticket      String    验证成功的票据，当且仅当 ret = 0 时 ticket 有值。
             // CaptchaAppId       String    验证码应用ID。
             // bizState    Any       自定义透传参数。
             // randstr     String    本次验证的随机串，请求后台接口时需带上。
-            // console.log("callback:", res);
+            console.log('callback:', res);
             // res（用户主动关闭验证码）= {ret: 2, ticket: null}
             // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
+            // res（客户端出现异常错误 仍返回可用票据） = {ret: 0, ticket: "String", randstr: "String",  errorCode: Number, errorMessage: "String"}
             if (res.ret === 0) {
-                // 复制结果至剪切板
-                // let str = `【randstr】->【${res.randstr}】      【ticket】->【${res.ticket}】`
-                // let ipt = document.createElement("input");
-                // ipt.value = str;
-                // document.body.appendChild(ipt);
-                // ipt.select();
-                // document.execCommand("Copy");
-                // document.body.removeChild(ipt);
-                // alert("1. 返回结果（randstr、ticket）已复制到剪切板，ctrl+v 查看。2. 打开浏览器控制台，查看完整返回结果。");
                 let data = $('form').serialize();
                 let avatar = $('#avatar').attr('src')
                 data += `&ticket=${res.ticket}&randstr=${res.randstr}&avatar=${avatar}`
@@ -98,6 +67,35 @@
                 });
             }
         }
+        $(document).ready(function () {
+            var captcha1 = new TencentCaptcha('2046626881', tcaptchaCallback);
+            $("#TencentCaptcha").click(function () {
+                captcha1.show();
+            })
+        })
+    </script>
+
+    <script>
+        $('#avatar').on('click', function () {
+            $('#upload-avatar').click()
+        })
+        $('#upload-avatar').on('change', function () {
+            let formData = new FormData
+            formData.append('chat-image', $(this)[0].files[0])
+            $.ajax({
+                url: '/api/chat/upload',
+                type: 'post',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (e) {
+                    $('#avatar').attr('src', e.data.url)
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        })
     </script>
 @endsection
 
