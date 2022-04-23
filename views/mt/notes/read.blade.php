@@ -26,7 +26,7 @@
                 <p id="headline">{!! $note['title'] !!}</p>
                 <p style="text-align: center;font-size: .9em;margin: 0;color: white"><i
                             class="fa fa-calendar"></i>&nbsp;{{time_convert($note['create_time'])}}&nbsp;&nbsp;
-                    <i class="fa fa-user"></i>&nbsp;{{$note['username']}}&nbsp;&nbsp;<i
+                    <i class="fa fa-user"></i>&nbsp;{{$username}}&nbsp;&nbsp;<i
                             class="fa fa-folder"></i>&nbsp;{{$note['category']}}&nbsp;&nbsp;<i
                             class="fa fa-eye"></i>&nbsp;{{$note['hits']}}&nbsp;&nbsp;<i
                             class="fa fa-comment"></i>&nbsp;{{$commentsCount}}

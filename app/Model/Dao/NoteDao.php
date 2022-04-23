@@ -19,7 +19,6 @@ class NoteDao
      * @param null $userId
      *
      * @return mixed
-     * @throws Exception
      * @throws Throwable
      */
     public function findOne($id, $userId = null): mixed

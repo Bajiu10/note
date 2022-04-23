@@ -8,6 +8,7 @@ use App\Model\Dao\NoteDao;
 use App\Model\Entities\Category;
 use App\Model\Entities\Comment;
 use App\Model\Entities\Note;
+use App\Model\Entities\User;
 use App\Services\Paginate;
 use Exception;
 use Max\Database\Query\Expression;
@@ -65,7 +66,8 @@ class NoteController extends Controller
             if (!empty($note->tags)) {
                 $note->tags = explode(',', $note->tags);
             }
-            return view('notes.read', compact(['note', 'commentsCount', 'hots', 'recommended']));
+            $username = User::find($note['user_id'])?->username ?: '匿名用户';
+            return view('notes.read', compact(['note', 'commentsCount', 'hots', 'recommended', 'username']));
         }
         throw new Exception('笔记不存在！', 404);
     }
