@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use Max\Database\Events\QueryExecuted;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Event\Contracts\EventListenerInterface;
 use Max\Log\LoggerFactory;
 

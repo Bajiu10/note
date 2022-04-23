@@ -5,7 +5,7 @@ namespace App\Middlewares;
 
 use Exception;
 use Max\Database\Redis;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

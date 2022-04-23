@@ -1,54 +1,41 @@
 <?php
 
+use Max\Http\Server as HttpServer;
+use Max\Server\Listeners\ServerListener;
+use Max\Server\Server;
+use Max\WebSocket\Server as WebSocketServer;
 use Swoole\Constant;
-use Max\Http\Server;
 
 return [
     'mode'      => SWOOLE_PROCESS,
     'servers'   => [
         [
             'name'      => 'websocket',
-            'type'      => \Max\Server\Server::SERVER_WEBSOCKET,
+            'type'      => Server::SERVER_WEBSOCKET,
             'host'      => '0.0.0.0',
             'port'      => 8787,
             'sockType'  => SWOOLE_SOCK_TCP,
             'settings'  => [
                 Constant::OPTION_OPEN_WEBSOCKET_PROTOCOL => true,
+                Constant::OPTION_MAX_REQUEST             => 10000,
+                Constant::OPTION_OPEN_HTTP_PROTOCOL      => true,
             ],
             'callbacks' => [
-                'open'    => [\Max\WebSocket\Server::class, 'open'],
-                'message' => [\Max\WebSocket\Server::class, 'message'],
-                'close'   => [\Max\WebSocket\Server::class, 'close'],
-                'receive' => [\Max\WebSocket\Server::class, 'receive']
+                ServerListener::EVENT_OPEN    => [WebSocketServer::class, 'OnOpen'],
+                ServerListener::EVENT_MESSAGE => [WebSocketServer::class, 'OnMessage'],
+                ServerListener::EVENT_CLOSE   => [WebSocketServer::class, 'OnClose'],
+                ServerListener::EVENT_REQUEST => [HttpServer::class, 'onRequest'],
             ],
-        ],
-        [
-            'name'      => 'http',
-            'type'      => \Max\Server\Server::SERVER_HTTP,
-            'host'      => '0.0.0.0',
-            'port'      => 9999,
-            'sockType'  => SWOOLE_SOCK_TCP,
-            'settings'  => [
-                Constant::OPTION_MAX_REQUEST           => 10000,
-                Constant::OPTION_ENABLE_STATIC_HANDLER => true,
-                Constant::OPTION_OPEN_HTTP_PROTOCOL    => true,
-            ],
-            'callbacks' => [
-                'request' => [Server::class, 'request'],
-            ],
-        ],
+        ]
     ],
     'settings'  => [
         Constant::OPTION_ENABLE_COROUTINE => true,
         Constant::OPTION_WORKER_NUM       => 4,
-//        Constant::OPTION_DAEMONIZE        => true,
+        //        Constant::OPTION_DAEMONIZE        => true,
         Constant::OPTION_LOG_FILE         => __DIR__ . '/../runtime/logs/std.log',
     ],
     'callbacks' => [
-        'start'        => [\Max\Server\Callbacks::class, 'start'],
-        'workerStart'  => [\Max\Server\Callbacks::class, 'workerStart'],
-        'task'         => [\Max\Server\Callbacks::class, 'task'],
-        'finish'       => [\Max\Server\Callbacks::class, 'finish'],
-        'managerStart' => [\Max\Server\Callbacks::class, 'managerStart'],
+        ServerListener::EVENT_TASK   => [\Max\Server\Callbacks::class, 'onTask'],
+        ServerListener::EVENT_FINISH => [\Max\Server\Callbacks::class, 'onFinish'],
     ],
 ];

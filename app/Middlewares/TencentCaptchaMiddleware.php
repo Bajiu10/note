@@ -3,7 +3,7 @@
 namespace App\Middlewares;
 
 use App\Services\TencentCloud\Captcha;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Exceptions\InvalidRequestHandlerException;
 use Max\Validator\Exceptions\ValidateException;

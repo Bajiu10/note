@@ -5,7 +5,7 @@ namespace App\Model\Dao;
 use App\Model\Entities\Note;
 use Max\Database\Collection;
 use Max\Database\Query;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Swoole\Exception;
 use Throwable;
 

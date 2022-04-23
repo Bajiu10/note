@@ -4,17 +4,18 @@ namespace App\Controllers\Api;
 
 use App\Controllers\ApiController;
 use App\Model\Dao\NoteDao;
+use App\Model\Entities\Note;
 use App\Services\Uploader;
 use Exception;
-use Max\Di\Annotations\Inject;
-use Max\Di\Exceptions\NotFoundException;
+use Max\Database\Exceptions\ModelNotFoundException;
+use Max\Database\Exceptions\PoolException;
+use Max\Database\Exceptions\QueryException;
+use Max\Di\Annotation\Inject;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\PostMapping;
 use Max\Http\Message\UploadedFile;
 use Psr\Http\Message\ResponseInterface;
-use ReflectionException;
-use Throwable;
 
 /**
  * Class Note
@@ -34,14 +35,17 @@ class NoteController extends ApiController
     }
 
     /**
-     * @throws ReflectionException
-     * @throws NotFoundException
-     * @throws Throwable
+     * @param $id
+     *
+     * @return ResponseInterface
+     * @throws ModelNotFoundException
+     * @throws PoolException
+     * @throws QueryException
      */
     #[GetMapping(path: '/<id>')]
     public function show($id): ResponseInterface
     {
-        return $this->success(\App\Model\Entities\Note::findOrFail($id)->toArray());
+        return $this->success(Note::findOrFail($id)->toArray());
     }
 
     /**

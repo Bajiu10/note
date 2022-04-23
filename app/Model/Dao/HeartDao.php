@@ -4,7 +4,7 @@ namespace App\Model\Dao;
 
 use App\Model\Entities\Heart;
 use Max\Database\Query;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Swoole\Exception;
 use Throwable;
 

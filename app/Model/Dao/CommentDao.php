@@ -4,7 +4,7 @@ namespace App\Model\Dao;
 
 use Max\Database\Collection;
 use Max\Database\Query;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Psr\Http\Message\ServerRequestInterface;
 use function make;
 

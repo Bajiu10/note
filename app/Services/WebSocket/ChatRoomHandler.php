@@ -5,11 +5,11 @@ namespace App\Services\WebSocket;
 use App\Model\Entities\User;
 use App\Services\Jwt;
 use Max\Database\Redis;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Log\LoggerFactory;
-use Max\Server\Contracts\WebSocketHandlerInterface;
-use Max\Server\WebSocket\Annotations\WebSocketHandler;
 use Max\Utils\Collection;
+use Max\WebSocket\Annotations\WebSocketHandler;
+use Max\WebSocket\Contracts\WebSocketHandlerInterface;
 use Swoole\Http\Request;
 use Swoole\Table;
 use Swoole\WebSocket\Frame;
@@ -34,7 +34,7 @@ class ChatRoomHandler implements WebSocketHandlerInterface
 
     protected int $length = 20;
 
-    protected const OPCODE_USER_MESSAGE = 100;
+    protected const OPCODE_USER_MESSAGE     = 100;
     protected const OPCODE_HISTORY_MESSAGES = 101;
 
     protected const KEY = 'maxphp:chatroom:msg';
@@ -45,31 +45,31 @@ class ChatRoomHandler implements WebSocketHandlerInterface
         $table->column('uid', Table::TYPE_INT);
         $table->create();
         $this->table = $table;
-//        Timer::tick(10000, function() {
-//            $count = 1;
-//            while ($count < $this->length && $this->redis->lLen(self::KEY) > $this->length) {
-//                $count++;
-//                $message = $this->redis->lPop(self::KEY);
-//                try {
-//                    $data = json_decode($message, true);
-//                    \App\Model\Entities\Message::create([
-//                        'user_id'    => $data['uid'],
-//                        'text'       => $data['data'],
-//                        'created_at' => date('Y-m-d H:i:s', $data['time'])
-//                    ]);
-//                } catch (\Exception $exception) {
-//                    $this->loggerFactory->get()->error($exception->getMessage());
-//                    $this->redis->lPush($message);
-//                }
-//            }
-//        });
+        //        Timer::tick(10000, function() {
+        //            $count = 1;
+        //            while ($count < $this->length && $this->redis->lLen(self::KEY) > $this->length) {
+        //                $count++;
+        //                $message = $this->redis->lPop(self::KEY);
+        //                try {
+        //                    $data = json_decode($message, true);
+        //                    \App\Model\Entities\Message::create([
+        //                        'user_id'    => $data['uid'],
+        //                        'text'       => $data['data'],
+        //                        'created_at' => date('Y-m-d H:i:s', $data['time'])
+        //                    ]);
+        //                } catch (\Exception $exception) {
+        //                    $this->loggerFactory->get()->error($exception->getMessage());
+        //                    $this->redis->lPush($message);
+        //                }
+        //            }
+        //        });
     }
 
     /**
-     * @param Server $server
+     * @param Server  $server
      * @param Request $request
      */
-    public function open(Server $server, Request $request)
+    public function onOpen(Server $server, Request $request)
     {
         if (isset($request->get['token']) && $request->get['token']) {
             $user = $this->jwt->decode($request->get['token']);
@@ -83,11 +83,11 @@ class ChatRoomHandler implements WebSocketHandlerInterface
             $server->disconnect($request->fd);
             return;
         }
-        $len = $this->redis->lLen(self::KEY);
+        $len  = $this->redis->lLen(self::KEY);
         $data = $this->redis->lRange(self::KEY, max(0, $len - $this->length), $len);
-        $ids = [];
+        $ids  = [];
         foreach ($data as &$v) {
-            $v = json_decode($v, true);
+            $v         = json_decode($v, true);
             $v['data'] = htmlspecialchars($v['data']);
             if (!in_array($v['uid'], $ids)) {
                 $ids[] = $v['uid'];
@@ -110,9 +110,9 @@ class ChatRoomHandler implements WebSocketHandlerInterface
 
     /**
      * @param Server $server
-     * @param Frame $frame
+     * @param Frame  $frame
      */
-    public function message(Server $server, Frame $frame)
+    public function onMessage(Server $server, Frame $frame)
     {
         if ($frame->data === 'ping') {
             $server->push($frame->fd, json_encode(['code' => 0, 'online' => $this->table->count()]));
@@ -133,7 +133,7 @@ class ChatRoomHandler implements WebSocketHandlerInterface
      * @param Server $server
      * @param        $fd
      */
-    public function close(Server $server, $fd)
+    public function onClose(Server $server, $fd)
     {
         $this->table->del($fd);
     }

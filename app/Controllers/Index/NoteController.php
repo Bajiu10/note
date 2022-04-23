@@ -11,7 +11,7 @@ use App\Model\Entities\Note;
 use App\Services\Paginate;
 use Exception;
 use Max\Database\Query\Expression;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\RequestMapping;

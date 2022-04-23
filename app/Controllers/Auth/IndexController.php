@@ -6,7 +6,7 @@ use App\Controllers\Controller;
 use App\Middlewares\Authentication;
 use Exception;
 use Max\Config\Annotations\Config;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\RequestMapping;
 use Max\Http\Exceptions\HttpException;

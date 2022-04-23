@@ -7,11 +7,10 @@ use App\Middlewares\TencentCaptchaMiddleware;
 use App\Model\Entities\User;
 use App\Services\Jwt;
 use App\Services\TencentCloud\Captcha;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\PostMapping;
-use Max\Http\Exceptions\HttpException;
 use Max\Http\Session;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
@@ -48,7 +47,6 @@ class AuthController extends ApiController
 
     /**
      * @throws Throwable
-     * @throws HttpException
      */
     #[PostMapping(path: '/reg', middlewares: [TencentCaptchaMiddleware::class])]
     public function register(): ResponseInterface

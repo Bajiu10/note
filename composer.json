@@ -40,7 +40,6 @@
         "max/env": "dev-master",
         "max/session": "dev-master",
         "max/server": "dev-master",
-        "max/foundation": "dev-master",
         "swoole/ide-helper": "^4.8",
         "firebase/php-jwt": "*"
     },

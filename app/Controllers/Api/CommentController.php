@@ -7,7 +7,7 @@ use App\Middlewares\TencentCaptchaMiddleware;
 use App\Model\Dao\CommentDao;
 use App\Model\Dao\HeartDao;
 use Max\Database\Query;
-use Max\Di\Annotations\Inject;
+use Max\Di\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
