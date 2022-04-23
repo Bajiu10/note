@@ -1,6 +1,10 @@
 @extends('mt/layout/main')
-@section('title'){!! $note->title !!} | MaxPHP - 组件化的轻量PHP框架@endsection
-@section('keywords'){{$note->tags ?? ''}}@endsection
+@section('title')
+    {!! $note->title !!} | MaxPHP - 组件化的轻量PHP框架
+@endsection
+@section('keywords')
+    {{$note->tags ?? ''}}
+@endsection
 @section('head')
     <meta name="description" content="{!! $note->abstract !!}">
     <link rel="canonical" href="{{request()->url()}}">
@@ -112,14 +116,11 @@
                                         <input type="text" placeholder="网站" name="website" class="user-info">
                                         <input type="hidden" name="note_id" value="{{$note['id']}}">
                                     </div>
-                                    <input type="hidden" id="TencentCaptcha" data-appid="2004706694"
-                                           data-cbfn="callbackName"
-                                           data-biz-state="data-biz-state">
                                     <div style="width: 6em; text-align: right">
                                         <span id="select-meme" style="width: 2.8em;text-align: center;margin: 0 .3em"><i
                                                     style="font-size: 2.1em;color: black;cursor:pointer;"
                                                     class="fa fa-smile-o"></i></span>
-                                        <span id="comment"
+                                        <span id="TencentCaptcha"
                                               style="cursor: pointer; line-height: 1.4em; font-size: 1.7em"
                                               class="fa fa-paper-plane-o" aria-hidden="true" title="发送"></span>
                                     </div>
@@ -322,56 +323,32 @@
     <script src="/static/editor/editormd.min.js"></script>
     <script type="text/javascript" src="/static/js/qrcode.min.js" id="corepress_jquery_qrcode-js"></script>
     <script>
-        // 回调函数需要放在全局对象window下
-        window.callbackName = function (res) {
-            // $(this).prop('disabled', true);
-            // 返回结果
-            // ret         Int       验证结果，0：验证成功。2：用户主动关闭验证码。
-            // ticket      String    验证成功的票据，当且仅当 ret = 0 时 ticket 有值。
-            // CaptchaAppId       String    验证码应用ID。
-            // bizState    Any       自定义透传参数。
-            // randstr     String    本次验证的随机串，请求后台接口时需带上。
-            // console.log("callback:", res);
-            // res（用户主动关闭验证码）= {ret: 2, ticket: null}
-            // res（验证成功） = {ret: 0, ticket: "String", randstr: "String"}
-            if (res.ret === 0) {
-                // 复制结果至剪切板
-                // let str = `【randstr】->【${res.randstr}】      【ticket】->【${res.ticket}】`
-                // let ipt = document.createElement("input");
-                // ipt.value = str;
-                // document.body.appendChild(ipt);
-                // ipt.select();
-                // document.execCommand("Copy");
-                // document.body.removeChild(ipt);
-                // alert("1. 返回结果（randstr、ticket）已复制到剪切板，ctrl+v 查看。2. 打开浏览器控制台，查看完整返回结果。");
-                let data = $(form).serialize();
-                data += `&ticket=${res.ticket}&randstr=${res.randstr}`
-                $.ajax({
-                    url: '/api/notes/comment',
-                    type: 'post',
-                    data: data,
-                    dataType: 'json',
-                    success: function (e) {
-                        if (e.status) {
-                            window.location.reload();
-                        } else {
-                            alert(e.message);
-                        }
-                    },
-                    error: function (e) {
-                        alert('服务器异常!');
+        var tcaptchaCallback = function (res) {
+            let data = $(form).serialize();
+            data += `&ticket=${res.ticket}&randstr=${res.randstr}`
+            $.ajax({
+                url: '/api/notes/comment',
+                type: 'post',
+                data: data,
+                dataType: 'json',
+                success: function (e) {
+                    if (e.status) {
+                        window.location.reload();
+                    } else {
+                        alert(e.message);
                     }
-                });
-            }
+                },
+                error: function (e) {
+                    alert('服务器异常!');
+                }
+            });
         }
-
-        $('#comment').on('click', function () {
-            if (0 === $('#comment-field').text().length) {
-                return false;
-            }
-            $('#TencentCaptcha').click();
+        $(document).ready(function () {
+            var captcha1 = new TencentCaptcha('2046626881', tcaptchaCallback);
+            $("#TencentCaptcha").click(function () {
+                captcha1.show();
+            })
         })
-
         document.onscroll = function () {
             let catalog = document.getElementById('catalog-box');
             if (document.documentElement.scrollTop > 300) {

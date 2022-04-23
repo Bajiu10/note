@@ -45,7 +45,7 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "@php max vendor:publish"
+            "rm -rf runtime/di"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.example.env', '.env');\""

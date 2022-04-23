@@ -2,6 +2,7 @@
 
 namespace App\Model\Dao;
 
+use App\Model\Entities\Heart;
 use Max\Database\Collection;
 use Max\Database\Query;
 use Max\Di\Annotation\Inject;
@@ -12,6 +13,9 @@ class CommentDao
 {
     #[Inject]
     protected Query $query;
+
+    #[Inject]
+    protected HeartDao $heartDao;
 
     /**
      * @param int    $limit
@@ -45,7 +49,7 @@ class CommentDao
             'parent_id',
             'count(f.user_id) hearts'
         ];
-        $hearts   = make(HeartDao::class)->getIdsByIp($request->ip())->toArray();
+        $hearts   = Heart::where('comment_id', $request->ip())->column('user_id')->toArray();
         $comments = $this->query->table('comments', 'c')
                                 ->leftJoin('hearts', 'f')->on('c.id', 'f.comment_id')
                                 ->where('note_id', $id)

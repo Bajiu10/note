@@ -62,7 +62,7 @@ const BASE_PATH = __DIR__ . '/../';
         $container->alias($id, $binding);
     }
 
-    Scanner::init($loader, [ListenerCollector::class, RouteCollector::class], $repository->get('di.scanDir'), BASE_PATH . 'runtime');
+    Scanner::init($loader, [ListenerCollector::class, RouteCollector::class, \Max\WebSocket\RouteCollector::class], $repository->get('di.scanDir'), BASE_PATH . 'runtime');
     /** @var EventDispatcher $eventDispatcher */
     $eventDispatcher  = $container->make(EventDispatcher::class);
     $listenerProvider = $eventDispatcher->getListenerProvider();

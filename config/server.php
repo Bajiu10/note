@@ -1,6 +1,7 @@
 <?php
 
 use Max\Http\Server as HttpServer;
+use Max\Server\Callbacks;
 use Max\Server\Listeners\ServerListener;
 use Max\Server\Server;
 use Max\WebSocket\Server as WebSocketServer;
@@ -13,7 +14,7 @@ return [
             'name'      => 'websocket',
             'type'      => Server::SERVER_WEBSOCKET,
             'host'      => '0.0.0.0',
-            'port'      => 8787,
+            'port'      => 9999,
             'sockType'  => SWOOLE_SOCK_TCP,
             'settings'  => [
                 Constant::OPTION_OPEN_WEBSOCKET_PROTOCOL => true,
@@ -35,7 +36,7 @@ return [
         Constant::OPTION_LOG_FILE         => __DIR__ . '/../runtime/logs/std.log',
     ],
     'callbacks' => [
-        ServerListener::EVENT_TASK   => [\Max\Server\Callbacks::class, 'onTask'],
-        ServerListener::EVENT_FINISH => [\Max\Server\Callbacks::class, 'onFinish'],
+        ServerListener::EVENT_TASK   => [Callbacks::class, 'onTask'],
+        ServerListener::EVENT_FINISH => [Callbacks::class, 'onFinish'],
     ],
 ];
