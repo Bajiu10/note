@@ -28,7 +28,6 @@ class Captcha
      * @param ServerRequestInterface $request
      *
      * @return bool
-     * @throws HttpException
      */
     public function valid(ServerRequestInterface $request): bool
     {
