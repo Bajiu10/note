@@ -15,7 +15,7 @@
 
 @section('body')
     <div style="height:20em;background: url(
-    @if(empty($note->thumb))
+    @if(empty($note['thumb']))
             '/static/bg/bg{{rand(1, 33)}}.jpg'
     @else
             '{{$note->thumb}}'
