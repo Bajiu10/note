@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Controllers\Index;
+namespace App\Http\Controllers\Index;
 
-use App\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Model\Dao\CommentDao;
 use App\Model\Dao\NoteDao;
 use App\Model\Entities\Link;
 use App\Services\Paginate;
 use Exception;
-use Max\Database\Redis;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
+use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Exceptions\HttpException;
+use Max\Redis\Manager;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
 use Throwable;
 use function view;
 
-#[\Max\Http\Annotations\Controller(prefix: '/')]
-class IndexController extends Controller
+#[Controller(prefix: '/')]
+class IndexController extends BaseController
 {
     use Paginate;
 
@@ -30,7 +31,7 @@ class IndexController extends Controller
     protected NoteDao $noteDao;
 
     #[Inject]
-    protected Redis $redis;
+    protected Manager $redis;
 
     #[Inject]
     protected CommentDao $commentDao;

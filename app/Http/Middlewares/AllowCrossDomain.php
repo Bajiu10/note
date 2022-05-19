@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
 use Exception;
 use Max\Http\Message\Stream\StringStream;

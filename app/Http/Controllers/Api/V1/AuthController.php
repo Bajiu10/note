@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Controllers\ApiController;
-use App\Middlewares\TencentCaptchaMiddleware;
+use App\Http\Controllers\ApiController;
+use App\Http\Middlewares\TencentCaptchaMiddleware;
 use App\Model\Entities\User;
 use App\Services\Jwt;
 use App\Services\TencentCloud\Captcha;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\PostMapping;
-use Max\Http\Session;
+use Max\Session\Session;
 use Max\Validator\Validator;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;

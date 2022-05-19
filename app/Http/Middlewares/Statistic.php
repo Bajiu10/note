@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
 use Exception;
-use Max\Database\Redis;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
+use Max\Redis\Manager;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -18,7 +18,7 @@ class Statistic implements MiddlewareInterface
     protected CacheInterface $cache;
 
     #[Inject]
-    protected Redis $redis;
+    protected Manager $redis;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

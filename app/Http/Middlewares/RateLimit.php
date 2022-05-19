@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

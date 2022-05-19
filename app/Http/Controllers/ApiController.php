@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
 use Psr\Http\Message\ResponseInterface;
 
-abstract class ApiController extends Controller
+abstract class ApiController extends BaseController
 {
     /**
-     * @param array  $data
-     * @param string $message
-     * @param int    $code
+     * @param array |\JsonSerializable $data
+     * @param string                   $message
+     * @param int                      $code
      *
      * @return ResponseInterface
      */
-    protected function success(array $data, string $message = '操作成功', int $code = 0): ResponseInterface
+    protected function success($data, string $message = '操作成功', int $code = 0): ResponseInterface
     {
         $response = $this->response->json([
             'status'  => true,

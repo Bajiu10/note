@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-abstract class Controller
+abstract class BaseController
 {
     #[Inject]
     protected ContainerInterface $container;

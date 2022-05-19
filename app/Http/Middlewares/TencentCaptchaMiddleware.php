@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
 use App\Services\TencentCloud\Captcha;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Exceptions\InvalidRequestHandlerException;
 use Max\Validator\Exceptions\ValidateException;

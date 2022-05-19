@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -9,6 +10,7 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 return [
     'default' => 'blade',
     'engines' => [
@@ -18,7 +20,7 @@ return [
                 // 模板目录
                 'path'       => __DIR__ . '/../views/',
                 // 编译和缓存目录
-                'compileDir' => __DIR__ . '/../runtime/cache/views/compile/',
+                'compileDir' => __DIR__ . '/../runtime/cache/views/',
                 // 模板缓存
                 'cache'      => false,
                 // 模板后缀
@@ -27,4 +29,3 @@ return [
         ],
     ]
 ];
-

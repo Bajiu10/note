@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Http;
 
 use Max\Http\RequestHandler;
 use Max\Routing\Router;
@@ -13,12 +13,12 @@ class Kernel extends RequestHandler
      * @var array|string[]
      */
     protected array $middlewares = [
-        'App\Middlewares\ExceptionHandlerMiddleware',
-        'App\Middlewares\SessionMiddleware',
+        'App\Http\Middlewares\ExceptionHandlerMiddleware',
+        'App\Http\Middlewares\SessionMiddleware',
         'Max\Http\Middlewares\RoutingMiddleware',
-        'App\Middlewares\AllowCrossDomain',
-        'App\Middlewares\ParseBodyMiddleware',
-        'App\Middlewares\Statistic'
+//        'App\Http\Middlewares\AllowCrossDomain',
+//        'App\Http\Middlewares\ParseBodyMiddleware',
+        'App\Http\Middlewares\Statistic'
     ];
 
     /**

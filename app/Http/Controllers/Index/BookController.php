@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Controllers\Index;
+namespace App\Http\Controllers\Index;
 
-use App\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Model\Entities\Book;
 use App\Model\Entities\Note;
 use Max\Di\Exceptions\NotFoundException;
+use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -13,8 +14,8 @@ use Swoole\Exception;
 use Throwable;
 use function view;
 
-#[\Max\Http\Annotations\Controller(prefix: 'book')]
-class BookController extends Controller
+#[Controller(prefix: 'book')]
+class BookController extends BaseController
 {
     /**
      * @throws NotFoundException

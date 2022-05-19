@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
 use Exception;
-use Max\Di\Annotation\Inject;
-use Max\Http\Session;
+use Max\Aop\Annotation\Inject;
+use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

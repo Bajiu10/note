@@ -26,6 +26,7 @@
     "require": {
         "php": "^8.0",
         "ext-posix": "*",
+        "ext-curl": "*",
         "max/cache": "dev-master",
         "max/database": "dev-master",
         "max/console": "dev-master",
@@ -33,15 +34,19 @@
         "max/validator": "dev-master",
         "max/log": "dev-master",
         "max/routing": "dev-master",
-        "ext-curl": "*",
         "max/config": "dev-master",
         "max/http": "dev-master",
+        "max/redis": "dev-master",
         "max/websocket": "dev-master",
         "max/env": "dev-master",
         "max/session": "dev-master",
         "max/server": "dev-master",
-        "swoole/ide-helper": "^4.8",
-        "firebase/php-jwt": "*"
+        "max/framework": "dev-master",
+        "firebase/php-jwt": "*",
+        "max/aop": "dev-master"
+    },
+    "require-dev": {
+        "swoole/ide-helper": "^4.8"
     },
     "scripts": {
         "post-autoload-dump": [

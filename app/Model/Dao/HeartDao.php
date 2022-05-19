@@ -3,15 +3,15 @@
 namespace App\Model\Dao;
 
 use App\Model\Entities\Heart;
-use Max\Database\Query;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
+use Max\Database\Manager;
 use Swoole\Exception;
 use Throwable;
 
 class HeartDao
 {
     #[Inject]
-    protected Query $query;
+    protected Manager $query;
 
     /**
      * @param      $commentId
@@ -24,8 +24,8 @@ class HeartDao
     public function hasOneByCommentId($commentId, $userId = null): bool
     {
         return Heart::where('comment_id', $commentId)
-            ->when($userId, fn(Query\Builder $builder) => $builder->where('user_id', $userId)
-            )->exists();
+                    ->when($userId, fn($builder) => $builder->where('user_id', $userId))
+                    ->exists();
     }
 
     /**
@@ -41,16 +41,13 @@ class HeartDao
         return $this->query
             ->table('hearts')
             ->where('comment_id', $commentId)
-            ->when($userId, function (Query\Builder $builder) use ($userId) {
-                return $builder->where('user_id', $userId);
-            })->delete();
+            ->when($userId, fn($builder) => $builder->where('user_id', $userId))->delete();
     }
 
     /**
      * @param $data
      *
      * @return false|string
-     * @throws Exception
      * @throws Throwable
      */
     public function createOne($data): bool|string

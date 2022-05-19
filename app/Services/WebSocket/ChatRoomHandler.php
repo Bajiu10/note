@@ -4,9 +4,9 @@ namespace App\Services\WebSocket;
 
 use App\Model\Entities\User;
 use App\Services\Jwt;
-use Max\Database\Redis;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Log\LoggerFactory;
+use Max\Redis\Manager;
 use Max\Utils\Collection;
 use Max\WebSocket\Annotations\WebSocketHandler;
 use Max\WebSocket\Contracts\WebSocketHandlerInterface;
@@ -24,7 +24,7 @@ class ChatRoomHandler implements WebSocketHandlerInterface
     protected Table $table;
 
     #[Inject]
-    protected Redis $redis;
+    protected Manager $redis;
 
     #[Inject]
     protected Jwt $jwt;

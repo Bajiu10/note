@@ -4,7 +4,7 @@ use Max\Config\Repository;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Env\Env;
 use Max\Http\Response;
-use Max\Http\Session;
+use Max\Session\Session;
 use Max\View\Renderer;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -55,9 +55,8 @@ if (false === function_exists('view')) {
         ob_start();
         echo $renderer->render($theme . '.' . $template, $arguments);
         $response = make(ResponseInterface::class);
-        $response->setPsr7((new Response())->html(ob_get_clean()));
 
-        return $response;
+        return $response->html(ob_get_clean());
     }
 }
 

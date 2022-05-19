@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Middlewares;
+namespace App\Http\Middlewares;
 
 use Max\Console\Output\ConsoleOutput;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Http\Exceptions\HttpException;
 use Max\Http\Middlewares\ExceptionHandlerMiddleware as CoreExceptionHandlerMiddleware;
 use Psr\Http\Message\ResponseInterface;
@@ -26,7 +26,7 @@ class ExceptionHandlerMiddleware extends CoreExceptionHandlerMiddleware
      * @return void
      * @throws HttpException
      */
-    protected function reportException(Throwable $throwable, ServerRequestInterface $request)
+    protected function reportException(Throwable $throwable, ServerRequestInterface $request): void
     {
         $this->logger->error($throwable->getMessage(), [
             'method'  => $request->getMethod(),
@@ -57,7 +57,7 @@ class ExceptionHandlerMiddleware extends CoreExceptionHandlerMiddleware
                 'code'    => 500,
             ]);
         }
-        $code = $this->getCode($throwable);
+        $code = $throwable instanceof HttpException ? $throwable->getCode() : 500;
         return view('error', ['code' => $code, 'message' => $throwable->getMessage()])->withStatus($code);
     }
 }

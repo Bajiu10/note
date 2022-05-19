@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Controllers\ApiController;
-use App\Middlewares\TencentCaptchaMiddleware;
+use App\Http\Controllers\ApiController;
+use App\Http\Middlewares\TencentCaptchaMiddleware;
 use App\Model\Dao\CommentDao;
 use App\Model\Dao\HeartDao;
-use Max\Database\Query;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
+use Max\Database\Manager;
 use Max\Di\Exceptions\NotFoundException;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
@@ -30,7 +30,7 @@ class CommentController extends ApiController
     protected Validator $validator;
 
     /**
-     * @param            $id
+     * @param                           $id
      * @param \App\Model\Dao\CommentDao $commentDao
      *
      * @return ResponseInterface
@@ -72,14 +72,14 @@ class CommentController extends ApiController
     /**
      * @param          $id
      * @param HeartDao $heartDao
-     * @param Query    $query
+     * @param Manager  $query
      *
      * @return ResponseInterface
      * @throws Exception
      * @throws Throwable
      */
     #[GetMapping(path: '/heart/<id>')]
-    public function heart($id, HeartDao $heartDao, Query $query): ResponseInterface
+    public function heart($id, HeartDao $heartDao, Manager $query): ResponseInterface
     {
         if (!$query->table('comments')->where('id', $id)->exists()) {
             return $this->error('评论不存在');

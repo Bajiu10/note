@@ -14,7 +14,7 @@ namespace App\Listeners;
 
 use Max\Console\Output\ConsoleOutput;
 use Max\Console\Output\Formatter;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Event\Annotations\Listen;
 use Max\Event\Contracts\EventListenerInterface;
 use Max\Server\Events\OnClose;

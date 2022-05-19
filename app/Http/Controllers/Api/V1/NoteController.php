@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Controllers\ApiController;
+use App\Http\Controllers\ApiController;
+use App\Http\Resources\V1\NoteResource;
 use App\Model\Dao\NoteDao;
 use App\Model\Entities\Note;
 use App\Services\Uploader;
 use Exception;
+use Max\Aop\Annotation\Inject;
 use Max\Database\Exceptions\ModelNotFoundException;
-use Max\Database\Exceptions\PoolException;
-use Max\Database\Exceptions\QueryException;
-use Max\Di\Annotation\Inject;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\PostMapping;
@@ -31,7 +30,8 @@ class NoteController extends ApiController
     #[GetMapping(path: '')]
     public function index(NoteDao $noteDao): ResponseInterface
     {
-        return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
+        return $this->success(NoteResource::paginate(Note::all(), $this->request));
+        //        return $this->success($noteDao->getSome($this->request->get('p', 1))->toArray());
     }
 
     /**
@@ -39,8 +39,6 @@ class NoteController extends ApiController
      *
      * @return ResponseInterface
      * @throws ModelNotFoundException
-     * @throws PoolException
-     * @throws QueryException
      */
     #[GetMapping(path: '/<id>')]
     public function show($id): ResponseInterface

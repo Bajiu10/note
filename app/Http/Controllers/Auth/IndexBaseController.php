@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use App\Controllers\Controller;
-use App\Middlewares\Authentication;
+use App\Http\Controllers\BaseController;
+use App\Http\Middlewares\Authentication;
 use Exception;
 use Max\Config\Annotations\Config;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
+use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\RequestMapping;
 use Max\Http\Exceptions\HttpException;
-use Max\Http\Session;
+use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use function redirect;
@@ -21,8 +22,8 @@ use function view;
  *
  * @package App\Http\Controllers\Auth
  */
-#[\Max\Http\Annotations\Controller(prefix: '/')]
-class IndexController extends Controller
+#[Controller(prefix: '/')]
+class IndexBaseController extends BaseController
 {
     #[Inject]
     protected Session $session;

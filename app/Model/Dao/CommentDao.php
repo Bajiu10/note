@@ -3,19 +3,15 @@
 namespace App\Model\Dao;
 
 use App\Model\Entities\Heart;
+use Max\Aop\Annotation\Inject;
 use Max\Database\Collection;
-use Max\Database\Query;
-use Max\Di\Annotation\Inject;
+use Max\Database\Manager;
 use Psr\Http\Message\ServerRequestInterface;
-use function make;
 
 class CommentDao
 {
     #[Inject]
-    protected Query $query;
-
-    #[Inject]
-    protected HeartDao $heartDao;
+    protected Manager $query;
 
     /**
      * @param int    $limit

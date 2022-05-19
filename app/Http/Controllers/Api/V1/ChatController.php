@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\Api;
+namespace App\Http\Controllers\Api\V1;
 
-use App\Controllers\ApiController;
+use App\Http\Controllers\ApiController;
 use App\Services\Uploader;
 use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\PostMapping;

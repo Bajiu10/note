@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Controllers\Index;
+namespace App\Http\Controllers\Index;
 
-use App\Controllers\Controller;
-use App\Middlewares\Authentication;
+use App\Events\NoteReadEvent;
+use App\Http\Controllers\BaseController;
+use App\Http\Middlewares\Authentication;
 use App\Model\Dao\NoteDao;
 use App\Model\Entities\Category;
 use App\Model\Entities\Comment;
@@ -12,11 +13,13 @@ use App\Model\Entities\User;
 use App\Services\Paginate;
 use Exception;
 use Max\Database\Query\Expression;
-use Max\Di\Annotation\Inject;
+use Max\Aop\Annotation\Inject;
 use Max\Di\Exceptions\NotFoundException;
+use Max\Event\Contracts\EventDispatcherInterface;
+use Max\Http\Annotations\Controller;
 use Max\Http\Annotations\GetMapping;
 use Max\Http\Annotations\RequestMapping;
-use Max\Http\Session;
+use Max\Session\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionException;
@@ -29,8 +32,8 @@ use function view;
  *
  * @package App\Http\Controllers\Index
  */
-#[\Max\Http\Annotations\Controller(prefix: '/')]
-class NoteController extends Controller
+#[Controller(prefix: '/')]
+class NoteController extends BaseController
 {
     use Paginate;
 
@@ -43,6 +46,9 @@ class NoteController extends Controller
     #[Inject]
     protected LoggerInterface $logger;
 
+    #[Inject]
+    protected EventDispatcherInterface $eventDispatcher;
+
     /**
      * @param            $id
      *
@@ -54,9 +60,7 @@ class NoteController extends Controller
     public function show($id): ResponseInterface
     {
         if (!empty($note = $this->noteDao->findOne($id))) {
-            Note::where('id', $id)->update([
-                'hits' => new Expression('hits + 1')
-            ]);
+            $this->eventDispatcher->dispatch(new NoteReadEvent($id));
             if (Note::PERMISSION_LOGIN == $note['permission'] && !$this->session->get('user.id')) {
                 throw new Exception('登录后可查看~');
             }
