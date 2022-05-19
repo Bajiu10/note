@@ -1,0 +1,124 @@
+<?php
+
+namespace App\Services\WebSocket;
+
+use App\Model\Entities\User;
+use App\Services\Jwt;
+use Max\Aop\Annotation\Inject;
+use Max\Log\LoggerFactory;
+use Max\Redis\Manager;
+use Max\Utils\Collection;
+use Max\WebSocket\Annotations\WebSocketHandler;
+use Max\WebSocket\Contracts\WebSocketHandlerInterface;
+use Swoole\Http\Request;
+use Swoole\Table;
+use Swoole\WebSocket\Frame;
+use Swoole\WebSocket\Server;
+#[WebSocketHandler(path: '/')]
+class ChatRoomHandler implements WebSocketHandlerInterface
+{
+    use \Max\Aop\ProxyHandler;
+    use \Max\Aop\PropertyHandler;
+    /**
+     * @var Table
+     */
+    protected Table $table;
+    #[Inject]
+    protected Manager $redis;
+    #[Inject]
+    protected Jwt $jwt;
+    #[Inject]
+    protected LoggerFactory $loggerFactory;
+    protected int $length = 20;
+    protected const OPCODE_USER_MESSAGE = 100;
+    protected const OPCODE_HISTORY_MESSAGES = 101;
+    protected const KEY = 'maxphp:chatroom:msg';
+    public function __construct()
+    {
+        $this->__handleProperties();
+        $table = new Table(1 << 10);
+        $table->column('uid', Table::TYPE_INT);
+        $table->create();
+        $this->table = $table;
+        //        Timer::tick(10000, function() {
+        //            $count = 1;
+        //            while ($count < $this->length && $this->redis->lLen(self::KEY) > $this->length) {
+        //                $count++;
+        //                $message = $this->redis->lPop(self::KEY);
+        //                try {
+        //                    $data = json_decode($message, true);
+        //                    \App\Model\Entities\Message::create([
+        //                        'user_id'    => $data['uid'],
+        //                        'text'       => $data['data'],
+        //                        'created_at' => date('Y-m-d H:i:s', $data['time'])
+        //                    ]);
+        //                } catch (\Exception $exception) {
+        //                    $this->loggerFactory->get()->error($exception->getMessage());
+        //                    $this->redis->lPush($message);
+        //                }
+        //            }
+        //        });
+    }
+    /**
+     * @param Server  $server
+     * @param Request $request
+     */
+    public function onOpen(Server $server, Request $request)
+    {
+        if (isset($request->get['token']) && $request->get['token']) {
+            $user = $this->jwt->decode($request->get['token']);
+            $this->table->set($request->fd, ['uid' => $user?->id]);
+        } else {
+            $server->push($request->fd, json_encode(['code' => 1, 'data' => '认证失败', 'time' => time()]));
+            $server->disconnect($request->fd);
+            return;
+        }
+        $len = $this->redis->lLen(self::KEY);
+        $data = $this->redis->lRange(self::KEY, max(0, $len - $this->length), $len);
+        $ids = [];
+        foreach ($data as &$v) {
+            $v = json_decode($v, true);
+            $v['data'] = htmlspecialchars($v['data']);
+            if (!in_array($v['uid'], $ids)) {
+                $ids[] = $v['uid'];
+            }
+        }
+        /** @var Collection $users */
+        $users = User::whereIn('id', $ids)->get()->keyBy('id');
+        foreach ($data as &$v) {
+            if ($users->has($v['uid'])) {
+                $v['avatar'] = $users->get($v['uid'])->avatar;
+            } else {
+                $v['avatar'] = 'https://cdn.shopify.com/s/files/1/1493/7144/products/product-image-16756312_1024x1024.jpg?v=1476865937';
+            }
+        }
+        $server->push($request->fd, json_encode(['code' => self::OPCODE_HISTORY_MESSAGES, 'data' => $data]));
+    }
+    /**
+     * @param Server $server
+     * @param Frame  $frame
+     */
+    public function onMessage(Server $server, Frame $frame)
+    {
+        if ($frame->data === 'ping') {
+            $server->push($frame->fd, json_encode(['code' => 0, 'online' => $this->table->count()]));
+        } else {
+            if (($uid = $this->table->get($frame->fd, 'uid')) && ($user = User::find($uid))) {
+                $data = ['uid' => $uid, 'username' => $user->username, 'avatar' => $user->avatar, 'data' => $frame->data, 'time' => time()];
+                $this->redis->rPush(self::KEY, json_encode($data));
+                $data['data'] = htmlspecialchars($data['data']);
+                foreach ($server->connections as $fd) {
+                    $server->push($fd, json_encode(['code' => self::OPCODE_USER_MESSAGE, 'data' => $data]));
+                }
+            }
+        }
+    }
+    /**
+     * @param Server $server
+     * @param        $fd
+     */
+    public function onClose(Server $server, $fd)
+    {
+        $this->table->del($fd);
+    }
+}
